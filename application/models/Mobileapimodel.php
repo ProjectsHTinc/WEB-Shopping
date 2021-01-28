@@ -419,7 +419,7 @@ class Mobileapimodel extends CI_Model {
 //#################### Mobile Login End ####################//
 
 //#################### Mobile Login OTP ####################//
-	public function login_mobileotp($mobile_number,$OTP,$mob_key,$mobile_type,$login_type)
+	public function Login_mobileotp($mobile_number,$OTP,$mob_key,$mobile_type,$login_type)
 	{
 	  $cust_id = '';
       $sql = "SELECT * FROM customers WHERE phone_number  ='$mobile_number' AND mobile_otp = '$OTP'";
