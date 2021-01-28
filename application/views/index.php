@@ -157,8 +157,7 @@
                                     <div class="pro-content text-center">
                                         <h4><a href="<?php echo base_url(); ?>home/product_details/<?php echo $sproduct_id; ?>/<?php echo $enc_product_name ; ?>/"><?php echo $npro->product_name; ?></a></h4>
                                         <?php if ($offer_status == '1'){ ?>
-                                        <p class="price"><span class="mrp">₹<?php echo $prod_actual_price;?></span> <span>₹<?php echo $offer_price;?></span></p>
-										<?php } else { ?>
+                                        <p class="price"><span class="mrp">₹<?php echo $prod_actual_price;?></span> <span>₹<?php echo $offer_price;?></span></p>										<?php } else { ?>
                                         <p class="price"><span>₹<?php echo $prod_actual_price;?></span></p>
                                         <?php } ?>
                                         <div class="action-links2">

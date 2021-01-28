@@ -163,6 +163,10 @@ class Mobileapimodel extends CI_Model {
 
 //#################### SMS End ####################//
 
+
+
+
+
 //#################### Main Login ####################//
 	public function Login($username,$password,$mob_key,$mobile_type)
 	{
@@ -247,11 +251,10 @@ class Mobileapimodel extends CI_Model {
             $response = array("status" => "error", "msg" => "Invalid login");
             return $response;
       }
-
-
-
 	}
 
+
+//########################################//
 
    function social_login($username,$mob_key,$mobile_type,$login_type,$first_name,$last_name)
   {
@@ -376,11 +379,130 @@ class Mobileapimodel extends CI_Model {
       return $response;
     }
 
-
-
   }
 //#################### Main Login End ####################//
 
+
+//#################### Mobile Login ####################//
+	public function Login_mobile($mobile_number)
+	{
+      
+	  $digits = 4;
+	  $OTP = str_pad(rand(0, pow(10, $digits)-1), $digits, '0', STR_PAD_LEFT);
+		  
+      $sql = "SELECT * FROM customers WHERE phone_number='$mobile_number'";
+	  $user_result = $this->db->query($sql);
+		if($user_result->num_rows()>0)
+		{
+			$update_sql = "UPDATE customers SET mobile_otp = '$OTP' WHERE phone_number  ='$mobile_number'";
+    		$update_otp = $this->db->query($update_sql);
+
+			 $mobile_message = 'Dear user, Use the OTP '.$OTP.' to login.- Team LAMORE';
+			 $this->smsmodel->send_sms($mobile_number,$mobile_message);
+		} else {
+
+			$sQuery = "INSERT INTO customers (name,phone_number,mobile_otp,status,created_at) VALUES ('New Member','".$mobile_number. "','".$OTP. "','Active',now())";
+			$insert_user = $this->db->query($sQuery);
+			$user_id = $this->db->insert_id();
+			
+			$sQuery = "INSERT INTO customer_details (customer_id,first_name,newsletter_status,created_at) VALUES ('".$user_id. "','New Member','1',now())";
+			$insert_user = $this->db->query($sQuery);
+
+			$mobile_message = 'Dear user, Use the OTP '.$OTP.' to login.- Team LAMORE';
+			$this->smsmodel->send_sms($mobile_number,$mobile_message);
+		}
+		$response = array("status" => "success", "msg" => "Mobile Login", "mobile_number" => $mobile_number, "OTP" => $OTP);
+        return $response;
+	}
+
+
+//#################### Mobile Login End ####################//
+
+//#################### Mobile Login OTP ####################//
+	public function login_mobileotp($mobile_number,$OTP,$mob_key,$mobile_type,$login_type)
+	{
+	  $cust_id = '';
+      $sql = "SELECT * FROM customers WHERE phone_number  ='$mobile_number' AND mobile_otp = '$OTP'";
+
+      $user_result = $this->db->query($sql);
+      $ress = $user_result->result();
+      if($user_result->num_rows()>0)
+      {
+        foreach ($user_result->result() as $rows)
+        {
+          $cust_id = $rows->id;
+          $login_count = $rows->login_count+1;
+        }
+
+        $sql = "SELECT
+            A.id AS customer_id,
+            A.phone_number,
+            A.email,
+            B.first_name,
+            B.last_name,
+            B.birth_date,
+            B.gender,
+            B.profile_picture,
+            B.newsletter_status,
+            A.login_count,
+            A.last_login
+          FROM
+            customers A,
+            customer_details B
+          WHERE
+            A.id = B.customer_id AND A.id = '$cust_id'";
+        $cust_result = $this->db->query($sql);
+        $ress = $cust_result->result();
+
+        if($cust_result->num_rows()>0)
+        {
+          foreach ($cust_result->result() as $rows)
+          {
+            $profile_picture = $rows->profile_picture;
+          }
+
+          if ($profile_picture != ''){
+                $profile_picture = base_url().'assets/front/profile/'.$profile_picture;
+            }else {
+                 $profile_picture = '';
+            }
+
+          $userData  = array(
+                "customer_id" => $ress[0]->customer_id,
+                "phone_number" => $ress[0]->phone_number,
+                "email" => $ress[0]->email,
+                "first_name" => $ress[0]->first_name,
+                "last_name" => $ress[0]->last_name,
+                "birth_date" => $ress[0]->birth_date,
+                "gender" => $ress[0]->gender,
+                "profile_picture" => $profile_picture,
+                "newsletter_status" => $ress[0]->newsletter_status,
+                "login_count" => $ress[0]->login_count,
+                "last_login" => $ress[0]->last_login
+          );
+        }
+          $update_sql = "UPDATE customers SET last_login=NOW(),login_count='$login_count' WHERE id='$cust_id'";
+          $update_result = $this->db->query($update_sql);
+
+          $gcmQuery = "SELECT * FROM cus_notification_master WHERE mob_key like '%" .$mob_key. "%' LIMIT 1";
+          $gcm_result = $this->db->query($gcmQuery);
+          $gcm_ress = $gcm_result->result();
+
+          if($gcm_result->num_rows()==0)
+          {
+            $sQuery = "INSERT INTO cus_notification_master (cus_id,mob_key,mobile_type,created_at ) VALUES ('". $cust_id . "','". $mob_key . "','". $mobile_type . "',now())";
+            $update_gcm = $this->db->query($sQuery);
+          }
+
+              $response = array("status" => "success", "msg" => "Login Successfully", "userData" => $userData);
+              return $response;
+      } else {
+
+            $response = array("status" => "error", "msg" => "Invalid login");
+            return $response;
+      }
+	}
+//#################### User Registration ####################//
 
 //#################### User Registration ####################//
 	public function cust_registration($name,$phone,$email,$password,$newsletter,$mob_key,$mobile_type)
@@ -755,7 +877,7 @@ class Mobileapimodel extends CI_Model {
 
     }
 
-
+//########################################//
 
     function get_product_color($product_id,$size_id){
       $select="SELECT am.attribute_value,am.attribute_name,pc.mas_color_id,pc.mas_size_id,ams.attribute_value AS size,pc.* FROM product_combined AS pc LEFT JOIN attribute_masters AS am ON am.id=pc.mas_color_id LEFT JOIN attribute_masters AS ams ON ams.id=pc.mas_size_id WHERE pc.product_id='$product_id' AND pc.mas_size_id='$size_id'  AND ams.status='Active'";
@@ -802,7 +924,7 @@ class Mobileapimodel extends CI_Model {
          }
         return $data;
     }
-
+//########################################//
     function remove_wishlist($product_id,$user_id){
       $delete="DELETE FROM cus_wishlist WHERE customer_id='$user_id' AND product_id='$product_id'";
       $res=$this->db->query($delete);
@@ -813,7 +935,7 @@ class Mobileapimodel extends CI_Model {
       }
         return $data;
     }
-
+//########################################//
     function view_wishlist($user_id){
       $select="SELECT p.* FROM cus_wishlist AS cw LEFT JOIN products AS p ON p.id=cw.product_id WHERE cw.customer_id='$user_id' AND p.status='Active'";
       $res=$this->db->query($select);
@@ -919,7 +1041,7 @@ class Mobileapimodel extends CI_Model {
       return $data;
     }
 
-
+//########################################//
     function product_cart_remove($cart_id,$user_id){
       $delete="DELETE FROM product_cart WHERE cus_id='$user_id' AND id='$cart_id'";
       $res=$this->db->query($delete);
@@ -930,7 +1052,7 @@ class Mobileapimodel extends CI_Model {
       }
         return $data;
     }
-
+//########################################//
     function view_cart_items($user_id){
       $Select_price="SELECT * FROM products WHERE status='Active'";
       $res_price=$this->db->query($Select_price);
@@ -1015,7 +1137,7 @@ class Mobileapimodel extends CI_Model {
         return $data;
     }
 
-
+//########################################//
 
     function cart_quantity($cart_id,$quantity,$user_id){
       $select="SELECT * FROM product_cart WHERE id='$cart_id'";
@@ -1068,7 +1190,7 @@ class Mobileapimodel extends CI_Model {
           }
           return $data;
       }
-
+//########################################//
       function product_reviews_add($product_id,$user_id,$rating,$comment){
         $check="SELECT * FROM product_review WHERE product_id='$product_id' AND cus_id='$user_id'";
         $result=$this->db->query($check);
@@ -1085,7 +1207,7 @@ class Mobileapimodel extends CI_Model {
        }
          return $data;
       }
-
+//########################################//
       function product_review_check($product_id,$user_id){
         $check="SELECT * FROM product_review WHERE product_id='$product_id' AND cus_id='$user_id'";
         $result=$this->db->query($check);
@@ -1107,7 +1229,7 @@ class Mobileapimodel extends CI_Model {
        return $data;
       }
 
-
+//########################################//
       function review_update($user_id,$rating,$comment,$review_id){
         $check="UPDATE product_review SET rating='$rating',comment='$comment' WHERE cus_id='$user_id' AND id='$review_id'";
         $result=$this->db->query($check);
@@ -1146,7 +1268,7 @@ class Mobileapimodel extends CI_Model {
           return $data;
 
       }
-
+//########################################//
 
       function address_create($user_id,$country_id,$state,$city,$pincode,$house_no,$street,$landmark,$full_name,$mobile_number,$email_address,$alternative_mobile_number,$address_type,$address_mode){
         $insert="INSERT INTO cus_address (cus_id,country_id,state,city,pincode,house_no,street,landmark,full_name,mobile_number,email_address,alternative_mobile_number,address_type_id,address_mode,status,created_at,created_by)
@@ -1159,7 +1281,7 @@ class Mobileapimodel extends CI_Model {
        }
        return $data;
       }
-
+//########################################//
 
       function check_pincode($pin_code){
         $select = "SELECT * FROM zipcode_masters WHERE zip_code='$pin_code' AND status='Active'";
@@ -1178,7 +1300,7 @@ class Mobileapimodel extends CI_Model {
           return $data;
 
       }
-
+//########################################//
 
       function place_order($user_id,$address_id,$cus_notes){
         $check_order = "SELECT * FROM purchase_order ORDER BY id DESC LIMIT 1";
@@ -1233,7 +1355,7 @@ class Mobileapimodel extends CI_Model {
           return $data;
       }
 
-
+//########################################//
 
       function password_update($user_id,$password){
         $new_pwd=md5($password);
@@ -1246,7 +1368,7 @@ class Mobileapimodel extends CI_Model {
         }
           return $data;
       }
-
+//########################################//
       function check_password($user_id,$password){
         $new_pwd=md5($password);
         $update="SELECT * FROM  customers  WHERE id='$user_id' AND password='$new_pwd'";
@@ -1258,7 +1380,7 @@ class Mobileapimodel extends CI_Model {
         }
           return $data;
       }
-
+//########################################//
       function get_profile_details($user_id){
         $select = "SELECT c.*,cd.* FROM customers as c left join customer_details as cd on c.id=cd.customer_id where c.id='$user_id' and c.status='Active'";
         $res=$this->db->query($select);
@@ -1282,7 +1404,7 @@ class Mobileapimodel extends CI_Model {
           return $data;
       }
 
-
+//########################################//
       function update_profile_details($user_id,$first_name,$last_name,$email,$mobile_number,$gender,$dob,$newsletter_status){
         $check_email="SELECT * FROM customers WHERE email='$email' AND id!='$user_id'";
         $res=$this->db->query($check_email);
@@ -1308,7 +1430,7 @@ class Mobileapimodel extends CI_Model {
         }
         return  $data;
       }
-
+//########################################//
       function forgot_password($email_phone){
         $check="SELECT * FROM customers where phone_number='$email_phone' or email='$email_phone'";
         $res=$this->db->query($check);
@@ -1321,7 +1443,10 @@ class Mobileapimodel extends CI_Model {
 
           $id=$rows->id;
           $email= $rows->email;
-          $otp= rand(100000, 999999);
+		  $digits = 4;
+		  $otp = str_pad(rand(0, pow(10, $digits)-1), $digits, '0', STR_PAD_LEFT);
+		
+          //$otp= rand(100000, 999999);
           $textmessage='Password Reset OTP '.$otp.'';
           $notes =utf8_encode($textmessage);
           $this->smsmodel->send_sms($phone,$notes);
@@ -1335,7 +1460,7 @@ class Mobileapimodel extends CI_Model {
         }
           return $data;
       }
-
+//########################################//
       function verify_otp_password($email_phone,$otp){
         $check="SELECT * FROM customers where phone_number='$email_phone' or email='$email_phone'";
         $res=$this->db->query($check);
@@ -1354,7 +1479,7 @@ class Mobileapimodel extends CI_Model {
           return $data;
       }
 
-
+//########################################//
 
       function view_orders($user_id){
         $select="SELECT po.*,ca.* FROM purchase_order as po left join cus_address as ca on ca.id=po.cus_address_id where po.cus_id='$user_id'";
@@ -1390,7 +1515,7 @@ class Mobileapimodel extends CI_Model {
 
       }
 
-
+//########################################//
       function check_my_order($order_id){
         $select="SELECT pc.id as cart_id,ca.*,pur.cus_address_id,c.*,p.id as product_id,p.product_name,p.product_cover_img,am.attribute_value,am.attribute_name,ams.attribute_value AS size,pc.*,comb.id FROM product_cart AS pc
 LEFT JOIN products AS p ON p.id=pc.product_id LEFT JOIN product_combined AS comb ON comb.id=pc.product_combined_id LEFT JOIN attribute_masters AS am ON am.id=comb.mas_color_id
@@ -1419,7 +1544,7 @@ LEFT JOIN cus_address AS ca ON ca.id=pur.cus_address_id WHERE pc.order_id='$orde
       }
 
 
-
+//########################################//
       function search_product($search_name,$user_id){
         $select="SELECT tm.id as tag_id,tm.tag_name,p.*,IFNULL(cw.customer_id,'0') AS wishlisted FROM tag_masters as tm left join product_tags as pt on tm.id=pt.tag_id left join products as p on  p.id=pt.product_id LEFT JOIN  cus_wishlist AS cw ON cw.product_id=p.id AND cw.customer_id='$user_id' WHERE tm.tag_name LIKE '$search_name%' AND p.status='Active'  GROUP by p.id";
        $res=$this->db->query($select);
@@ -1455,7 +1580,7 @@ LEFT JOIN cus_address AS ca ON ca.id=pur.cus_address_id WHERE pc.order_id='$orde
         }
         return $data;
       }
-
+//########################################//
 
 }
 ?>

@@ -77,8 +77,7 @@
             </div>
         </div>
         <!-- Preloader End -->
-	<div class="header-row"><marquee >Silver Multi Stone Band Ring - Pongal Offer 10%</marquee></div>
-    
+	<div class="header-row"><marquee >Muslin Towel (Pack Of 2) Summer Discount Offer 25%</marquee></div>
 	<!-- Wrapper Start -->
     <div class="wrapper home-2">   
         <!-- Header Area Start -->

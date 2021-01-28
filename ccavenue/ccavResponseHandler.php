@@ -1,8 +1,7 @@
 <?php
-ob_start();
 include('Crypto.php');
 include("connection.php");
-error_reporting(0);
+	error_reporting(0);
 	
 	$workingKey='3A5F7172E7947B223888492581B32ED2';		//Working Key should be provided here.
 	$encResponse=$_POST["encResp"];			//This is the response sent by the CCAvenue Server
