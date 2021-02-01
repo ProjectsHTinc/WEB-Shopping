@@ -29,6 +29,7 @@ if (count($category_details)>0){
             </div>
         </div>
         <!-- Page Breadcrumb End -->
+		
         <!-- Categories Product Start -->
         <div class="all-categories pb-100">
             <div class="container-fluid">
