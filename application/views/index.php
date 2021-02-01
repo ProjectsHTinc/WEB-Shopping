@@ -45,7 +45,7 @@
 <?php }	?>
 
 <div class="home-home-2-banner pb-50">
-            <div class="container-fluid plr-0">
+            <div class="container-fluid">
                 <div class="row">
                     <!-- Single Banner Start -->
                     <div class="col-sm-4">
@@ -96,7 +96,7 @@
 		<?php  if (count($home_newproducts)>0){ ?>
         <!-- New Products Selection Start -->
         <div class="new-products-selection pb-80">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row">
                     <!-- Section Title Start -->
                     <div class="col-xs-12">
@@ -157,7 +157,8 @@
                                     <div class="pro-content text-center">
                                         <h4><a href="<?php echo base_url(); ?>home/product_details/<?php echo $sproduct_id; ?>/<?php echo $enc_product_name ; ?>/"><?php echo $npro->product_name; ?></a></h4>
                                         <?php if ($offer_status == '1'){ ?>
-                                        <p class="price"><span class="mrp">₹<?php echo $prod_actual_price;?></span> <span>₹<?php echo $offer_price;?></span></p>										<?php } else { ?>
+                                        <p class="price"><span class="mrp">₹<?php echo $prod_actual_price;?></span> <span>₹<?php echo $offer_price;?></span></p>
+										<?php } else { ?>
                                         <p class="price"><span>₹<?php echo $prod_actual_price;?></span></p>
                                         <?php } ?>
                                         <div class="action-links2">
@@ -207,7 +208,7 @@
 ?>
         <!-- home-2 Big Banner Start -->
         <div class="h2-big-banner pb-100">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row">
                     <!-- Big Banner Start -->
                     <div class="col-sm-12">
@@ -233,7 +234,7 @@
 <?php  if (count($home_popularproducts)>0){ ?>       
         <!-- Best Seller Products Start -->
         <div class="best-seller-products pb-50">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row">
                     <!-- Section Title Start -->
                     <div class="col-xs-12">

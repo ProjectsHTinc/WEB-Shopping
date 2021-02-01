@@ -2,7 +2,7 @@
         <footer>
            <!-- Footer Middle Start -->
             <div class="footer-middle">
-                <div class="container">
+                <div class="container-fluid">
                     <div class="container-footer ptb-50">
                          <div class="row">
                             <!-- Single Footer Start -->
@@ -66,7 +66,7 @@
             <!-- Footer Middle End -->
             <!-- Footer Bottom Start -->
             <div class="footer-bottom">
-                <div class="container">
+                <div class="container-fluid">
                     <div class="container-footer ptb-30">
                         <div class="row">
                             <div class="col-sm-7">
