@@ -108,7 +108,7 @@ if (count($product_gallery)>0){
                         </div>
                     </div>
                     <!-- Thumbnail Description Start -->
-                    <div class="col-sm-4">
+                    <div class="col-sm-4 pl-50">
                      <form id="product-form" name="product-form" class="contact-form" action="<?php echo base_url(); ?>home/insertcart/" method="post">
                         <div class="thubnail-desc fix">
                             <h2 class="product-header mb-20"><?php echo $product_name; ?></h2>

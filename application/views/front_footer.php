@@ -17,7 +17,7 @@
                             </div>
                             <!-- Single Footer Start -->
                             <!-- Single Footer Start -->
-                            <div class="single-footer col-md-3 col-sm-6">
+                            <div class="single-footer col-md-3 col-sm-6 pl-50">
                                 <h4 class="footer-title">information</h4>
                                 <div class="footer-content">
                                     <ul class="footer-list">
