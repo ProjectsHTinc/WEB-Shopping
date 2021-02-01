@@ -14,7 +14,7 @@ if (count($category_details)>0){
 ?>
         <!-- Page Breadcrumb Start -->
         <div class="sub-breadcrumb" style="background: rgba(0, 0, 0, 0) url(<?php echo $cat_image_url; ?>) no-repeat scroll center center / cover;">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="text-center ptb-70" >
@@ -31,7 +31,7 @@ if (count($category_details)>0){
         <!-- Page Breadcrumb End -->
         <!-- Categories Product Start -->
         <div class="all-categories pb-100">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row">
                    <!-- Sidebar Content Start -->
                     <div class="col-md-9 col-md-push-3">

@@ -1,6 +1,6 @@
 <!-- Page Breadcrumb Start -->
         <div class="sub-breadcrumb" style="background: rgba(0, 0, 0, 0) url(<?php echo base_url(); ?>assets/category/default_banner.png) no-repeat scroll center center / cover;">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="text-center ptb-70" >
@@ -18,7 +18,7 @@
         
         <!-- Contact Email Area Start -->
         <div class="contact-email-area mt-50">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row">
                 <h3 class="mb-5">Contact Us</h3>
                         <p class="text-capitalize mb-40">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>

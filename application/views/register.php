@@ -1,6 +1,6 @@
         <!-- Page Breadcrumb Start -->
         <div class="sub-breadcrumb" style="background: rgba(0, 0, 0, 0) url(<?php echo base_url(); ?>assets/category/default_banner.png) no-repeat scroll center center / cover;">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="text-center ptb-70" >
@@ -20,15 +20,18 @@
 		
         <!-- Register Account Start -->
         <div class="register-account">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row">
+					<div class="col-sm-12">
                     <div class="register-title">
                         <h3 class="mb-10">REGISTER ACCOUNT</h3>
                         <p class="mb-10">If you already have an account with us, please login at the <a href="<?php echo base_url(); ?>login/">login page</a>.</p>
                     </div>
+					</div>
                 </div>
                 <!-- Row End -->
                 <div class="row">
+				<div class="col-sm-12">
                     <form class="form-horizontal pb-100" name="registration"  id="registration" method="post" action="">
                         <fieldset>
                             <legend>Your Personal Details</legend>
@@ -87,6 +90,7 @@
                         </div>
                     </form>
                 </div>
+				</div>
                 <!-- Row End -->
             </div>
             <!-- Container End -->

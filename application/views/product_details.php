@@ -62,7 +62,7 @@ if (count($product_details)>0){
 ?>
 <!-- Page Breadcrumb Start -->
         <div class="sub-breadcrumb" style="background: rgba(0, 0, 0, 0) url(<?php echo base_url(); ?>assets/category/default_banner.png) no-repeat scroll center center / cover;">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="text-center ptb-70" >
@@ -80,7 +80,7 @@ if (count($product_details)>0){
 		
         <!-- Product Thumbnail Start -->
         <div class="main-product-thumbnail pb-50">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-4">
                         <img id="big-img" src="<?php echo base_url(); ?>assets/products/<?php echo $product_cover_img;?>" data-zoom-image="<?php echo base_url(); ?>assets/products/<?php echo $product_cover_img;?>" alt="product-image" />
@@ -413,7 +413,7 @@ if (count($product_gallery)>0){
 		?>
         <!-- Best Seller Products Start -->
         <div class="best-seller-products pb-100">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row">
                     <!-- Section Title Start -->
                     <div class="col-xs-12">
@@ -425,6 +425,7 @@ if (count($product_gallery)>0){
                 </div>
                 <!-- Row End -->
                 <div class="row">
+				 <div class="col-xs-12">
                     <!-- Best Seller Product Activation Start -->
                     <div class="best-seller new-products owl-carousel">
                         
@@ -487,6 +488,7 @@ if (count($product_gallery)>0){
                             <?php } ?>
                 </div>
                 <!-- Row End -->
+				</div>
             </div>
             <!-- Container End -->
         </div>
@@ -497,7 +499,7 @@ if (count($product_gallery)>0){
    
    <!-- Reviews Start -->
         <div class="best-seller-products pb-100" id='creview'>
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row">
                     <!-- Section Title Start -->
                     <div class="col-xs-12">
@@ -509,6 +511,7 @@ if (count($product_gallery)>0){
                 </div>
                 <!-- Row End -->
                 <div class="row">
+				<div class="col-xs-12">
 				<?php
 			if (count($review_details)>0){
                    foreach($review_details as $review){
@@ -537,6 +540,7 @@ if (count($product_gallery)>0){
 				<p class="mb-10">There are no reviews for this product.</p>
 		<?php } ?>
                 </div>
+				</div>
                 <!-- Row End -->
             </div>
             <!-- Container End -->

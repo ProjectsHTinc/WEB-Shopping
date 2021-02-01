@@ -1,6 +1,6 @@
 <!-- Page Breadcrumb Start -->
         <div class="sub-breadcrumb" style="background: rgba(0, 0, 0, 0) url(<?php echo base_url(); ?>assets/category/default_banner.png) no-repeat scroll center center / cover;">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="text-center ptb-70" >
@@ -18,8 +18,9 @@
 		
         <!-- Categories Product Start -->
         <div class="all-categories pb-100">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row">
+				<div class="col-sm-12">
                    <!-- Sidebar Content Start -->
                     <div class="col-md-9 col-md-push-3">
                         <!-- Sidebar Right Top Content Start -->
@@ -231,6 +232,7 @@
                     </div>
                     <!-- Sidebar End -->
                 </div>
+				</div>
                 <!-- Row End -->
             </div>
             <!-- Container End -->

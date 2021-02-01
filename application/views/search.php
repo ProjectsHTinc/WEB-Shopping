@@ -9,7 +9,7 @@
 	?>
 	<!-- Categories Product Start -->
 	<div class="all-categories pb-100 pt-100">
-		<div class="container">
+		<div class="container-fluid">
 			<div class="row">
 			   <!-- Sidebar Content Start -->
 				<div class="col-md-12">

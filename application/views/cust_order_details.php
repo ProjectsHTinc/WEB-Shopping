@@ -1,6 +1,6 @@
 <!-- Page Breadcrumb Start -->
         <div class="sub-breadcrumb" style="background: rgba(0, 0, 0, 0) url(<?php echo base_url(); ?>assets/category/default_banner.png) no-repeat scroll center center / cover;">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="text-center ptb-70" >
@@ -19,7 +19,7 @@
 		
         <!-- My Account Page Start Here -->
         <div class="my-account white-bg pb-100">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="account-dashboard">
                    <div class="dashboard-upper-info">
                        <div class="row no-gutters align-items-center">

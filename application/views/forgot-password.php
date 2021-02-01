@@ -1,6 +1,6 @@
         <!-- Page Breadcrumb Start -->
         <div class="sub-breadcrumb" style="background: rgba(0, 0, 0, 0) url(<?php echo base_url(); ?>assets/category/default_banner.png) no-repeat scroll center center / cover;">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="text-center ptb-70" >
@@ -20,7 +20,7 @@
 		
         <!-- Register Account Start -->
         <div class="register-account">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row">
                     <div class="register-title">
                         <h3 class="mb-10">Forgot Password</h3>
