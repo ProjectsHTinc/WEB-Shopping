@@ -72,11 +72,11 @@
                             </form>
                         </div>
                         		<div class="alert alert-success alert-dismissible" id="send" style="display:none;">
-    								<strong>Request Send..</strong> Your Message send to Webmaster...
+    								<strong>Request Send..</strong> Your Message send to Webmaster...</strong>
   								</div>
                         
                                 <div class="alert alert-danger alert-dismissible" id="error" style="display:none;">
-    								<strong>Sorry!.. Please Check Your Email id.
+    								<strong>Sorry!.. Please Check Your Email id.</strong>
   								</div>
                     </div>
                 </div>
