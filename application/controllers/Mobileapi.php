@@ -100,7 +100,6 @@ class Mobileapi extends CI_Controller {
 			$login_type ='';
 
 		 	$username = $this->input->post("username");
-			$password = $this->input->post("password");
 			$mob_key = $this->input->post("mob_key");
 			$mobile_type = $this->input->post("mobile_type");
 			$login_type=$this->input->post("login_type");
@@ -222,9 +221,7 @@ class Mobileapi extends CI_Controller {
 		$mob_key ='';
 		$mobile_type = '';
 
-	     $name = $this->input->post("name");
-
-
+		$name = $this->input->post("name");
 		$phone = $this->input->post("phone");
 		$email = $this->input->post("email");
 		$password = $this->input->post("password");
@@ -625,8 +622,6 @@ class Mobileapi extends CI_Controller {
 		echo json_encode($response);
 	}
 
-
-
 //-----------------------------------------------//
 
 
@@ -861,7 +856,6 @@ class Mobileapi extends CI_Controller {
 
 		public function product_reviews()
 		{
-
 			$_POST = json_decode(file_get_contents("php://input"), TRUE);
 
 			if(!$this->checkMethod())
@@ -1223,6 +1217,6 @@ class Mobileapi extends CI_Controller {
 		}
 //-----------------------------------------------//
 
-//-----------------------------------------------//
+
 
 }

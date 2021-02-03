@@ -62,7 +62,7 @@ body {
     max-width: 100%;
 	padding-top:10px;
 	padding-bottom : 3px;
-	background:#5fa9ab;
+	background:#ce0100;
 	text-align : center;
 	color:#ffffff;
 }
@@ -454,7 +454,7 @@ input#newsletter-permission {
     opacity: 0;
     position: absolute;
     top: 100%;
-    width: 250px;
+    width: 300px;
     -webkit-transform-origin: 0 0 0;
     -moz-transform-origin: 0 0 0;
     -ms-transform-origin: 0 0 0;
@@ -517,7 +517,7 @@ input#newsletter-permission {
 
 .primary-menu {
     position: relative;
-	margin-top:40px;
+	margin-top:30px;
 }
 
 .primary-menu-list > li > ul.mega-menu > li,
@@ -604,7 +604,7 @@ input#newsletter-permission {
 .selection-list li ul.search-form,
 .search-form {
     width: 300px;
-    background: #1a1a1a;
+    background: #9e9e9e;
     padding: 0 20px;
     position: absolute;
     opacity: 0;

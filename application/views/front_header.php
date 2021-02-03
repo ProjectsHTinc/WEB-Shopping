@@ -14,7 +14,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Little A More - Online Shopping Cart</title>
+    <title>Online Shopping App</title>
     <meta name="description" content="">
     <meta name="keywords" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -139,7 +139,7 @@
                     </div>
                     <!-- Primary-Menu End -->
                     <!-- Header All Shopping Selection Start -->
-                    <div class="col-lg-4 col-md-2 col-sm-6 col-xs-7 full-col pr-0" style="padding-top:30px;">
+                    <div class="col-lg-4 col-md-2 col-sm-6 col-xs-7 full-col pr-0 pt-20">
                         <div class="main-selection">
                             <ul class="selection-list text-right">
                             <li class="hidden-control">
