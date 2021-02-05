@@ -9,166 +9,134 @@ class Mobileapimodel extends CI_Model {
         $this->load->model('mailmodel');
     }
 
-//#################### Email ####################//
-
-	public function sendMail($to,$subject,$email_message)
+//#################### Mobile Login ####################//
+	public function Login_mobile($mobile_number)
 	{
-		// Set content-type header for sending HTML email
-		$headers = "MIME-Version: 1.0" . "\r\n";
-		$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-		// Additional headers
-		$headers .= 'From: Heyla App<hello@heylaapp.com>' . "\r\n";
-		mail($to,$subject,$email_message,$headers);
-	}
+	  $digits = 4;
+	  $OTP = str_pad(rand(0, pow(10, $digits)-1), $digits, '0', STR_PAD_LEFT);
+		  
+      $sql = "SELECT * FROM customers WHERE phone_number='$mobile_number' AND status = 'Active'";
+	  $user_result = $this->db->query($sql);
+		if($user_result->num_rows()>0)
+		{
+			$update_sql = "UPDATE customers SET mobile_otp = '$OTP' WHERE phone_number  ='$mobile_number'";
+    		$update_otp = $this->db->query($update_sql);
 
-//#################### Email End ####################//
-
-
-//#################### Notification ####################//
-
-	public function sendNotification($gcm_key,$Title,$Message,$mobiletype)
-	{
-		if ($mobiletype =='1'){
-
-		    require_once 'assets/notification/Firebase.php';
-            require_once 'assets/notification/Push.php';
-
-            $device_token = explode(",", $gcm_key);
-            $push = null;
-
-//        //first check if the push has an image with it
-		    $push = new Push(
-					$Title,
-					$Message,
-					'http://heylaapp.com/assets/notification/images/events.jpg'
-				);
-
-// 			//if the push don't have an image give null in place of image
- 			// $push = new Push(
- 			// 		'HEYLA',
- 			// 		'Hi Testing from maran',
- 			// 		null
- 			// 	);
-
-    		//getting the push from push object
-    		$mPushNotification = $push->getPush();
-
-    		//creating firebase class object
-    		$firebase = new Firebase();
-
-    	foreach($device_token as $token) {
-    		 $firebase->send(array($token),$mPushNotification);
-    	}
-
+			 $mobile_message = 'Dear user, Use the OTP '.$OTP.' to login.- Team OSPAPP';
+			 //$this->smsmodel->send_sms($mobile_number,$mobile_message);
+		
 		} else {
 
-			$device_token = explode(",", $gcm_key);
-			$passphrase = 'hs123';
-		    $loction ='assets/notification/heylaapp.pem';
+			$sQuery = "INSERT INTO customers (name,phone_number,mobile_otp,status,created_at) VALUES ('New Member','".$mobile_number. "','".$OTP. "','Active',now())";
+			$insert_user = $this->db->query($sQuery);
+			$user_id = $this->db->insert_id();
+			
+			$sQuery = "INSERT INTO customer_details (customer_id,first_name,newsletter_status,created_at) VALUES ('".$user_id. "','New Member','1',now())";
+			$insert_user = $this->db->query($sQuery);
 
-			$ctx = stream_context_create();
-			stream_context_set_option($ctx, 'ssl', 'local_cert', $loction);
-			stream_context_set_option($ctx, 'ssl', 'passphrase', $passphrase);
+			$mobile_message = 'Dear user, Use the OTP '.$OTP.' to login.- Team OSPAPP';
+			//$this->smsmodel->send_sms($mobile_number,$mobile_message);
+		}
+		$response = array("status" => "success", "msg" => "Mobile Login", "mobile_number" => $mobile_number, "OTP" => $OTP);
+        return $response;
+	}
 
-			// Open a connection to the APNS server
-			$fp = stream_socket_client('ssl://gateway.sandbox.push.apple.com:2195', $err, $errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx);
 
-			if (!$fp)
-				exit("Failed to connect: $err $errstr" . PHP_EOL);
+//#################### Mobile Login OTP ####################//
+	public function Login_mobileotp($mobile_number,$OTP,$mob_key,$mobile_type,$login_type,$login_portal)
+	{
+	  $cust_id = '';
+      $sql = "SELECT * FROM customers WHERE phone_number  ='$mobile_number' AND mobile_otp = '$OTP'";
 
-			$body['aps'] = array(
-				'alert' => array(
-					'body' => $Message,
-					'action-loc-key' => 'Heyla App',
-				),
-				'badge' => 2,
-				'sound' => 'assets/notification/oven.caf',
-				);
-
-			$payload = json_encode($body);
-
-			foreach($device_token as $token) {
-
-				// Build the binary notification
-    			$msg = chr(0) . pack("n", 32) . pack("H*", str_replace(" ", "", $token)) . pack("n", strlen($payload)) . $payload;
-        		$result = fwrite($fp, $msg, strlen($msg));
+      $user_result = $this->db->query($sql);
+      $ress = $user_result->result();
+      if($user_result->num_rows()>0)
+      {
+			foreach ($user_result->result() as $rows)
+			{
+				  $cust_id = $rows->id;
+				  $login_count = $rows->login_count+1;
 			}
 
-				fclose($fp);
-		}
+			$sql = "SELECT
+				A.id AS customer_id,
+				A.phone_number,
+				A.email,
+				B.first_name,
+				B.last_name,
+				B.birth_date,
+				B.gender,
+				B.profile_picture,
+				B.newsletter_status,
+				A.login_count,
+				A.last_login
+			  FROM
+				customers A,
+				customer_details B
+			  WHERE
+				A.id = B.customer_id AND A.id = '$cust_id'";
+			$cust_result = $this->db->query($sql);
+			$ress = $cust_result->result();
+
+			if($cust_result->num_rows()>0)
+			{
+			  foreach ($cust_result->result() as $rows)
+			  {
+				$profile_picture = $rows->profile_picture;
+			  }
+
+			  if ($profile_picture != ''){
+					$profile_picture = base_url().'assets/front/profile/'.$profile_picture;
+				}else {
+					 $profile_picture = '';
+				}
+
+			  $userData  = array(
+					"customer_id" => $ress[0]->customer_id,
+					"phone_number" => $ress[0]->phone_number,
+					"email" => $ress[0]->email,
+					"first_name" => $ress[0]->first_name,
+					"last_name" => $ress[0]->last_name,
+					"birth_date" => $ress[0]->birth_date,
+					"gender" => $ress[0]->gender,
+					"profile_picture" => $profile_picture,
+					"newsletter_status" => $ress[0]->newsletter_status,
+					"login_count" => $ress[0]->login_count,
+					"last_login" => $ress[0]->last_login
+			  );
+			}
+          $update_sql = "UPDATE customers SET login_type = '$login_type', last_login=NOW(),login_count='$login_count' WHERE id='$cust_id'";
+          $update_result = $this->db->query($update_sql);
+
+		  $insert_sql = "INSERT INTO login_history (customer_id,login_portal,created_at) VALUES ('".$cust_id. "','".$login_portal. "',now())";
+          $insert_result = $this->db->query($insert_sql);
+		  
+          $gcmQuery = "SELECT * FROM cus_notification_master WHERE mob_key like '%" .$mob_key. "%' LIMIT 1";
+          $gcm_result = $this->db->query($gcmQuery);
+          $gcm_ress = $gcm_result->result();
+
+          if($gcm_result->num_rows()==0)
+          {
+				$sQuery = "INSERT INTO cus_notification_master (cus_id,mob_key,mobile_type,created_at ) VALUES ('". $cust_id . "','". $mob_key . "','". $mobile_type . "',now())";
+				$update_gcm = $this->db->query($sQuery);
+          }
+
+			  $response = array("status" => "success", "msg" => "Login Successfully", "userData" => $userData);
+			  return $response;
+      
+	  } else {
+		  
+            $response = array("status" => "error", "msg" => "Invalid login");
+            return $response;
+      }
 	}
-
-//#################### Notification End ####################//
-
-
-//#################### SMS ####################//
-
-	public function sendSMS($Phoneno,$Message)
-	{
-        //Your authentication key
-        $authKey = "191431AStibz285a4f14b4";
-
-        //Multiple mobiles numbers separated by comma
-        $mobileNumber = "$Phoneno";
-
-        //Sender ID,While using route4 sender id should be 6 characters long.
-        $senderId = "LAMORE";
-
-        //Your message to send, Add URL encoding here.
-        $message = urlencode($Message);
-
-        //Define route
-        $route = "transactional";
-
-        //Prepare you post parameters
-        $postData = array(
-            'authkey'=> $authKey,
-            'mobiles'=> $mobileNumber,
-            'message'=> $message,
-            'sender'=> $senderId,
-            'route'=> $route
-        );
-
-        //API URL
-        $url="https://control.msg91.com/api/sendhttp.php";
-
-        // init the resource
-        $ch = curl_init();
-        curl_setopt_array($ch, array(
-            CURLOPT_URL => $url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => $postData
-            //,CURLOPT_FOLLOWLOCATION => true
-        ));
-
-
-        //Ignore SSL certificate verification
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-
-
-        //get response
-        $output = curl_exec($ch);
-
-        //Print error if any
-        if(curl_errno($ch))
-        {
-            echo 'error:' . curl_error($ch);
-        }
-
-        curl_close($ch);
-	}
-
-//#################### SMS End ####################//
-
-
-
+	
+	
 //#################### Main Login ####################//
-	public function Login($username,$password,$mob_key,$mobile_type)
+	public function Login($username,$password,$mob_key,$mobile_type,$login_type,$login_portal)
 	{
       $cust_id = '';
-      $sql = "SELECT * FROM customers WHERE password = md5('".$password."') AND status = 'Active' AND (phone_number = '$username' OR email = '$username')";
+      $sql = "SELECT * FROM customers WHERE email = '$username' AND password = md5('".$password."') AND status = 'Active'";
 
       $user_result = $this->db->query($sql);
       $ress = $user_result->result();
@@ -227,9 +195,12 @@ class Mobileapimodel extends CI_Model {
                 "last_login" => $ress[0]->last_login
           );
         }
-          $update_sql = "UPDATE customers SET last_login=NOW(),login_count='$login_count' WHERE id='$cust_id'";
+          $update_sql = "UPDATE customers SET login_type = '$login_type',last_login=NOW(),login_count='$login_count' WHERE id='$cust_id'";
           $update_result = $this->db->query($update_sql);
 
+		  $insert_sql = "INSERT INTO login_history (customer_id,login_portal,created_at) VALUES ('".$cust_id. "','".$login_portal. "',now())";
+          $insert_result = $this->db->query($insert_sql);
+		  
           $gcmQuery = "SELECT * FROM cus_notification_master WHERE mob_key like '%" .$mob_key. "%' LIMIT 1";
           $gcm_result = $this->db->query($gcmQuery);
           $gcm_ress = $gcm_result->result();
@@ -252,70 +223,13 @@ class Mobileapimodel extends CI_Model {
 
 
 //################ Social Login ########################//
-   function social_login($username,$mob_key,$mobile_type,$login_type,$first_name,$last_name)
+  function social_login($username,$first_name,$last_name,$mob_key,$mobile_type,$login_type,$login_portal)
   {
-    if($login_type=='g+' || $login_type=='fb'){
-      $select="SELECT * FROM customers WHERE  email = '$username'";
+      $select="SELECT * FROM customers WHERE email = '$username' AND status = 'Active'";
       $user_res= $this->db->query($select);
-      if($user_res->num_rows()==0){
+	  
+      if($user_res->num_rows()>0){
 		  
-        //$insert="INSERT INTO customers (name,email,login_type,login_count,status) VALUES('$first_name','$username','$login_type','1','Active')";
-		$insert="INSERT INTO customers (name,email,login_count,status) VALUES('$first_name','$username','1','Active')";
-        $cus_result = $this->db->query($insert);
-        $insert_id = $this->db->insert_id();
-       
-	   $insert_details="INSERT INTO customer_details(customer_id,first_name,last_name,newsletter_status,created_at,created_by)VALUES('$insert_id','$first_name','$last_name','1',NOW(),'$insert_id')";
-        $cus_result_details = $this->db->query($insert_details);
-       
-	   $sql = "SELECT  A.id AS customer_id,A.phone_number,A.email,B.first_name,B.last_name,B.birth_date,B.gender,B.profile_picture,B.newsletter_status,A.login_count,A.last_login FROM customers A,customer_details B  WHERE  A.id = B.customer_id AND A.id = '$insert_id'";
-          $cust_result = $this->db->query($sql);
-          $ress = $cust_result->result();
-
-                  if($cust_result->num_rows()>0)
-                  {
-                    foreach ($cust_result->result() as $rows)
-                    {
-                      $profile_picture = $rows->profile_picture;
-                    }
-
-                    if ($profile_picture != ''){
-                          $profile_picture = base_url().'assets/front/profile/'.$profile_picture;
-                      }else {
-                           $profile_picture = '';
-                      }
-
-                    $userData  = array(
-                          "customer_id" => $ress[0]->customer_id,
-                          "phone_number" => $ress[0]->phone_number,
-                          "email" => $ress[0]->email,
-                          "first_name" => $ress[0]->first_name,
-                          "last_name" => $ress[0]->last_name,
-                          "birth_date" => $ress[0]->birth_date,
-                          "gender" => $ress[0]->gender,
-                          "profile_picture" => $profile_picture,
-                          "newsletter_status" => $ress[0]->newsletter_status,
-                          "login_count" => $ress[0]->login_count,
-                          "last_login" => $ress[0]->last_login
-                    );
-                  }
-
-
-                    $gcmQuery = "SELECT * FROM cus_notification_master WHERE mob_key like '%" .$mob_key. "%' LIMIT 1";
-                    $gcm_result = $this->db->query($gcmQuery);
-                    $gcm_ress = $gcm_result->result();
-
-                    if($gcm_result->num_rows()==0)
-                    {
-                      $sQuery = "INSERT INTO cus_notification_master (cus_id,mob_key,mobile_type,created_at ) VALUES ('". $id . "','". $mob_key . "','". $mobile_type . "',now())";
-                      $update_gcm = $this->db->query($sQuery);
-                    }
-
-            $response = array("status" => "success", "msg" => "Login Successfully", "userData" => $userData);
-            return $response;
-
-
-
-      }else{
         $res_check=$user_res->result();
         foreach($res_check as $rows_check){
 			$check_status=$rows_check->status;
@@ -323,7 +237,6 @@ class Mobileapimodel extends CI_Model {
 			$login_count = $rows_check->login_count+1;
 		}
 		
-	   if($check_status=='Active'){
 			$sql = "SELECT  A.id AS customer_id, A.phone_number, A.email, B.first_name, B.last_name, B.birth_date, B.gender, B.profile_picture, B.newsletter_status,A.login_count,A.last_login FROM customers A,customer_details B  WHERE  A.id = B.customer_id AND A.id = '$id'";
 			$cust_result = $this->db->query($sql);
 			$ress = $cust_result->result();
@@ -355,9 +268,12 @@ class Mobileapimodel extends CI_Model {
                           "last_login" => $ress[0]->last_login
                     );
                   }
-                    $update_sql = "UPDATE customers SET last_login=NOW(),login_count='$login_count' WHERE id='$id'";
+                    $update_sql = "UPDATE customers SET login_type='$login_type', last_login=NOW(),login_count='$login_count' WHERE id='$id'";
                     $update_result = $this->db->query($update_sql);
 
+					$insert_sql = "INSERT INTO login_history (customer_id,login_portal,created_at) VALUES ('".$id. "','".$login_portal. "',now())";
+					$insert_result = $this->db->query($insert_sql);
+					
                     $gcmQuery = "SELECT * FROM cus_notification_master WHERE mob_key like '%" .$mob_key. "%' LIMIT 1";
                     $gcm_result = $this->db->query($gcmQuery);
                     $gcm_ress = $gcm_result->result();
@@ -370,141 +286,130 @@ class Mobileapimodel extends CI_Model {
 
                         $response = array("status" => "success", "msg" => "Login Successfully", "userData" => $userData);
                         return $response;
-                } else {
+		
+		}else{
+        
+			$insert="INSERT INTO customers (name,email,login_type,login_count,status) VALUES('$first_name','$username','$login_type','1','Active')";
+			$cus_result = $this->db->query($insert);
+			$insert_id = $this->db->insert_id();
+       
+			$insert_details="INSERT INTO customer_details(customer_id,first_name,last_name,newsletter_status,created_at,created_by)VALUES('$insert_id','$first_name','$last_name','1',NOW(),'$insert_id')";
+			$cus_result_details = $this->db->query($insert_details);
+       
+			$sql = "SELECT  A.id AS customer_id,A.phone_number,A.email,B.first_name,B.last_name,B.birth_date,B.gender,B.profile_picture,B.newsletter_status,A.login_count,A.last_login FROM customers A,customer_details B  WHERE  A.id = B.customer_id AND A.id = '$insert_id'";
+			$cust_result = $this->db->query($sql);
+			$ress = $cust_result->result();
 
-                  $response = array("status" => "error", "msg" => "Account blocked");
-                  return $response;
-                }
+                  if($cust_result->num_rows()>0)
+                  {
+                    foreach ($cust_result->result() as $rows)
+                    {
+                      $profile_picture = $rows->profile_picture;
+                    }
+
+                    if ($profile_picture != ''){
+                          $profile_picture = base_url().'assets/front/profile/'.$profile_picture;
+                      }else {
+                           $profile_picture = '';
+                      }
+
+                    $userData  = array(
+                          "customer_id" => $ress[0]->customer_id,
+                          "phone_number" => $ress[0]->phone_number,
+                          "email" => $ress[0]->email,
+                          "first_name" => $ress[0]->first_name,
+                          "last_name" => $ress[0]->last_name,
+                          "birth_date" => $ress[0]->birth_date,
+                          "gender" => $ress[0]->gender,
+                          "profile_picture" => $profile_picture,
+                          "newsletter_status" => $ress[0]->newsletter_status,
+                          "login_count" => $ress[0]->login_count,
+                          "last_login" => $ress[0]->last_login
+                    );
+                  }
+
+				$insert_sql = "INSERT INTO login_history (customer_id,login_portal,created_at) VALUES ('".$insert_id. "','".$login_portal. "',now())";
+				$insert_result = $this->db->query($insert_sql);
+	  
+				$gcmQuery = "SELECT * FROM cus_notification_master WHERE mob_key like '%" .$mob_key. "%' LIMIT 1";
+				$gcm_result = $this->db->query($gcmQuery);
+				$gcm_ress = $gcm_result->result();
+
+				if($gcm_result->num_rows()==0)
+				{
+					  $sQuery = "INSERT INTO cus_notification_master (cus_id,mob_key,mobile_type,created_at ) VALUES ('". $id . "','". $mob_key . "','". $mobile_type . "',now())";
+					  $update_gcm = $this->db->query($sQuery);
+				}
+
+				$response = array("status" => "success", "msg" => "Login Successfully", "userData" => $userData);
+				return $response;
       }
-    }else{
-      $response = array("status" => "error", "msg" => "Something Went Wrong");
-      return $response;
-    }
-
+    
   }
 
 
-//#################### Mobile Login ####################//
-	public function Login_mobile($mobile_number)
-	{
-      
-	  $digits = 4;
-	  $OTP = str_pad(rand(0, pow(10, $digits)-1), $digits, '0', STR_PAD_LEFT);
-		  
-      $sql = "SELECT * FROM customers WHERE phone_number='$mobile_number'";
-	  $user_result = $this->db->query($sql);
-		if($user_result->num_rows()>0)
-		{
-			$update_sql = "UPDATE customers SET mobile_otp = '$OTP' WHERE phone_number  ='$mobile_number'";
-    		$update_otp = $this->db->query($update_sql);
-
-			 $mobile_message = 'Dear user, Use the OTP '.$OTP.' to login.- Team LAMORE';
-			 $this->smsmodel->send_sms($mobile_number,$mobile_message);
-		} else {
-
-			$sQuery = "INSERT INTO customers (name,phone_number,mobile_otp,status,created_at) VALUES ('New Member','".$mobile_number. "','".$OTP. "','Active',now())";
-			$insert_user = $this->db->query($sQuery);
-			$user_id = $this->db->insert_id();
-			
-			$sQuery = "INSERT INTO customer_details (customer_id,first_name,newsletter_status,created_at) VALUES ('".$user_id. "','New Member','1',now())";
-			$insert_user = $this->db->query($sQuery);
-
-			$mobile_message = 'Dear user, Use the OTP '.$OTP.' to login.- Team LAMORE';
-			$this->smsmodel->send_sms($mobile_number,$mobile_message);
+//################# Forgot password #######################//
+      function forgot_password($email_phone){
+        $check="SELECT * FROM customers where phone_number='$email_phone' or email='$email_phone'";
+        $res=$this->db->query($check);
+        if($res->num_rows()==0){
+            $data = array("status" => "error","msg"=>"No Email or Mobile number registered");
+        }else{
+          $result=$res->result();
+          foreach($result as $rows){
+				$id=$rows->id;
+				$name=$rows->name;
+				$email= $rows->email;
+				$phone=$rows->phone_number;
 		}
-		$response = array("status" => "success", "msg" => "Mobile Login", "mobile_number" => $mobile_number, "OTP" => $OTP);
-        return $response;
-	}
 
-
-//#################### Mobile Login OTP ####################//
-	public function Login_mobileotp($mobile_number,$OTP,$mob_key,$mobile_type,$login_type)
-	{
-	  $cust_id = '';
-      $sql = "SELECT * FROM customers WHERE phone_number  ='$mobile_number' AND mobile_otp = '$OTP'";
-
-      $user_result = $this->db->query($sql);
-      $ress = $user_result->result();
-      if($user_result->num_rows()>0)
-      {
-        foreach ($user_result->result() as $rows)
-        {
-          $cust_id = $rows->id;
-          $login_count = $rows->login_count+1;
-        }
-
-        $sql = "SELECT
-            A.id AS customer_id,
-            A.phone_number,
-            A.email,
-            B.first_name,
-            B.last_name,
-            B.birth_date,
-            B.gender,
-            B.profile_picture,
-            B.newsletter_status,
-            A.login_count,
-            A.last_login
-          FROM
-            customers A,
-            customer_details B
-          WHERE
-            A.id = B.customer_id AND A.id = '$cust_id'";
-        $cust_result = $this->db->query($sql);
-        $ress = $cust_result->result();
-
-        if($cust_result->num_rows()>0)
-        {
-          foreach ($cust_result->result() as $rows)
-          {
-            $profile_picture = $rows->profile_picture;
+			$digits = 4;
+			$otp = str_pad(rand(0, pow(10, $digits)-1), $digits, '0', STR_PAD_LEFT);
+		
+          //$textmessage='Password Reset OTP '.$otp.'';
+          //$notes =utf8_encode($textmessage);
+		  //$this->smsmodel->send_sms($phone,$notes);
+		  
+		  //$subject = "Forgot Password - OTP";
+		  //$htmlContent = 'Dear '. $name . '<br><br>' .  'Username : '. $email .'<br>OTP : '. $otp .'<br><br><br>Regards<br>OSPAPP';
+		  //$this->sendMail($email,$subject,$htmlContent);
+			
+          
+          $update_otp="UPDATE customers SET mobile_otp='$otp' WHERE id='$id'";
+          $res_otp=$this->db->query($update_otp);
+          if($res_otp){
+            $data = array("status" => "success","msg"=>"OTP has sent to regsitered Mobile number");
+          }else{
+            $data = array("status" => "error","msg"=>"No Email or phone number registered");
           }
-
-          if ($profile_picture != ''){
-                $profile_picture = base_url().'assets/front/profile/'.$profile_picture;
-            }else {
-                 $profile_picture = '';
-            }
-
-          $userData  = array(
-                "customer_id" => $ress[0]->customer_id,
-                "phone_number" => $ress[0]->phone_number,
-                "email" => $ress[0]->email,
-                "first_name" => $ress[0]->first_name,
-                "last_name" => $ress[0]->last_name,
-                "birth_date" => $ress[0]->birth_date,
-                "gender" => $ress[0]->gender,
-                "profile_picture" => $profile_picture,
-                "newsletter_status" => $ress[0]->newsletter_status,
-                "login_count" => $ress[0]->login_count,
-                "last_login" => $ress[0]->last_login
-          );
         }
-          $update_sql = "UPDATE customers SET last_login=NOW(),login_count='$login_count' WHERE id='$cust_id'";
-          $update_result = $this->db->query($update_sql);
-
-          $gcmQuery = "SELECT * FROM cus_notification_master WHERE mob_key like '%" .$mob_key. "%' LIMIT 1";
-          $gcm_result = $this->db->query($gcmQuery);
-          $gcm_ress = $gcm_result->result();
-
-          if($gcm_result->num_rows()==0)
-          {
-            $sQuery = "INSERT INTO cus_notification_master (cus_id,mob_key,mobile_type,created_at ) VALUES ('". $cust_id . "','". $mob_key . "','". $mobile_type . "',now())";
-            $update_gcm = $this->db->query($sQuery);
-          }
-
-              $response = array("status" => "success", "msg" => "Login Successfully", "userData" => $userData);
-              return $response;
-      } else {
-
-            $response = array("status" => "error", "msg" => "Invalid login");
-            return $response;
+          return $data;
       }
-	}
+	  
+//################# Forgot password OTP #######################//
+      function verify_otp_password($email_phone,$otp){
+        $check="SELECT * FROM customers where email='$email_phone'";
+        $res=$this->db->query($check);
+        if($res->num_rows()==0){
+            $data = array("status" => "error","msg"=>"No Email registered");
+        }else{
+            $result=$res->result();
+            foreach($result as $rows){
+				$mobile_otp=$rows->mobile_otp;
+			}
+            if($mobile_otp==$otp){
+              $data = array("status" => "success","msg"=>"OTP Verified Successfully");
+            }else{
+              $data = array("status" => "error","msg"=>"You have entered invalid OTP");
+            }
+        }
+          return $data;
+      }
+
 
 
 //#################### User Registration ####################//
-	public function cust_registration($name,$phone,$email,$password,$newsletter,$mob_key,$mobile_type)
+	public function cust_registration($name,$phone,$email,$password)
 	{
 	    $cust_id = "";
 
@@ -519,24 +424,14 @@ class Mobileapimodel extends CI_Model {
 			$res=$this->db->query($create);
 			$last_id=$this->db->insert_id();
 
-			$user_details="INSERT INTO customer_details(customer_id,first_name,newsletter_status) VALUES('$last_id','$name','$newsletter')";
+			$user_details="INSERT INTO customer_details(customer_id,first_name) VALUES('$last_id','$name')";
 			$result=$this->db->query($user_details);
 
 			$update_sql = "UPDATE customers SET created_at =NOW(),created_by ='$last_id' WHERE id='$last_id'";
 			$update_result = $this->db->query($update_sql);
 
-			$gcmQuery = "SELECT * FROM cus_notification_master WHERE mob_key like '%" .$mob_key. "%' LIMIT 1";
-			$gcm_result = $this->db->query($gcmQuery);
-			$gcm_ress = $gcm_result->result();
-
-			if($gcm_result->num_rows()==0)
-			{
-				$sQuery = "INSERT INTO cus_notification_master (cus_id,mob_key,mobile_type,created_at ) VALUES ('". $last_id . "','". $mob_key . "','". $mobile_type . "',now())";
-				$update_gcm = $this->db->query($sQuery);
-			}
-
 			//$subject = "Customer Registration";
-			//$htmlContent = 'Dear '. $name . '<br><br>' .  'Username : '. $email .'<br>Password : '. $pwdconfirm .'<br><br><br>Regards<br>LittleAMore';
+			//$htmlContent = 'Dear '. $name . '<br><br>' .  'Username : '. $email .'<br>Password : '. $password .'<br><br><br>Regards<br>OSPAPP';
 			//$this->sendMail($email,$subject,$htmlContent);
 
 			$response = array("status" => "success", "msg" => "Signup Successfully");
@@ -551,45 +446,65 @@ class Mobileapimodel extends CI_Model {
 
     function home_page(){
 
-      //----- Home  Banner----//
-      $select="SELECT * FROM banner WHERE  status='Active'";
+      //----- Home Banner----//
+      $select="SELECT * FROM banner WHERE status='Active'";
       $res=$this->db->query($select);
          if($res->num_rows()>0){
            $result=$res->result();
-           foreach($result  as $rows){
-             $banner_list[]=array(
-               "id"=>$rows->id,
-               "banner_title"=>$rows->banner_title,
-               "banner_desc"=>$rows->banner_desc,
-               "banner_image"=>base_url().'assets/banner/'.$rows->banner_image,
-               "product_id"=>$rows->product_id,
-             );
-           }
-          $banner_list= array("status" => "success","msg"=>"Banner list","data"=>$banner_list);
-
-         }else{
-         $banner_list = array("status" => "error","msg"=>"No Banner list Found");
+			 foreach($result  as $rows){
+				 $banner_list[]=array(
+				   "id"=>$rows->id,
+				   "banner_title"=>$rows->banner_title,
+				   "banner_desc"=>$rows->banner_desc,
+				   "banner_image"=>base_url().'assets/banner/'.$rows->banner_image,
+				   "product_id"=>$rows->product_id,
+				 );
+			   }
+			$banner_list= array("status" => "success","msg"=>"Banner list","data"=>$banner_list);
+         
+		 }else{
+			$banner_list = array("status" => "error","msg"=>"No Banner list Found");
          }
 
-         //----- ads  Banner----//
-         $select="SELECT * FROM ads_master WHERE  status='Active'";
+         //----- Adv. Banner----//
+         $select="SELECT * FROM ads_master WHERE status='Active'";
          $res=$this->db->query($select);
             if($res->num_rows()>0){
               $result=$res->result();
-              foreach($result  as $rows){
-                $ads_list[]=array(
-                  "id"=>$rows->id,
-                  "ad_title"=>$rows->ad_title,
-                  "sub_cat_id"=>$rows->sub_cat_id,
-                  "ad_img"=>base_url().'assets/ads/'.$rows->ad_img,
-                );
-              }
-            $ads_list = array("status" => "success","msg"=>"Ads List","data"=>$ads_list);
+				  foreach($result  as $rows){
+					$ads_list[]=array(
+					  "id"=>$rows->id,
+					  "ad_title"=>$rows->ad_title,
+					  "sub_cat_id"=>$rows->sub_cat_id,
+					  "ad_img"=>base_url().'assets/ads/'.$rows->ad_img,
+					);
+				  }
+				$ads_list = array("status" => "success","msg"=>"Ads List","data"=>$ads_list);
             }else{
-            $ads_list = array("status" => "error","msg"=>"No Ads List Found");
+				$ads_list = array("status" => "error","msg"=>"No Ads List Found");
             }
 
-            //--------New Product  list----//
+		//--------Category list----//
+		$select="SELECT * FROM category_masters WHERE parent_id='1'  AND status='Active'";
+		$res=$this->db->query($select);
+         if($res->num_rows()>0){
+           $result=$res->result();
+			   foreach($result  as $rows){
+				 $category_list[]=array(
+				   "id"=>$rows->id,
+				   "parent_id"=>$rows->parent_id,
+				   "category_name"=>$rows->category_name,
+				   "category_image"=>base_url().'assets/category/'.$rows->category_thumbnail,
+				   "category_desc"=>$rows->category_desc,
+				 );
+			   }
+			$cat_list = array("status" => "success","msg"=>"Category found","category_list"=>$category_list);
+         }else{
+			$cat_list = array("status" => "error","msg"=>"No category found");
+         }
+		 
+
+            //--------New Product list----//
             $select="SELECT * FROM products WHERE status='Active' ORDER BY id DESC LIMIT 5";
             $res=$this->db->query($select);
              if($res->num_rows()>0){
@@ -621,6 +536,7 @@ class Mobileapimodel extends CI_Model {
              }else{
               $prd_list = array("status" => "error","msg"=>"No Products found");
              }
+
 
              //--------Popular  Product  list----//
              $select="SELECT pvc.*,p.* FROM product_view_count AS pvc LEFT JOIN products AS p ON p.id=pvc.product_id WHERE p.status='Active' ORDER BY pvc.view_count DESC";
@@ -655,8 +571,8 @@ class Mobileapimodel extends CI_Model {
               $popular_prd_list = array("status" => "error","msg"=>"No popular products");
               }
 
-      $data=array("status"=>"success","msg"=>"Home page data","banner_list"=>$banner_list,"ads_list"=>$ads_list,"new_product"=>$prd_list,"popular_product_list"=>$popular_prd_list);
-    //  $data=array("status"=>"success","msg"=>"Home page data","data"=>$response);
+      $data=array("status"=>"success","msg"=>"Home page data","banner_list"=>$banner_list,"ads_list"=>$ads_list,"cat_list"=>$cat_list,"new_product"=>$prd_list,"popular_product_list"=>$popular_prd_list);
+   
         return $data;
     }
 
@@ -1431,55 +1347,6 @@ class Mobileapimodel extends CI_Model {
       }
 	  
 	  
-//################# Forgot password #######################//
-      function forgot_password($email_phone){
-        $check="SELECT * FROM customers where phone_number='$email_phone' or email='$email_phone'";
-        $res=$this->db->query($check);
-        if($res->num_rows()==0){
-            $data = array("status" => "error","msg"=>"No Email or Mobile number registered");
-        }else{
-          $result=$res->result();
-          foreach($result as $rows){}
-           $phone=$rows->phone_number;
-
-          $id=$rows->id;
-          $email= $rows->email;
-		  $digits = 4;
-		  $otp = str_pad(rand(0, pow(10, $digits)-1), $digits, '0', STR_PAD_LEFT);
-		
-          //$otp= rand(100000, 999999);
-          $textmessage='Password Reset OTP '.$otp.'';
-          $notes =utf8_encode($textmessage);
-          $this->smsmodel->send_sms($phone,$notes);
-          $update_otp="UPDATE customers SET mobile_otp='$otp' WHERE id='$id'";
-          $res_otp=$this->db->query($update_otp);
-          if($res_otp){
-            $data = array("status" => "success","msg"=>"OTP has sent to regsitered Mobile number");
-          }else{
-            $data = array("status" => "error","msg"=>"No Email or phone number registered");
-          }
-        }
-          return $data;
-      }
-	  
-	  
-      function verify_otp_password($email_phone,$otp){
-        $check="SELECT * FROM customers where phone_number='$email_phone' or email='$email_phone'";
-        $res=$this->db->query($check);
-        if($res->num_rows()==0){
-            $data = array("status" => "error","msg"=>"No Email or Mobile number registered");
-          }else{
-            $result=$res->result();
-            foreach($result as $rows){}
-            $mobile_otp=$rows->mobile_otp;
-            if($mobile_otp==$otp){
-              $data = array("status" => "success","msg"=>"OTP Verified Successfully");
-            }else{
-              $data = array("status" => "error","msg"=>"You have entered invalid OTP");
-            }
-          }
-          return $data;
-      }
 
 
 //################# View orders #######################//
