@@ -627,14 +627,13 @@ class Mobileapimodel extends CI_Model {
 
 //#################### Category and sub category based product list ####################//
 
-  function product_list($cat_id,$sub_cat_id,$user_id){
-    if($user_id=='0'){
-      $cus_id=0;
-    }else{
-      $cus_id=$user_id;
-    }
-    $select="SELECT p.*,IFNULL(cw.customer_id,'0') AS wishlisted FROM products AS p
-    LEFT JOIN  cus_wishlist AS cw ON cw.product_id=p.id AND cw.customer_id='$cus_id' WHERE cat_id='$cat_id' AND sub_cat_id='$sub_cat_id' AND status='Active'";
+  function product_list($cat_id,$sub_cat_id,$cus_id){
+   
+	if ($sub_cat_id == ''){
+		$select="SELECT p.*,IFNULL(cw.customer_id,'0') AS wishlisted FROM products AS p LEFT JOIN  cus_wishlist AS cw ON cw.product_id=p.id AND cw.customer_id='$cus_id' WHERE cat_id='$cat_id' AND status='Active'";
+  } else{
+		$select="SELECT p.*,IFNULL(cw.customer_id,'0') AS wishlisted FROM products AS p LEFT JOIN  cus_wishlist AS cw ON cw.product_id=p.id AND cw.customer_id='$cus_id' WHERE cat_id='$cat_id' AND sub_cat_id='$sub_cat_id' AND status='Active'";
+  }
     $res=$this->db->query($select);
      if($res->num_rows()>0){
         $result=$res->result();
@@ -714,7 +713,7 @@ class Mobileapimodel extends CI_Model {
 
 
        //---product combination ---//
-       $select="SELECT am.attribute_value,am.attribute_name,pc.mas_color_id,pc.mas_size_id,ams.attribute_value AS size,pc.* FROM product_combined AS pc LEFT JOIN attribute_masters AS am ON am.id=pc.mas_color_id LEFT JOIN attribute_masters AS ams ON ams.id=pc.mas_size_id WHERE product_id='$product_id' AND ams.status='Active'";
+      /* $select="SELECT am.attribute_value,am.attribute_name,pc.mas_color_id,pc.mas_size_id,ams.attribute_value AS size,pc.* FROM product_combined AS pc LEFT JOIN attribute_masters AS am ON am.id=pc.mas_color_id LEFT JOIN attribute_masters AS ams ON ams.id=pc.mas_size_id WHERE product_id='$product_id' AND ams.status='Active' GROUP BY pc.mas_size_id";
        $res=$this->db->query($select);
         if($res->num_rows()>0){
            $result=$res->result();
@@ -736,7 +735,7 @@ class Mobileapimodel extends CI_Model {
          $comb_prod = array("status" => "success","msg"=>"Combined Products","comb_product_list"=>$comb_product_list);
         }else{
            $comb_prod = array("status" => "error","msg"=>"No Record Found");
-        }
+        }*/
 
          //---product specification ---//
          $select="SELECT sm.spec_name,ps.* FROM product_specification AS ps LEFT JOIN specification_masters AS sm ON sm.id=ps.spec_id WHERE product_id='$product_id' AND ps.status='Active'";
@@ -773,10 +772,40 @@ class Mobileapimodel extends CI_Model {
              $product_review = array("status" => "error","msg"=>"No Review");
            }
 		   
-        $data=array("status"=>"success","msg"=>"product details","product_details"=>$product_details,"comb_product"=>$comb_prod,"product_specification"=>$prod_specs,"product_review"=>$product_review);
+        $data=array("status"=>"success","msg"=>"product details","product_details"=>$product_details,"product_specification"=>$prod_specs,"product_review"=>$product_review);
         return $data;
 
     }
+
+
+//#################### Product Colour ####################//
+
+    function get_product_size($product_id){
+		
+       $select="SELECT ams.attribute_value AS size,pc.* FROM product_combined AS pc LEFT JOIN attribute_masters AS am ON am.id=pc.mas_color_id LEFT JOIN attribute_masters AS ams ON ams.id=pc.mas_size_id WHERE product_id='$product_id' AND ams.status='Active' GROUP BY pc.mas_size_id ORDER BY pc.prod_default DESC";
+       $res=$this->db->query($select);
+        if($res->num_rows()>0){
+           $result=$res->result();
+           foreach($result  as $rows){
+               $product_size[]=array(
+                 "id"=>$rows->id,
+                 "product_id"=>$rows->product_id,
+                 "mas_size_id"=>$rows->mas_size_id,
+                 "size"=>$rows->size,
+                 "prod_actual_price"=>$rows->prod_actual_price,
+                 "prod_mrp_price"=>$rows->prod_mrp_price,
+                 "prod_default"=>$rows->prod_default,
+                 "stocks_left"=>$rows->stocks_left
+               );
+           }
+			$product_size_list = array("status" => "success","msg"=>"Products Size","product_size"=>$product_size);
+        }else{
+            $product_size_list = array("status" => "error","msg"=>"No Record Found");
+        }
+        
+       return $product_size_list;
+    }
+
 
 
 //#################### Product Colour ####################//
@@ -796,7 +825,7 @@ class Mobileapimodel extends CI_Model {
                 "prod_actual_price"=>$rows->prod_actual_price,
                 "prod_mrp_price"=>$rows->prod_mrp_price,
                 "prod_default"=>$rows->prod_default,
-                "stocks_left"=>$rows->stocks_left,
+                "stocks_left"=>$rows->stocks_left
               );
           }
         $data = array("status" => "success","msg"=>"Product Color found","product_color"=>$product_color);
@@ -804,12 +833,30 @@ class Mobileapimodel extends CI_Model {
           $data = array("status" => "error","msg"=>"No Record Found");
        }
        return $data;
-
     }
 
+//################# Check pincode #######################//
 
+      function check_pincode($pin_code){
+        $select = "SELECT * FROM zipcode_masters WHERE zip_code='$pin_code' AND status='Active'";
+        $res=$this->db->query($select);
+        if($res->num_rows()==0){
+           $data = array("status" => "error","msg"=>"No Delivery for this Area");
+        }else{
+            foreach($res->result() as $rows) {}
+            $return_delivery=array(
+                "id"=>$rows->id,
+                "zipcode"=>$rows->zip_code,
+                "zip_desc"=>$rows->zip_desc,
+              );
+             $data = array("status" => "success","msg"=>"Delivery found","delivery_status"=>$return_delivery);
+            }
+          return $data;
+
+      }
+	  
 //#################### Product Wishlist ####################//
-    function prod_wishlist_add($product_id,$user_id){
+    function add_wishlist($product_id,$user_id){
      $select="SELECT * FROM cus_wishlist WHERE  customer_id='$user_id' AND product_id='$product_id'";
       $res=$this->db->query($select);
          if($res->num_rows()>0){
@@ -876,6 +923,129 @@ class Mobileapimodel extends CI_Model {
     }
 
 
+
+//#################### Category and sub category based product list ####################//
+
+  function related_products($cat_id,$sub_cat_id,$product_id,$cus_id){
+   
+	if ($sub_cat_id == ''){
+		$select="SELECT p.*,IFNULL(cw.customer_id,'0') AS wishlisted FROM products AS p LEFT JOIN  cus_wishlist AS cw ON cw.product_id=p.id AND cw.customer_id='$cus_id' WHERE cat_id='$cat_id' AND p.id!='$product_id' AND status='Active'";
+  } else{
+		$select="SELECT p.*,IFNULL(cw.customer_id,'0') AS wishlisted FROM products AS p LEFT JOIN  cus_wishlist AS cw ON cw.product_id=p.id AND cw.customer_id='$cus_id' WHERE cat_id='$cat_id' AND sub_cat_id='$sub_cat_id' AND p.id!='$product_id' AND status='Active'";
+  }
+    $res=$this->db->query($select);
+     if($res->num_rows()>0){
+        $result=$res->result();
+        foreach($result  as $rows){
+            $product_list[]=array(
+              "id"=>$rows->id,
+              "product_name"=>$rows->product_name,
+              "sku_code"=>$rows->sku_code,
+              "product_cover_img"=>base_url().'assets/products/'.$rows->product_cover_img,
+              "prod_size_chart"=>base_url().'assets/products/'.$rows->prod_size_chart,
+              "product_description"=>$rows->product_description,
+              "offer_status"=>$rows->offer_status,
+              "specification_status"=>$rows->specification_status,
+              "combined_status"=>$rows->combined_status,
+              "prod_actual_price"=>$rows->prod_actual_price,
+              "prod_mrp_price"=>$rows->prod_mrp_price,
+              "offer_percentage"=>$rows->offer_percentage,
+              "delivery_fee_status"=>$rows->delivery_fee_status,
+              "prod_return_policy"=>$rows->prod_return_policy,
+              "prod_cod"=>$rows->prod_cod,
+              "product_meta_title"=>$rows->product_meta_title,
+              "product_meta_desc"=>$rows->product_meta_desc,
+              "product_meta_keywords"=>$rows->product_meta_keywords,
+              "stocks_left"=>$rows->stocks_left,
+              "wishlisted"=>$rows->wishlisted,
+            );
+        }
+      $data = array("status" => "success","msg"=>"Products found","product_list"=>$product_list);
+     }else{
+        $data = array("status" => "error","msg"=>"No Products found");
+     }
+      return $data;
+
+  }
+
+
+//################ Product review ########################//
+      function product_reviews($product_id){
+        $select="SELECT c.name,pr.* FROM  product_review AS pr LEFT JOIN customers AS c ON c.id=pr.cus_id WHERE pr.product_id='$product_id' AND pr.status='Active'";
+        $res=$this->db->query($select);
+       if($res->num_rows()>0){
+            $result=$res->result();
+            foreach($result  as $rows){
+                $prod_review[]=array(
+                  "id"=>$rows->id,
+                  "customer_name"=>$rows->name,
+                  "product_id"=>$rows->product_id,
+                  "rating"=>$rows->rating,
+                  "comment"=>$rows->comment,
+                );
+            }
+              $data = array("status" => "success","msg"=>"Reviews found","product_review"=>$prod_review);
+          }else{
+              $data = array("status" => "error","msg"=>"No Review found");
+          }
+          return $data;
+      }
+	  
+	  
+      function product_reviews_add($product_id,$user_id,$rating,$comment){
+        $check="SELECT * FROM product_review WHERE product_id='$product_id' AND cus_id='$user_id'";
+        $result=$this->db->query($check);
+       if($result->num_rows()==0){
+         $insert="INSERT INTO product_review (cus_id,product_id,rating,comment,status,created_at,created_by) VALUES('$user_id','$product_id','$rating','$comment','Active',NOW(),'$user_id')";
+         $res=$this->db->query($insert);
+         if($res){
+             $data = array("status" => "success","msg"=>"Review Added");
+         }else{
+             $data = array("status" => "error","msg"=>"Something Went wrong");
+         }
+       }else{
+         $data = array("status" => "error","msg"=>"Review added already");
+       }
+         return $data;
+      }
+	  
+
+      function product_review_check($product_id,$user_id){
+        $check="SELECT * FROM product_review WHERE product_id='$product_id' AND cus_id='$user_id'";
+        $result=$this->db->query($check);
+       if($result->num_rows()==0){
+         $data = array("status" => "success","msg"=>"Add Review");
+       }else{
+         $select="SELECT * FROM product_review WHERE product_id='$product_id' AND cus_id='$user_id'";
+         $result=$this->db->query($select);
+         $result_rev=$result->result();
+         foreach($result_rev  as $rows){}
+             $prod_review=array(
+               "id"=>$rows->id,
+               "product_id"=>$rows->product_id,
+               "rating"=>$rows->rating,
+               "comment"=>$rows->comment,
+             );
+          $data = array("status" => "success","msg"=>"Reviews found","product_review"=>$prod_review);
+       }
+       return $data;
+      }
+
+
+      function review_update($user_id,$rating,$comment,$review_id){
+        $check="UPDATE product_review SET rating='$rating',comment='$comment' WHERE cus_id='$user_id' AND id='$review_id'";
+        $result=$this->db->query($check);
+       if($result){
+         $data = array("status" => "success","msg"=>"Review Updated");
+       }else{
+          $data = array("status" => "error","msg"=>"Something Went Wrong");
+       }
+       return $data;
+      }
+
+
+
+
 //#################### Product cart ####################//
     function product_cart($product_id,$prod_comb_id,$quantity,$user_id){
         $check="SELECT * FROM products WHERE id='$product_id'";
@@ -900,6 +1070,7 @@ class Mobileapimodel extends CI_Model {
           foreach($result_com as $row_comb){ }
            $old_price_comb=$row_comb->prod_actual_price;
            $offer_status=$rows_result->offer_status;
+		   $check_quantity=$rows_result->stocks_left;
 
           if($offer_status=='1'){
             $offer_percentage=$rows_result->offer_percentage;
@@ -934,7 +1105,6 @@ class Mobileapimodel extends CI_Model {
                 $data = array("status" => "error","msg"=>"Something Went wrong");
             }
           }
-
 
         }else{
           $data = array("status" => "error","msg"=>"Out of Stocks");
@@ -1071,79 +1241,6 @@ class Mobileapimodel extends CI_Model {
     }
 
 
-//################ Product review ########################//
-      function product_reviews($product_id){
-        $select="SELECT c.name,pr.* FROM  product_review AS pr LEFT JOIN customers AS c ON c.id=pr.cus_id WHERE pr.product_id='$product_id' AND pr.status='Active'";
-        $res=$this->db->query($select);
-       if($res->num_rows()>0){
-            $result=$res->result();
-            foreach($result  as $rows){
-                $prod_review[]=array(
-                  "id"=>$rows->id,
-                  "customer_name"=>$rows->name,
-                  "product_id"=>$rows->product_id,
-                  "rating"=>$rows->rating,
-                  "comment"=>$rows->comment,
-                );
-            }
-              $data = array("status" => "success","msg"=>"Reviews found","product_review"=>$prod_review);
-          }else{
-              $data = array("status" => "error","msg"=>"No Review found");
-          }
-          return $data;
-      }
-	  
-	  
-      function product_reviews_add($product_id,$user_id,$rating,$comment){
-        $check="SELECT * FROM product_review WHERE product_id='$product_id' AND cus_id='$user_id'";
-        $result=$this->db->query($check);
-       if($result->num_rows()==0){
-         $insert="INSERT INTO product_review (cus_id,product_id,rating,comment,status,created_at,created_by) VALUES('$user_id','$product_id','$rating','$comment','Active',NOW(),'$user_id')";
-         $res=$this->db->query($insert);
-         if($res){
-             $data = array("status" => "success","msg"=>"Review Added");
-         }else{
-             $data = array("status" => "error","msg"=>"Something Went wrong");
-         }
-       }else{
-         $data = array("status" => "error","msg"=>"Review added already");
-       }
-         return $data;
-      }
-	  
-
-      function product_review_check($product_id,$user_id){
-        $check="SELECT * FROM product_review WHERE product_id='$product_id' AND cus_id='$user_id'";
-        $result=$this->db->query($check);
-       if($result->num_rows()==0){
-         $data = array("status" => "success","msg"=>"Add Review");
-       }else{
-         $select="SELECT * FROM product_review WHERE product_id='$product_id' AND cus_id='$user_id'";
-         $result=$this->db->query($select);
-         $result_rev=$result->result();
-         foreach($result_rev  as $rows){}
-             $prod_review=array(
-               "id"=>$rows->id,
-               "product_id"=>$rows->product_id,
-               "rating"=>$rows->rating,
-               "comment"=>$rows->comment,
-             );
-          $data = array("status" => "success","msg"=>"Reviews found","product_review"=>$prod_review);
-       }
-       return $data;
-      }
-
-
-      function review_update($user_id,$rating,$comment,$review_id){
-        $check="UPDATE product_review SET rating='$rating',comment='$comment' WHERE cus_id='$user_id' AND id='$review_id'";
-        $result=$this->db->query($check);
-       if($result){
-         $data = array("status" => "success","msg"=>"Review Updated");
-       }else{
-          $data = array("status" => "error","msg"=>"Something Went Wrong");
-       }
-       return $data;
-      }
 
 
 //################ Address List ########################//
@@ -1191,25 +1288,7 @@ class Mobileapimodel extends CI_Model {
 	  
 	  
 	  
-//################# Check pincode #######################//
 
-      function check_pincode($pin_code){
-        $select = "SELECT * FROM zipcode_masters WHERE zip_code='$pin_code' AND status='Active'";
-        $res=$this->db->query($select);
-        if($res->num_rows()==0){
-           $data = array("status" => "error","msg"=>"No Delivery for this Area");
-        }else{
-            foreach($res->result() as $rows) {}
-            $return_delivery=array(
-                "id"=>$rows->id,
-                "zipcode"=>$rows->zip_code,
-                "zip_desc"=>$rows->zip_desc,
-              );
-             $data = array("status" => "success","msg"=>"Delivery found","delivery_status"=>$return_delivery);
-            }
-          return $data;
-
-      }
 	  
 	  
 //################ Place order ########################//

@@ -302,7 +302,6 @@ class Mobileapi extends CI_Controller {
 
 	public function home_page()
 	{
-
 	 $_POST = json_decode(file_get_contents("php://input"), TRUE);
 
 		if(!$this->checkMethod())
@@ -323,7 +322,6 @@ class Mobileapi extends CI_Controller {
 
 		$data['result']=$this->mobileapimodel->home_page();
 		$response = $data['result'];
-		//print_r($response);
 		echo json_encode($response);
 	}
 
@@ -354,13 +352,12 @@ class Mobileapi extends CI_Controller {
 
 		$data['result']=$this->mobileapimodel->category_list();
 		$response = $data['result'];
-		//print_r($response);
 		echo json_encode($response);
 	}
 
 //-----------------------------------------------//
 
-//--------------------Category list---------------------------//
+//-----------------------------------------------//
 
 	public function sub_cat_list()
 	{
@@ -385,7 +382,6 @@ class Mobileapi extends CI_Controller {
 		$cat_id = $this->input->post("cat_id");
 		$data['result']=$this->mobileapimodel->sub_cat_list($cat_id);
 		$response = $data['result'];
-		//print_r($response);
 		echo json_encode($response);
 	}
 
@@ -417,16 +413,15 @@ class Mobileapi extends CI_Controller {
 
 	 	$cat_id = $this->input->post("cat_id");
 		$sub_cat_id = $this->input->post("sub_cat_id");
-		$user_id = $this->input->post("user_id");
-		$data['result']=$this->mobileapimodel->product_list($cat_id,$sub_cat_id,$user_id);
+		$cus_id = $this->input->post("user_id");
+		$data['result']=$this->mobileapimodel->product_list($cat_id,$sub_cat_id,$cus_id);
 		$response = $data['result'];
-		//print_r($response);
 		echo json_encode($response);
 	}
 
 //-----------------------------------------------//
 
-//--------------------Product details page---------------------------//
+//-----------------------------------------------//
 
 	public function product_details()
 	{
@@ -460,6 +455,38 @@ class Mobileapi extends CI_Controller {
 
 //-----------------------------------------------//
 
+	public function get_product_size()
+	{
+
+		$_POST = json_decode(file_get_contents("php://input"), TRUE);
+
+		if(!$this->checkMethod())
+		{
+			return FALSE;
+		}
+
+		if($_POST == FALSE)
+		{
+			$res = array();
+			$res["opn"] = "Login";
+			$res["scode"] = 204;
+			$res["message"] = "Input error";
+
+			echo json_encode($res);
+			return;
+		}
+		$product_id = $this->input->post("product_id");
+		$data['result']=$this->mobileapimodel->get_product_size($product_id);
+		$response = $data['result'];
+		//print_r($response);
+		echo json_encode($response);
+	}
+
+//-----------------------------------------------//
+
+
+//-----------------------------------------------//
+
 	public function get_product_color()
 	{
 
@@ -490,10 +517,42 @@ class Mobileapi extends CI_Controller {
 
 //-----------------------------------------------//
 
+//-----------------------------------------------//
 
-//--------------------Product Wishlist  ---------------------------//
 
-	public function wishlist()
+		public function check_pincode()
+		{
+
+			$_POST = json_decode(file_get_contents("php://input"), TRUE);
+
+			if(!$this->checkMethod())
+			{
+				return FALSE;
+			}
+
+			if($_POST == FALSE)
+			{
+				$res = array();
+				$res["opn"] = "Login";
+				$res["scode"] = 204;
+				$res["message"] = "Input error";
+
+				echo json_encode($res);
+				return;
+			}
+
+			 $pin_code=$this->input->post("pin_code");
+			
+			$data['result']=$this->mobileapimodel->check_pincode($pin_code);
+			$response = $data['result'];
+			//print_r($response);
+			echo json_encode($response);
+		}
+//-----------------------------------------------//
+
+//-----------------------------------------------//
+
+	public function add_wishlist()
 	{
 
 	  $_POST = json_decode(file_get_contents("php://input"), TRUE);
@@ -515,7 +574,7 @@ class Mobileapi extends CI_Controller {
 		}
 		$product_id = $this->input->post("product_id");
 		$user_id = $this->input->post("user_id");
-		$data['result']=$this->mobileapimodel->prod_wishlist_add($product_id,$user_id);
+		$data['result']=$this->mobileapimodel->add_wishlist($product_id,$user_id);
 		$response = $data['result'];
 		//print_r($response);
 		echo json_encode($response);
@@ -584,139 +643,38 @@ class Mobileapi extends CI_Controller {
 		echo json_encode($response);
 	}
 
-//------------------Product cart -----------------------------//
+//-----------------------------------------------//
 
-		public function product_cart()
+//-----------------------------------------------//
+
+	public function related_products()
+	{
+	  $_POST = json_decode(file_get_contents("php://input"), TRUE);
+
+		if(!$this->checkMethod())
 		{
-
-			$_POST = json_decode(file_get_contents("php://input"), TRUE);
-
-			if(!$this->checkMethod())
-			{
-				return FALSE;
-			}
-
-			if($_POST == FALSE)
-			{
-				$res = array();
-				$res["opn"] = "Login";
-				$res["scode"] = 204;
-				$res["message"] = "Input error";
-
-				echo json_encode($res);
-				return;
-			}
-			$product_id = $this->input->post("product_id");
-			$prod_comb_id = $this->input->post("product_comb_id");
-			$quantity = $this->input->post("quantity");
-			$user_id = $this->input->post("user_id");
-			$data['result']=$this->mobileapimodel->product_cart($product_id,$prod_comb_id,$quantity,$user_id);
-			$response = $data['result'];
-			//print_r($response);
-			echo json_encode($response);
+			return FALSE;
 		}
 
-//-----------------------------------------------//
-
-//-----------------------------------------------//
-
-		public function product_cart_remove()
+		if($_POST == FALSE)
 		{
+			$res = array();
+			$res["opn"] = "Login";
+			$res["scode"] = 204;
+			$res["message"] = "Input error";
 
-			$_POST = json_decode(file_get_contents("php://input"), TRUE);
-
-			if(!$this->checkMethod())
-			{
-				return FALSE;
-			}
-
-			if($_POST == FALSE)
-			{
-				$res = array();
-				$res["opn"] = "Login";
-				$res["scode"] = 204;
-				$res["message"] = "Input error";
-
-				echo json_encode($res);
-				return;
-			}
-
-			$cart_id = $this->input->post("cart_id");
-			$user_id = $this->input->post("user_id");
-			$data['result']=$this->mobileapimodel->product_cart_remove($cart_id,$user_id);
-			$response = $data['result'];
-			//print_r($response);
-			echo json_encode($response);
+			echo json_encode($res);
+			return;
 		}
-		
-//-----------------------------------------------//
-
-//-----------------------------------------------//
-
-		public function view_cart_items()
-		{
-
-			$_POST = json_decode(file_get_contents("php://input"), TRUE);
-
-			if(!$this->checkMethod())
-			{
-				return FALSE;
-			}
-
-			if($_POST == FALSE)
-			{
-				$res = array();
-				$res["opn"] = "Login";
-				$res["scode"] = 204;
-				$res["message"] = "Input error";
-
-				echo json_encode($res);
-				return;
-			}
-
-			$user_id = $this->input->post("user_id");
-			$data['result']=$this->mobileapimodel->view_cart_items($user_id);
-			$response = $data['result'];
-			//print_r($response);
-			echo json_encode($response);
-		}
-
-//-----------------------------------------------//
-
-//-----------------------------------------------//
-
-		public function cart_quantity()
-		{
-
-			$_POST = json_decode(file_get_contents("php://input"), TRUE);
-
-			if(!$this->checkMethod())
-			{
-				return FALSE;
-			}
-
-			if($_POST == FALSE)
-			{
-				$res = array();
-				$res["opn"] = "Login";
-				$res["scode"] = 204;
-				$res["message"] = "Input error";
-
-				echo json_encode($res);
-				return;
-			}
-
-			$cart_id = $this->input->post("cart_id");
-			$quantity = $this->input->post("quantity");
-			$user_id=$this->input->post("user_id");
-			$data['result']=$this->mobileapimodel->cart_quantity($cart_id,$quantity,$user_id);
-			$response = $data['result'];
-			//print_r($response);
-			echo json_encode($response);
-		}
-
-
-//-----------------------------------------------//
+		$cus_id = $this->input->post("user_id");
+		$cat_id = $this->input->post("cat_id");
+		$sub_cat_id = $this->input->post("sub_cat_id");
+		$product_id = $this->input->post("product_id");
+		$data['result']=$this->mobileapimodel->related_products($cat_id,$sub_cat_id,$product_id,$cus_id);
+		$response = $data['result'];
+		//print_r($response);
+		echo json_encode($response);
+	}
 
 //-----------------------------------------------//
 
@@ -851,6 +809,141 @@ class Mobileapi extends CI_Controller {
 
 //-----------------------------------------------//
 
+		public function product_cart()
+		{
+
+			$_POST = json_decode(file_get_contents("php://input"), TRUE);
+
+			if(!$this->checkMethod())
+			{
+				return FALSE;
+			}
+
+			if($_POST == FALSE)
+			{
+				$res = array();
+				$res["opn"] = "Login";
+				$res["scode"] = 204;
+				$res["message"] = "Input error";
+
+				echo json_encode($res);
+				return;
+			}
+			$product_id = $this->input->post("product_id");
+			$prod_comb_id = $this->input->post("product_comb_id");
+			$quantity = $this->input->post("quantity");
+			$user_id = $this->input->post("user_id");
+			$data['result']=$this->mobileapimodel->product_cart($product_id,$prod_comb_id,$quantity,$user_id);
+			$response = $data['result'];
+			//print_r($response);
+			echo json_encode($response);
+		}
+
+//-----------------------------------------------//
+
+//-----------------------------------------------//
+
+		public function product_cart_remove()
+		{
+
+			$_POST = json_decode(file_get_contents("php://input"), TRUE);
+
+			if(!$this->checkMethod())
+			{
+				return FALSE;
+			}
+
+			if($_POST == FALSE)
+			{
+				$res = array();
+				$res["opn"] = "Login";
+				$res["scode"] = 204;
+				$res["message"] = "Input error";
+
+				echo json_encode($res);
+				return;
+			}
+
+			$cart_id = $this->input->post("cart_id");
+			$user_id = $this->input->post("user_id");
+			$data['result']=$this->mobileapimodel->product_cart_remove($cart_id,$user_id);
+			$response = $data['result'];
+			//print_r($response);
+			echo json_encode($response);
+		}
+		
+//-----------------------------------------------//
+
+//-----------------------------------------------//
+
+		public function view_cart_items()
+		{
+
+			$_POST = json_decode(file_get_contents("php://input"), TRUE);
+
+			if(!$this->checkMethod())
+			{
+				return FALSE;
+			}
+
+			if($_POST == FALSE)
+			{
+				$res = array();
+				$res["opn"] = "Login";
+				$res["scode"] = 204;
+				$res["message"] = "Input error";
+
+				echo json_encode($res);
+				return;
+			}
+
+			$user_id = $this->input->post("user_id");
+			$data['result']=$this->mobileapimodel->view_cart_items($user_id);
+			$response = $data['result'];
+			//print_r($response);
+			echo json_encode($response);
+		}
+
+//-----------------------------------------------//
+
+//-----------------------------------------------//
+
+		public function cart_quantity()
+		{
+
+			$_POST = json_decode(file_get_contents("php://input"), TRUE);
+
+			if(!$this->checkMethod())
+			{
+				return FALSE;
+			}
+
+			if($_POST == FALSE)
+			{
+				$res = array();
+				$res["opn"] = "Login";
+				$res["scode"] = 204;
+				$res["message"] = "Input error";
+
+				echo json_encode($res);
+				return;
+			}
+
+			$cart_id = $this->input->post("cart_id");
+			$quantity = $this->input->post("quantity");
+			$user_id=$this->input->post("user_id");
+			$data['result']=$this->mobileapimodel->cart_quantity($cart_id,$quantity,$user_id);
+			$response = $data['result'];
+			//print_r($response);
+			echo json_encode($response);
+		}
+
+
+//-----------------------------------------------//
+
+
+//-----------------------------------------------//
+
 		public function address_list()
 		{
 
@@ -924,38 +1017,7 @@ class Mobileapi extends CI_Controller {
 		}
 //-----------------------------------------------//
 
-//-----------------------------------------------//
 
-
-		public function check_pincode()
-		{
-
-			$_POST = json_decode(file_get_contents("php://input"), TRUE);
-
-			if(!$this->checkMethod())
-			{
-				return FALSE;
-			}
-
-			if($_POST == FALSE)
-			{
-				$res = array();
-				$res["opn"] = "Login";
-				$res["scode"] = 204;
-				$res["message"] = "Input error";
-
-				echo json_encode($res);
-				return;
-			}
-
-			 $pin_code=$this->input->post("pin_code");
-			
-			$data['result']=$this->mobileapimodel->check_pincode($pin_code);
-			$response = $data['result'];
-			//print_r($response);
-			echo json_encode($response);
-		}
-//-----------------------------------------------//
 
 //-----------------------------------------------//
 
