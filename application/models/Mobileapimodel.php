@@ -600,9 +600,9 @@ class Mobileapimodel extends CI_Model {
                       "stocks_left"=>$rows->stocks_left,
                     );
                 }
-              $prd_list = array("status" => "success","msg"=>"products list","data"=>$product_list);
+				$prd_list = array("status" => "success","msg"=>"products list","data"=>$product_list);
              }else{
-              $prd_list = array("status" => "error","msg"=>"No Products found");
+				$prd_list = array("status" => "error","msg"=>"No Products found");
              }
 
 
@@ -612,12 +612,20 @@ class Mobileapimodel extends CI_Model {
               if($res->num_rows()>0){
                  $result=$res->result();
                  foreach($result  as $rows){
+					 
+					$prod_size_chart = $rows->prod_size_chart;
+					if ($prod_size_chart!=''){
+						$product_size_url = base_url().'assets/products/charts/'.$prod_size_chart;
+					}else {
+						$product_size_url = "";
+					}
+					
                      $popular_product_list[]=array(
                        "id"=>$rows->id,
                        "product_name"=>$rows->product_name,
                        "sku_code"=>$rows->sku_code,
                        "product_cover_img"=>base_url().'assets/products/'.$rows->product_cover_img,
-                       "prod_size_chart"=>base_url().'assets/products/'.$rows->prod_size_chart,
+                       "prod_size_chart"=>$prod_size_chart,
                        "product_description"=>$rows->product_description,
                        "offer_status"=>$rows->offer_status,
                        "specification_status"=>$rows->specification_status,
@@ -657,7 +665,7 @@ class Mobileapimodel extends CI_Model {
                "id"=>$rows->id,
                "parent_id"=>$rows->parent_id,
                "category_name"=>$rows->category_name,
-               "category_image"=>base_url().'assets/category/'.$rows->category_image,
+               "category_image"=>base_url().'assets/category/thumbnail/'.$rows->category_thumbnail,
                "category_desc"=>$rows->category_desc,
              );
            }
@@ -680,7 +688,7 @@ class Mobileapimodel extends CI_Model {
                    "id"=>$rows->id,
                    "parent_id"=>$rows->parent_id,
                    "category_name"=>$rows->category_name,
-                   "category_image"=>base_url().'assets/category/'.$rows->category_image,
+				   "category_image"=>base_url().'assets/category/thumbnail/'.$rows->category_thumbnail,
                    "category_desc"=>$rows->category_desc,
                  );
                }
@@ -706,12 +714,19 @@ class Mobileapimodel extends CI_Model {
      if($res->num_rows()>0){
         $result=$res->result();
         foreach($result  as $rows){
+			$prod_size_chart = $rows->prod_size_chart;
+			if ($prod_size_chart!=''){
+				$product_size_url = base_url().'assets/products/charts/'.$prod_size_chart;
+			}else {
+				$product_size_url = "";
+			}
+					
             $product_list[]=array(
               "id"=>$rows->id,
               "product_name"=>$rows->product_name,
               "sku_code"=>$rows->sku_code,
               "product_cover_img"=>base_url().'assets/products/'.$rows->product_cover_img,
-              "prod_size_chart"=>base_url().'assets/products/'.$rows->prod_size_chart,
+              "prod_size_chart"=>$prod_size_chart,
               "product_description"=>$rows->product_description,
               "offer_status"=>$rows->offer_status,
               "specification_status"=>$rows->specification_status,
@@ -751,12 +766,19 @@ class Mobileapimodel extends CI_Model {
        if($res->num_rows()>0){
           $result=$res->result();
           foreach($result  as $rows){  }
+		  
+		  $prod_size_chart = $rows->prod_size_chart;
+			if ($prod_size_chart!=''){
+				$product_size_url = base_url().'assets/products/charts/'.$prod_size_chart;
+			}else {
+				$product_size_url = "";
+			}
               $prd_details=array(
                 "id"=>$rows->id,
                 "product_name"=>$rows->product_name,
                 "sku_code"=>$rows->sku_code,
                 "product_cover_img"=>base_url().'assets/products/'.$rows->product_cover_img,
-                "prod_size_chart"=>base_url().'assets/products/'.$rows->prod_size_chart,
+                "prod_size_chart"=>$product_size_url,
                 "product_description"=>$rows->product_description,
                 "offer_status"=>$rows->offer_status,
                 "specification_status"=>$rows->specification_status,
@@ -968,7 +990,6 @@ class Mobileapimodel extends CI_Model {
               "product_name"=>$rows->product_name,
               "sku_code"=>$rows->sku_code,
               "product_cover_img"=>base_url().'assets/products/'.$rows->product_cover_img,
-              "prod_size_chart"=>base_url().'assets/products/'.$rows->prod_size_chart,
               "product_description"=>$rows->product_description,
               "offer_status"=>$rows->offer_status,
               "specification_status"=>$rows->specification_status,
@@ -1010,7 +1031,6 @@ class Mobileapimodel extends CI_Model {
               "product_name"=>$rows->product_name,
               "sku_code"=>$rows->sku_code,
               "product_cover_img"=>base_url().'assets/products/'.$rows->product_cover_img,
-              "prod_size_chart"=>base_url().'assets/products/'.$rows->prod_size_chart,
               "product_description"=>$rows->product_description,
               "offer_status"=>$rows->offer_status,
               "specification_status"=>$rows->specification_status,
@@ -1709,7 +1729,6 @@ LEFT JOIN products AS p ON p.id=pc.product_id LEFT JOIN product_combined AS comb
                   "product_name"=>$rows->product_name,
                   "sku_code"=>$rows->sku_code,
                   "product_cover_img"=>base_url().'assets/products/'.$rows->product_cover_img,
-                  "prod_size_chart"=>base_url().'assets/products/'.$rows->prod_size_chart,
                   "product_description"=>$rows->product_description,
                   "offer_status"=>$rows->offer_status,
                   "specification_status"=>$rows->specification_status,
