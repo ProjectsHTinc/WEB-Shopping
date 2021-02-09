@@ -572,12 +572,18 @@ class Mobileapimodel extends CI_Model {
              if($res->num_rows()>0){
                 $result=$res->result();
                 foreach($result  as $rows){
+					$prod_size_chart = $rows->prod_size_chart;
+					if ($prod_size_chart!=''){
+						$product_size_url = base_url().'assets/products/charts/'.$prod_size_chart;
+					}else {
+						$product_size_url = "";
+					}
                     $product_list[]=array(
                       "id"=>$rows->id,
                       "product_name"=>$rows->product_name,
                       "sku_code"=>$rows->sku_code,
                       "product_cover_img"=>base_url().'assets/products/'.$rows->product_cover_img,
-                      "prod_size_chart"=>base_url().'assets/products/'.$rows->prod_size_chart,
+                      "prod_size_chart"=>$product_size_url,
                       "product_description"=>$rows->product_description,
                       "offer_status"=>$rows->offer_status,
                       "specification_status"=>$rows->specification_status,
