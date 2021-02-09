@@ -58,6 +58,20 @@ class Mobileapimodel extends CI_Model {
 				  $login_count = $rows->login_count+1;
 			}
 
+			$add_sql = "SELECT * FROM cus_address WHERE cus_id = '$cust_id' AND address_mode = '1' AND status = 'Active'";
+			$add_result = $this->db->query($add_sql);
+			$add_ress = $add_result->result();
+
+			if($add_result->num_rows()>0)
+			{
+			  foreach ($add_result->result() as $rows)
+			  {
+				$address_id = $rows->id;
+			  }
+			}else{
+				$address_id = 0;
+			}
+			
 			$sql = "SELECT
 				A.id AS customer_id,
 				A.phone_number,
@@ -102,7 +116,9 @@ class Mobileapimodel extends CI_Model {
 					"profile_picture" => $profile_picture,
 					"newsletter_status" => $ress[0]->newsletter_status,
 					"login_count" => $ress[0]->login_count,
-					"last_login" => $ress[0]->last_login
+					"last_login" => $ress[0]->last_login,
+					"address_id" => $address_id
+					
 			  );
 			}
           $update_sql = "UPDATE customers SET login_type = '$login_type', last_login=NOW(),login_count='$login_count' WHERE id='$cust_id'";
@@ -148,6 +164,20 @@ class Mobileapimodel extends CI_Model {
           $login_count = $rows->login_count+1;
         }
 
+			$add_sql = "SELECT * FROM cus_address WHERE cus_id = '$cust_id' AND address_mode = '1' AND status = 'Active'";
+			$add_result = $this->db->query($add_sql);
+			$add_ress = $add_result->result();
+
+			if($add_result->num_rows()>0)
+			{
+			  foreach ($add_result->result() as $rows)
+			  {
+				$address_id = $rows->id;
+			  }
+			}else{
+				$address_id = 0;
+			}
+			
         $sql = "SELECT
             A.id AS customer_id,
             A.phone_number,
@@ -192,7 +222,8 @@ class Mobileapimodel extends CI_Model {
                 "profile_picture" => $profile_picture,
                 "newsletter_status" => $ress[0]->newsletter_status,
                 "login_count" => $ress[0]->login_count,
-                "last_login" => $ress[0]->last_login
+                "last_login" => $ress[0]->last_login,
+				"address_id" => $address_id
           );
         }
           $update_sql = "UPDATE customers SET login_type = '$login_type',last_login=NOW(),login_count='$login_count' WHERE id='$cust_id'";
@@ -237,6 +268,20 @@ class Mobileapimodel extends CI_Model {
 			$login_count = $rows_check->login_count+1;
 		}
 		
+			$add_sql = "SELECT * FROM cus_address WHERE cus_id = '$id' AND address_mode = '1' AND status = 'Active'";
+			$add_result = $this->db->query($add_sql);
+			$add_ress = $add_result->result();
+
+			if($add_result->num_rows()>0)
+			{
+			  foreach ($add_result->result() as $rows)
+			  {
+				$address_id = $rows->id;
+			  }
+			}else{
+				$address_id = 0;
+			}
+			
 			$sql = "SELECT  A.id AS customer_id, A.phone_number, A.email, B.first_name, B.last_name, B.birth_date, B.gender, B.profile_picture, B.newsletter_status,A.login_count,A.last_login FROM customers A,customer_details B  WHERE  A.id = B.customer_id AND A.id = '$id'";
 			$cust_result = $this->db->query($sql);
 			$ress = $cust_result->result();
@@ -265,7 +310,8 @@ class Mobileapimodel extends CI_Model {
                           "profile_picture" => $profile_picture,
                           "newsletter_status" => $ress[0]->newsletter_status,
                           "login_count" => $ress[0]->login_count,
-                          "last_login" => $ress[0]->last_login
+                          "last_login" => $ress[0]->last_login,
+						  "address_id" => $address_id
                     );
                   }
                     $update_sql = "UPDATE customers SET login_type='$login_type', last_login=NOW(),login_count='$login_count' WHERE id='$id'";
@@ -293,9 +339,24 @@ class Mobileapimodel extends CI_Model {
 			$cus_result = $this->db->query($insert);
 			$insert_id = $this->db->insert_id();
        
-			$insert_details="INSERT INTO customer_details(customer_id,first_name,last_name,newsletter_status,created_at,created_by)VALUES('$insert_id','$first_name','$last_name','1',NOW(),'$insert_id')";
+			$insert_details="INSERT INTO customer_details(customer_id,first_name,last_name,newsletter_status,created_at,created_by)VALUES('$insert_id','$first_name','$last_name','Y',NOW(),'$insert_id')";
 			$cus_result_details = $this->db->query($insert_details);
        
+			$add_sql = "SELECT * FROM cus_address WHERE cus_id = '$insert_id' AND address_mode = '1' AND status = 'Active'";
+			$add_result = $this->db->query($add_sql);
+			$add_ress = $add_result->result();
+
+			if($add_result->num_rows()>0)
+			{
+			  foreach ($add_result->result() as $rows)
+			  {
+				$address_id = $rows->id;
+			  }
+			}else{
+				$address_id = 0;
+			}
+	   
+	   
 			$sql = "SELECT  A.id AS customer_id,A.phone_number,A.email,B.first_name,B.last_name,B.birth_date,B.gender,B.profile_picture,B.newsletter_status,A.login_count,A.last_login FROM customers A,customer_details B  WHERE  A.id = B.customer_id AND A.id = '$insert_id'";
 			$cust_result = $this->db->query($sql);
 			$ress = $cust_result->result();
@@ -324,7 +385,8 @@ class Mobileapimodel extends CI_Model {
                           "profile_picture" => $profile_picture,
                           "newsletter_status" => $ress[0]->newsletter_status,
                           "login_count" => $ress[0]->login_count,
-                          "last_login" => $ress[0]->last_login
+                          "last_login" => $ress[0]->last_login,
+						  "address_id" => $address_id
                     );
                   }
 
@@ -485,7 +547,7 @@ class Mobileapimodel extends CI_Model {
             }
 
 		//--------Category list----//
-		$select="SELECT * FROM category_masters WHERE parent_id='1'  AND status='Active'";
+		$select="SELECT * FROM category_masters WHERE parent_id='1' AND id!='1' AND status='Active'";
 		$res=$this->db->query($select);
          if($res->num_rows()>0){
            $result=$res->result();
@@ -494,7 +556,7 @@ class Mobileapimodel extends CI_Model {
 				   "id"=>$rows->id,
 				   "parent_id"=>$rows->parent_id,
 				   "category_name"=>$rows->category_name,
-				   "category_image"=>base_url().'assets/category/'.$rows->category_thumbnail,
+				   "category_image"=>base_url().'assets/category/thumbnail/'.$rows->category_thumbnail,
 				   "category_desc"=>$rows->category_desc,
 				 );
 			   }
@@ -1241,12 +1303,124 @@ class Mobileapimodel extends CI_Model {
     }
 
 
+//################ Place order ########################//
 
+      function place_order($user_id,$address_id,$cus_notes){
+        $check_order = "SELECT * FROM purchase_order ORDER BY id DESC LIMIT 1";
+        $res=$this->db->query($check_order);
+
+        if($res->num_rows()>0){
+            foreach($res->result() as $rows) {
+                $old_order_id = $rows->id;
+            }
+            $order_id = $old_order_id+1;
+        } else {
+            $order_id = 1;
+        }
+        $today = date("Ymd");
+        $rand = strtoupper(substr(uniqid(sha1(time())),0,4));
+        $order_id = 'SHOP'.$today . $rand . $order_id;
+        $select_cart="SELECT sum(total_amount) as total_amount,sum(quantity) as total_quantity FROM product_cart WHERE cus_id='$user_id' AND status='Pending'";
+        $result=$this->db->query($select_cart);
+        $res_cart=$result->result();
+        foreach($res_cart as $total_amount){}
+        $total=$total_amount->total_amount;
+
+        $tot_quantity=$total_amount->total_quantity;
+        $insert="INSERT INTO purchase_order (order_id,cus_id,purchase_date,cus_address_id,total_amount,status,cus_notes,created_at,created_by) VALUES('$order_id','$user_id',NOW(),'$address_id','$total','Success','$cus_notes',NOW(),'$user_id')";
+        $res=$this->db->query($insert);
+		//$insert_order_id = $this->db->insert_id();
+
+        //---Stocks left Update--//
+        $select_stock="SELECT * FROM product_cart WHERE cus_id='$user_id' AND status='Pending'";
+        $result_stock=$this->db->query($select_stock);
+        $res_stock=$result_stock->result();
+        foreach($res_stock as $rows_stock){
+          $prd_qu=$rows_stock->quantity;
+          $prd_id=$rows_stock->product_id;
+          $prd_com_id=$rows_stock->product_combined_id;
+          $update_stoc="UPDATE products SET stocks_left=stocks_left-'$prd_qu' WHERE id='$prd_id'";
+          $resu_stock=$this->db->query($update_stoc);
+          if($prd_com_id=='1'){
+            $update_comb_stoc="UPDATE product_combined SET stocks_left=stocks_left-'$prd_qu' WHERE id='$prd_com_id' AND product_id='$prd_id'";
+            $resu_stock=$this->db->query($update_comb_stoc);
+          }
+        }
+          //---Stocks left Update--//
+
+         //---Update Cart to Success--//
+        $update_cart="UPDATE product_cart SET order_id='$order_id',cus_id='$user_id',status='Success' WHERE cus_id='$user_id' AND status='Pending'";
+        $res_cart=$this->db->query($update_cart);
+        if($res_cart){
+          $data = array("status" => "success","msg"=>"Order Successfully Placed","order_id"=>$order_id);
+        }else{
+          $data = array("status" => "error","msg"=>"Order Error");
+        }
+          return $data;
+      }
+
+
+//################ Order Details ########################//
+
+      function order_details($user_id,$order_id){
+        $check_order = "SELECT
+							po.id as purchse_order_id,
+							po.*,
+							ca.*,
+							cm.country_name
+						FROM
+							purchase_order AS po
+						LEFT JOIN cus_address AS ca
+						ON
+							ca.id = po.cus_address_id
+						LEFT JOIN country_master as cm
+						ON ca.country_id = cm.id
+						WHERE
+							po.order_id = '$order_id'";
+        $res=$this->db->query($check_order);
+
+        if($res->num_rows()>0){
+          $result=$res->result();
+		  $data = array("status" => "success","msg"=>"Order Details","order_details"=>$result);
+        } else {
+           $data = array("status" => "error","msg"=>"Order Error Error");
+        }
+          return $data;
+      }
+
+//################ Order Address change ########################//
+
+	function select_order_address($address_id){
+			$select_address = "SELECT * FROM cus_address WHERE id = '$address_id'";
+			$sel_address = $this->db->query($select_address);
+			if($sel_address->num_rows()>0){
+            $result_address=$sel_address->result();
+				foreach($result_address  as $rows){ 
+					$address_id=$rows->id;
+				}
+			}	
+			 $data = array("status" => "success","msg"=>"Address details","address_id"=>$address_id);
+			 
+		return $data;
+	}
+	
+      function order_address_update($user_id,$purchse_order_id,$address_id){
+			
+			$update_address = "UPDATE purchase_order SET cus_address_id='$address_id' WHERE id = '$purchse_order_id'";
+			$update_address = $this->db->query($update_address);
+
+			if($update_address){
+			 $data = array("status" => "success","msg"=>"Address Update");
+			}else{
+			  $data = array("status" => "error","msg"=>"Something Went Wrong");
+			}
+		return $data;
+      }
 
 //################ Address List ########################//
 
       function address_list($user_id){
-        $select="SELECT * FROM cus_address  AS ca WHERE ca.cus_id='$user_id'";
+        $select="SELECT * FROM cus_address AS ca WHERE ca.cus_id='$user_id'";
         $res=$this->db->query($select);
         if($res->num_rows()>0){
             $result=$res->result();
@@ -1270,84 +1444,150 @@ class Mobileapimodel extends CI_Model {
               $data = array("status" => "error","msg"=>"No Address found");
           }
           return $data;
-
       }
 	  
 	  
       function address_create($user_id,$country_id,$state,$city,$pincode,$house_no,$street,$landmark,$full_name,$mobile_number,$email_address,$alternative_mobile_number,$address_type,$address_mode){
-        $insert="INSERT INTO cus_address (cus_id,country_id,state,city,pincode,house_no,street,landmark,full_name,mobile_number,email_address,alternative_mobile_number,address_type_id,address_mode,status,created_at,created_by)
-         VALUES('$user_id','$country_id','$state','$city','$pincode','$house_no','$street','$landmark','$full_name','$mobile_number','$email_address','$alternative_mobile_number','$address_type','$address_mode','Active','$user_id',NOW())";
-        $result=$this->db->query($insert);
-       if($result){
-         $data = array("status" => "success","msg"=>"Address Added");
-       }else{
-          $data = array("status" => "error","msg"=>"Something Went Wrong");
-       }
-       return $data;
+
+			$insert="INSERT INTO cus_address (cus_id,country_id,state,city,pincode,house_no,street,landmark,full_name,mobile_number,email_address,alternative_mobile_number,address_type_id,address_mode,status,created_at,created_by)
+			VALUES('$user_id','$country_id','$state','$city','$pincode','$house_no','$street','$landmark','$full_name','$mobile_number','$email_address','$alternative_mobile_number','$address_type','$address_mode','Active','$user_id',NOW())";
+			$result=$this->db->query($insert);
+			$address_id = $this->db->insert_id();
+			
+			if($result){
+				$data = array("status" => "success","msg"=>"Address Added","address_id"=>$address_id);
+			}else{
+				$data = array("status" => "error","msg"=>"Something Went Wrong");
+			}
+			return $data;
       }
 	  
-	  
-	  
+	  function address_update($user_id,$address_id,$country_id,$state,$city,$pincode,$house_no,$street,$landmark,$full_name,$mobile_number,$email_address,$alternative_mobile_number,$address_type,$address_mode,$status){
+		  
+			$update_address = "UPDATE cus_address SET cus_id='$user_id',country_id='$country_id',state='$state',city='$city',pincode='$pincode',house_no='$house_no',street='$street',landmark='$landmark',full_name='$full_name',mobile_number='$mobile_number',email_address='$email_address', alternative_mobile_number='$alternative_mobile_number',address_type_id='$address_type',address_mode='$address_mode',status='$status' WHERE id = '$address_id'";
+			$update_address = $this->db->query($update_address);
 
+			if($update_address){
+			 $data = array("status" => "success","msg"=>"Address Update");
+			}else{
+			  $data = array("status" => "error","msg"=>"Something Went Wrong");
+			}
+		return $data;
+	}
 	  
-	  
-//################ Place order ########################//
+	function address_set_default($address_id,$address_mode){
+		  
+			$update_address = "UPDATE cus_address SET address_mode='$address_mode' WHERE id = '$address_id'";
+			$update_address = $this->db->query($update_address);
 
-      function place_order($user_id,$address_id,$cus_notes){
-        $check_order = "SELECT * FROM purchase_order ORDER BY id DESC LIMIT 1";
-        $res=$this->db->query($check_order);
+			if($update_address){
+			 $data = array("status" => "success","msg"=>"Address Update");
+			}else{
+			  $data = array("status" => "error","msg"=>"Something Went Wrong");
+			}
+		return $data;
+	}
+	
 
+//################# View customer orders #######################//
+      function view_orders($user_id,$status){
+		
+		if ($status == 'Delivered'){
+			$select="SELECT po.*,ca.*,po.status AS order_status FROM purchase_order as po left join cus_address as ca on ca.id=po.cus_address_id where po.status = 'Delivered' AND po.cus_id='$user_id'";
+		}else {
+			$select="SELECT po.*,ca.*,po.status AS order_status FROM purchase_order as po left join cus_address as ca on ca.id=po.cus_address_id where po.status != 'Delivered' AND po.cus_id='$user_id'";
+		}
+        $res=$this->db->query($select);
         if($res->num_rows()>0){
-            foreach($res->result() as $rows) {
-                $old_order_id = $rows->id;
+            $result=$res->result();
+            foreach($result  as $rows){
+                $order_details[]=array(
+                  "id"=>$rows->id,
+                  "order_id"=>$rows->order_id,
+                  "cus_id"=>$rows->cus_id,
+                  "purchase_date"=>$rows->purchase_date,
+                  "total_amount"=>$rows->total_amount,
+                  "status"=>$rows->status,
+                  "cus_notes"=>$rows->cus_notes,
+                  "state"=>$rows->state,
+                  "city"=>$rows->city,
+                  "pincode"=>$rows->pincode,
+                  "house_no"=>$rows->house_no,
+                  "street"=>$rows->street,
+                  "landmark"=>$rows->landmark,
+                  "full_name"=>$rows->full_name,
+                  "mobile_number"=>$rows->mobile_number,
+                  "email_address"=>$rows->email_address,
+                  "alternative_mobile_number"=>$rows->alternative_mobile_number,
+				  "order_status"=>$rows->order_status
+                );
             }
-            $order_id = $old_order_id+1;
-        } else {
-            $order_id = 1;
-        }
-        $today = date("Ymd");
-        $rand = strtoupper(substr(uniqid(sha1(time())),0,4));
-        $order_id = 'Lil'.$today . $rand . $order_id;
-        $select_cart="SELECT sum(total_amount) as total_amount,sum(quantity) as total_quantity FROM product_cart WHERE cus_id='$user_id' AND status='Pending'";
-        $result=$this->db->query($select_cart);
-        $res_cart=$result->result();
-        foreach($res_cart as $total_amount){}
-        $total=$total_amount->total_amount;
-
-        $tot_quantity=$total_amount->total_quantity;
-        $insert="INSERT INTO purchase_order (order_id,cus_id,purchase_date,cus_address_id,total_amount,status,cus_notes,created_at,created_by) VALUES('$order_id','$user_id',NOW(),'$address_id','$total','Success','$cus_notes',NOW(),'$user_id')";
-        $res=$this->db->query($insert);
-
-        //---Stocks left Update--//
-        $select_stock="SELECT * FROM product_cart WHERE cus_id='$user_id' AND status='Pending'";
-        $result_stock=$this->db->query($select_stock);
-        $res_stock=$result_stock->result();
-        foreach($res_stock as $rows_stock){
-          $prd_qu=$rows_stock->quantity;
-          $prd_id=$rows_stock->product_id;
-          $prd_com_id=$rows_stock->product_combined_id;
-          $update_stoc="UPDATE products SET stocks_left=stocks_left-'$prd_qu' WHERE id='$prd_id'";
-          $resu_stock=$this->db->query($update_stoc);
-          if($prd_com_id=='1'){
-            $update_comb_stoc="UPDATE product_combined SET stocks_left=stocks_left-'$prd_qu' WHERE id='$prd_com_id' AND product_id='$prd_id'";
-            $resu_stock=$this->db->query($update_comb_stoc);
+              $data = array("status" => "success","msg"=>"orders found","order_details"=>$order_details);
+          }else{
+              $data = array("status" => "error","msg"=>"No orders found");
           }
-        }
-          //---Stocks left Update--//
+          return $data;
 
-          //---Update Cart to Success--//
-        $update_cart="UPDATE product_cart SET order_id='$order_id',cus_id='$user_id',status='Success' WHERE cus_id='$user_id' AND status='Pending'";
-        $res_cart=$this->db->query($update_cart);
-        if($res_cart){
-          $data = array("status" => "success","msg"=>"Order Successfully Placed");
-        }else{
-          $data = array("status" => "error","msg"=>"Payment Error");
-        }
+      }
+
+//###############  Customer order details #########################//
+      function view_order_details($order_id){
+        $select="SELECT pc.id as cart_id,ca.*,pur.cus_address_id,c.*,p.id as product_id,p.product_name,p.product_cover_img,am.attribute_value,am.attribute_name,ams.attribute_value AS size,pc.*,comb.id FROM product_cart AS pc
+LEFT JOIN products AS p ON p.id=pc.product_id LEFT JOIN product_combined AS comb ON comb.id=pc.product_combined_id LEFT JOIN attribute_masters AS am ON am.id=comb.mas_color_id LEFT JOIN attribute_masters AS ams ON ams.id=comb.mas_size_id LEFT JOIN purchase_order AS pur ON pur.order_id=pc.order_id LEFT JOIN customers AS c ON pur.cus_id=c.id LEFT JOIN cus_address AS ca ON ca.id=pur.cus_address_id WHERE pc.order_id='$order_id'";
+        $res=$this->db->query($select);
+        if($res->num_rows()>0){
+            $result=$res->result();
+            foreach($result  as $rows){
+                $my_order_details[]=array(
+                  "id"=>$rows->cart_id,
+                  "product_name"=>$rows->product_name,
+                  "product_id"=>$rows->product_id,
+                  "product_cover_img"=>base_url().'assets/products/'.$rows->product_cover_img,
+                  "color_name"=>$rows->attribute_name,
+                  "size"=>$rows->size,
+                  "price"=>$rows->price,
+                  "quantity"=>$rows->quantity,
+                );
+            }
+              $data = array("status" => "success","msg"=>"orders found","my_order_details"=>$my_order_details);
+          }else{
+              $data = array("status" => "error","msg"=>"No orders found");
+          }
           return $data;
       }
 
+
+//################# Track customer orders #######################//
+      function track_order($order_id){
+		
+			$select="SELECT * FROM order_history WHERE order_id ='$order_id' ORDER BY id ";
+			$res=$this->db->query($select);
+			if($res->num_rows()>0){
+			  $result = $res->result();
+              $data = array("status" => "success","msg"=>"orders found","track_details"=>$result);
+          }else{
+              $data = array("status" => "error","msg"=>"No orders found");
+          }
+          return $data;
+
+      }
+
+
 //################# Password update #######################//
 
+	function check_password($user_id,$password){
+        $new_pwd=md5($password);
+        $update="SELECT * FROM  customers  WHERE id='$user_id' AND password='$new_pwd'";
+        $res=$this->db->query($update);
+        if($res->num_rows()==0){
+          $data = array("status" => "error","msg"=>"Password error");
+        }else{
+          $data = array("status" => "success","msg"=>"Password Verified");
+        }
+          return $data;
+      }
+	  
+	  
       function password_update($user_id,$password){
         $new_pwd=md5($password);
         $update="UPDATE customers SET password='$new_pwd' WHERE id='$user_id'";
@@ -1361,20 +1601,6 @@ class Mobileapimodel extends CI_Model {
       }
 
 
-      function check_password($user_id,$password){
-        $new_pwd=md5($password);
-        $update="SELECT * FROM  customers  WHERE id='$user_id' AND password='$new_pwd'";
-        $res=$this->db->query($update);
-        if($res->num_rows()==0){
-          $data = array("status" => "error","msg"=>"Password error");
-        }else{
-          $data = array("status" => "success","msg"=>"Password Verified");
-        }
-          return $data;
-      }
-	  
-	  
-	  
 //################# Profile details #######################//
       function get_profile_details($user_id){
         $select = "SELECT c.*,cd.* FROM customers as c left join customer_details as cd on c.id=cd.customer_id where c.id='$user_id' and c.status='Active'";
@@ -1398,6 +1624,7 @@ class Mobileapimodel extends CI_Model {
             }
           return $data;
       }
+
 
       function update_profile_details($user_id,$first_name,$last_name,$email,$mobile_number,$gender,$dob,$newsletter_status){
         $check_email="SELECT * FROM customers WHERE email='$email' AND id!='$user_id'";
@@ -1425,76 +1652,46 @@ class Mobileapimodel extends CI_Model {
         return  $data;
       }
 	  
+	
+	public function update_profilepic($user_id,$userFileName)
+	{
+            $update_sql= "UPDATE customer_details SET profile_picture ='$userFileName' WHERE customer_id='$user_id'";
+			$update_result = $this->db->query($update_sql);
+			$picture_url = base_url().'assets/front/profile/'.$userFileName;
+
+			$response = array("status" => "success", "msg" => "Profile Picture Updated","picture_url" =>$picture_url);
+			return $response;
+	}
+	
+	
+	//#################### Notifications Update ####################//
+	  function notification_update($user_id,$status){
+		  $update_main="UPDATE customer_details SET notification_status = '$status' WHERE customer_id = '$user_id'";
+		  $res_main=$this->db->query($update_main);
+			  if($res_main){
+				$data = array("status" => "success","msg"=>"Updated Successfully");
+			  }else{
+				$data = array("status" => "error","msg"=>"Status Error");
+			  }
+        return  $data;
+      }
+	  
+	  function newsletter_update($user_id,$status){
+		  $update_main="UPDATE customer_details SET newsletter_status = '$status' WHERE customer_id = '$user_id'";
+		  $res_main=$this->db->query($update_main);
+			  if($res_main){
+				$data = array("status" => "success","msg"=>"Updated Successfully");
+			  }else{
+				$data = array("status" => "error","msg"=>"Status Error");
+			  }
+        return  $data;
+      }
+	  
 	  
 
-
-//################# View orders #######################//
-      function view_orders($user_id){
-        $select="SELECT po.*,ca.* FROM purchase_order as po left join cus_address as ca on ca.id=po.cus_address_id where po.cus_id='$user_id'";
-        $res=$this->db->query($select);
-        if($res->num_rows()>0){
-            $result=$res->result();
-            foreach($result  as $rows){
-                $order_details[]=array(
-                  "id"=>$rows->id,
-                  "order_id"=>$rows->order_id,
-                  "cus_id"=>$rows->cus_id,
-                  "purchase_date"=>$rows->purchase_date,
-                  "total_amount"=>$rows->total_amount,
-                  "status"=>$rows->status,
-                  "cus_notes"=>$rows->cus_notes,
-                  "state"=>$rows->state,
-                  "city"=>$rows->city,
-                  "pincode"=>$rows->pincode,
-                  "house_no"=>$rows->house_no,
-                  "street"=>$rows->street,
-                  "landmark"=>$rows->landmark,
-                  "full_name"=>$rows->full_name,
-                  "mobile_number"=>$rows->mobile_number,
-                  "email_address"=>$rows->email_address,
-                  "alternative_mobile_number"=>$rows->alternative_mobile_number,
-                );
-            }
-              $data = array("status" => "success","msg"=>"orders found","order_details"=>$order_details);
-          }else{
-              $data = array("status" => "error","msg"=>"No orders found");
-          }
-          return $data;
-
-      }
-
-//###############  Check my order #########################//
-      function check_my_order($order_id){
-        $select="SELECT pc.id as cart_id,ca.*,pur.cus_address_id,c.*,p.id as product_id,p.product_name,p.product_cover_img,am.attribute_value,am.attribute_name,ams.attribute_value AS size,pc.*,comb.id FROM product_cart AS pc
-LEFT JOIN products AS p ON p.id=pc.product_id LEFT JOIN product_combined AS comb ON comb.id=pc.product_combined_id LEFT JOIN attribute_masters AS am ON am.id=comb.mas_color_id
-LEFT JOIN attribute_masters AS ams ON ams.id=comb.mas_size_id LEFT JOIN purchase_order AS pur ON pur.order_id=pc.order_id LEFT JOIN customers AS c ON pur.cus_id=c.id
-LEFT JOIN cus_address AS ca ON ca.id=pur.cus_address_id WHERE pc.order_id='$order_id'";
-        $res=$this->db->query($select);
-        if($res->num_rows()>0){
-            $result=$res->result();
-            foreach($result  as $rows){
-                $my_order_details[]=array(
-                  "id"=>$rows->cart_id,
-                  "product_name"=>$rows->product_name,
-                  "product_id"=>$rows->product_id,
-                  "product_cover_img"=>base_url().'assets/products/'.$rows->product_cover_img,
-                  "color_name"=>$rows->attribute_name,
-                  "size"=>$rows->size,
-                  "price"=>$rows->price,
-                  "quantity"=>$rows->quantity,
-                );
-            }
-              $data = array("status" => "success","msg"=>"orders found","my_order_details"=>$my_order_details);
-          }else{
-              $data = array("status" => "error","msg"=>"No orders found");
-          }
-          return $data;
-      }
-
-
 //################ Search product ########################//
-      function search_product($search_name,$user_id){
-        $select="SELECT tm.id as tag_id,tm.tag_name,p.*,IFNULL(cw.customer_id,'0') AS wishlisted FROM tag_masters as tm left join product_tags as pt on tm.id=pt.tag_id left join products as p on  p.id=pt.product_id LEFT JOIN  cus_wishlist AS cw ON cw.product_id=p.id AND cw.customer_id='$user_id' WHERE tm.tag_name LIKE '$search_name%' AND p.status='Active'  GROUP by p.id";
+      function search_product($user_id,$search_name){
+        $select="SELECT tm.id as tag_id,tm.tag_name,p.*,IFNULL(cw.customer_id,'0') AS wishlisted FROM tag_masters as tm left join product_tags as pt on tm.id=pt.tag_id left join products as p on  p.id=pt.product_id LEFT JOIN  cus_wishlist AS cw ON cw.product_id=p.id AND cw.customer_id='$user_id' WHERE tm.tag_name LIKE '$search_name%' AND p.status='Active' GROUP by p.id";
        $res=$this->db->query($select);
        if($res->num_rows()==0){
           $data = array("status" => "failure","msg"=>"No Product found");
@@ -1524,7 +1721,7 @@ LEFT JOIN cus_address AS ca ON ca.id=pur.cus_address_id WHERE pc.order_id='$orde
                   "wishlisted"=>$rows->wishlisted,
                 );
             }
-        $data = array("status" => "success","msg"=>"Product Search  found","product_list"=>$product_list);
+		 $data = array("status" => "success","msg"=>"Product Search  found","product_list"=>$product_list);
         }
         return $data;
       }

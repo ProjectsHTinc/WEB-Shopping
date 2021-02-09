@@ -164,7 +164,7 @@ class Mobileapi extends CI_Controller {
 			if($_POST == FALSE)
 			{
 				$res = array();
-				$res["opn"] = "Login";
+				$res["opn"] = "Social Login";
 				$res["scode"] = 204;
 				$res["message"] = "Input error";
 
@@ -208,7 +208,7 @@ class Mobileapi extends CI_Controller {
 		if($_POST == FALSE)
 		{
 			$res = array();
-			$res["opn"] = "Login";
+			$res["opn"] = "Forgot Password";
 			$res["scode"] = 204;
 			$res["message"] = "Input error";
 
@@ -237,7 +237,7 @@ class Mobileapi extends CI_Controller {
 		if($_POST == FALSE)
 		{
 			$res = array();
-			$res["opn"] = "Login";
+			$res["opn"] = "OTP Password";
 			$res["scode"] = 204;
 			$res["message"] = "Input error";
 
@@ -312,7 +312,7 @@ class Mobileapi extends CI_Controller {
 		if($_POST == FALSE)
 		{
 			$res = array();
-			$res["opn"] = "Login";
+			$res["opn"] = "Landing Page";
 			$res["scode"] = 204;
 			$res["message"] = "Input error";
 
@@ -342,7 +342,7 @@ class Mobileapi extends CI_Controller {
 		if($_POST == FALSE)
 		{
 			$res = array();
-			$res["opn"] = "Login";
+			$res["opn"] = "Category List";
 			$res["scode"] = 204;
 			$res["message"] = "Input error";
 
@@ -372,7 +372,7 @@ class Mobileapi extends CI_Controller {
 		if($_POST == FALSE)
 		{
 			$res = array();
-			$res["opn"] = "Login";
+			$res["opn"] = "Sub Category List";
 			$res["scode"] = 204;
 			$res["message"] = "Input error";
 
@@ -402,7 +402,7 @@ class Mobileapi extends CI_Controller {
 		if($_POST == FALSE)
 		{
 			$res = array();
-			$res["opn"] = "Login";
+			$res["opn"] = "Product List";
 			$res["scode"] = 204;
 			$res["message"] = "Input error";
 
@@ -436,7 +436,7 @@ class Mobileapi extends CI_Controller {
 		if($_POST == FALSE)
 		{
 			$res = array();
-			$res["opn"] = "Login";
+			$res["opn"] = "Product Details";
 			$res["scode"] = 204;
 			$res["message"] = "Input error";
 
@@ -468,7 +468,7 @@ class Mobileapi extends CI_Controller {
 		if($_POST == FALSE)
 		{
 			$res = array();
-			$res["opn"] = "Login";
+			$res["opn"] = "Product Size";
 			$res["scode"] = 204;
 			$res["message"] = "Input error";
 
@@ -500,7 +500,7 @@ class Mobileapi extends CI_Controller {
 		if($_POST == FALSE)
 		{
 			$res = array();
-			$res["opn"] = "Login";
+			$res["opn"] = "Product Color";
 			$res["scode"] = 204;
 			$res["message"] = "Input error";
 
@@ -533,7 +533,7 @@ class Mobileapi extends CI_Controller {
 			if($_POST == FALSE)
 			{
 				$res = array();
-				$res["opn"] = "Login";
+				$res["opn"] = "Pincode Check";
 				$res["scode"] = 204;
 				$res["message"] = "Input error";
 
@@ -565,7 +565,7 @@ class Mobileapi extends CI_Controller {
 		if($_POST == FALSE)
 		{
 			$res = array();
-			$res["opn"] = "Login";
+			$res["opn"] = "Add Wishlist";
 			$res["scode"] = 204;
 			$res["message"] = "Input error";
 
@@ -597,7 +597,7 @@ class Mobileapi extends CI_Controller {
 		if($_POST == FALSE)
 		{
 			$res = array();
-			$res["opn"] = "Login";
+			$res["opn"] = "Remove Wishlist";
 			$res["scode"] = 204;
 			$res["message"] = "Input error";
 
@@ -629,7 +629,7 @@ class Mobileapi extends CI_Controller {
 		if($_POST == FALSE)
 		{
 			$res = array();
-			$res["opn"] = "Login";
+			$res["opn"] = "View Wishlist";
 			$res["scode"] = 204;
 			$res["message"] = "Input error";
 
@@ -659,7 +659,7 @@ class Mobileapi extends CI_Controller {
 		if($_POST == FALSE)
 		{
 			$res = array();
-			$res["opn"] = "Login";
+			$res["opn"] = "Related Products";
 			$res["scode"] = 204;
 			$res["message"] = "Input error";
 
@@ -690,7 +690,7 @@ class Mobileapi extends CI_Controller {
 			if($_POST == FALSE)
 			{
 				$res = array();
-				$res["opn"] = "Login";
+				$res["opn"] = "Product Reviews";
 				$res["scode"] = 204;
 				$res["message"] = "Input error";
 
@@ -722,7 +722,7 @@ class Mobileapi extends CI_Controller {
 			if($_POST == FALSE)
 			{
 				$res = array();
-				$res["opn"] = "Login";
+				$res["opn"] = "Review Add";
 				$res["scode"] = 204;
 				$res["message"] = "Input error";
 
@@ -756,7 +756,7 @@ class Mobileapi extends CI_Controller {
 			if($_POST == FALSE)
 			{
 				$res = array();
-				$res["opn"] = "Login";
+				$res["opn"] = "Review Check";
 				$res["scode"] = 204;
 				$res["message"] = "Input error";
 
@@ -788,7 +788,7 @@ class Mobileapi extends CI_Controller {
 			if($_POST == FALSE)
 			{
 				$res = array();
-				$res["opn"] = "Login";
+				$res["opn"] = "Review Update";
 				$res["scode"] = 204;
 				$res["message"] = "Input error";
 
@@ -822,7 +822,7 @@ class Mobileapi extends CI_Controller {
 			if($_POST == FALSE)
 			{
 				$res = array();
-				$res["opn"] = "Login";
+				$res["opn"] = "Add Cart";
 				$res["scode"] = 204;
 				$res["message"] = "Input error";
 
@@ -856,7 +856,7 @@ class Mobileapi extends CI_Controller {
 			if($_POST == FALSE)
 			{
 				$res = array();
-				$res["opn"] = "Login";
+				$res["opn"] = "Cart Remove";
 				$res["scode"] = 204;
 				$res["message"] = "Input error";
 
@@ -889,7 +889,7 @@ class Mobileapi extends CI_Controller {
 			if($_POST == FALSE)
 			{
 				$res = array();
-				$res["opn"] = "Login";
+				$res["opn"] = "View Cart";
 				$res["scode"] = 204;
 				$res["message"] = "Input error";
 
@@ -921,7 +921,7 @@ class Mobileapi extends CI_Controller {
 			if($_POST == FALSE)
 			{
 				$res = array();
-				$res["opn"] = "Login";
+				$res["opn"] = "Cart Quantity Update";
 				$res["scode"] = 204;
 				$res["message"] = "Input error";
 
@@ -941,6 +941,132 @@ class Mobileapi extends CI_Controller {
 
 //-----------------------------------------------//
 
+//-----------------------------------------------//
+
+		public function place_order()
+		{
+			$_POST = json_decode(file_get_contents("php://input"), TRUE);
+
+			if(!$this->checkMethod())
+			{
+				return FALSE;
+			}
+
+			if($_POST == FALSE)
+			{
+				$res = array();
+				$res["opn"] = "Place Order";
+				$res["scode"] = 204;
+				$res["message"] = "Input error";
+
+				echo json_encode($res);
+				return;
+			}
+
+			$user_id=$this->input->post("user_id");
+			$address_id=$this->input->post("address_id");
+			$cus_notes=$this->input->post("cus_notes");
+			$data['result']=$this->mobileapimodel->place_order($user_id,$address_id,$cus_notes);
+			$response = $data['result'];
+			//print_r($response);
+			echo json_encode($response);
+		}
+//-----------------------------------------------//
+
+//-----------------------------------------------//
+
+		public function order_details()
+		{
+			$_POST = json_decode(file_get_contents("php://input"), TRUE);
+
+			if(!$this->checkMethod())
+			{
+				return FALSE;
+			}
+
+			if($_POST == FALSE)
+			{
+				$res = array();
+				$res["opn"] = "Order Details";
+				$res["scode"] = 204;
+				$res["message"] = "Input error";
+
+				echo json_encode($res);
+				return;
+			}
+
+			$user_id=$this->input->post("user_id");
+			$order_id=$this->input->post("order_id");
+			$data['result']=$this->mobileapimodel->order_details($user_id,$order_id);
+			$response = $data['result'];
+			//print_r($response);
+			echo json_encode($response);
+		}
+//-----------------------------------------------//
+
+
+//-----------------------------------------------//
+
+		public function select_order_address()
+		{
+			$_POST = json_decode(file_get_contents("php://input"), TRUE);
+
+			if(!$this->checkMethod())
+			{
+				return FALSE;
+			}
+
+			if($_POST == FALSE)
+			{
+				$res = array();
+				$res["opn"] = "Order Address";
+				$res["scode"] = 204;
+				$res["message"] = "Input error";
+
+				echo json_encode($res);
+				return;
+			}
+
+			$address_id=$this->input->post("address_id");
+			$data['result']=$this->mobileapimodel->select_order_address($address_id);
+			$response = $data['result'];
+			//print_r($response);
+			echo json_encode($response);
+		}
+//-----------------------------------------------//
+
+//-----------------------------------------------//
+
+		public function order_address_update()
+		{
+			$_POST = json_decode(file_get_contents("php://input"), TRUE);
+
+			if(!$this->checkMethod())
+			{
+				return FALSE;
+			}
+
+			if($_POST == FALSE)
+			{
+				$res = array();
+				$res["opn"] = "Order Address change";
+				$res["scode"] = 204;
+				$res["message"] = "Input error";
+
+				echo json_encode($res);
+				return;
+			}
+
+			$user_id=$this->input->post("user_id");
+			$purchse_order_id=$this->input->post("purchse_order_id");
+			$address_id=$this->input->post("address_id");
+			$data['result']=$this->mobileapimodel->order_address_update($user_id,$purchse_order_id,$address_id);
+			$response = $data['result'];
+			//print_r($response);
+			echo json_encode($response);
+		}
+//-----------------------------------------------//
+
 
 //-----------------------------------------------//
 
@@ -957,7 +1083,7 @@ class Mobileapi extends CI_Controller {
 			if($_POST == FALSE)
 			{
 				$res = array();
-				$res["opn"] = "Login";
+				$res["opn"] = "Address List";
 				$res["scode"] = 204;
 				$res["message"] = "Input error";
 
@@ -988,7 +1114,7 @@ class Mobileapi extends CI_Controller {
 			if($_POST == FALSE)
 			{
 				$res = array();
-				$res["opn"] = "Login";
+				$res["opn"] = "Create Address";
 				$res["scode"] = 204;
 				$res["message"] = "Input error";
 
@@ -1018,11 +1144,10 @@ class Mobileapi extends CI_Controller {
 //-----------------------------------------------//
 
 
-
 //-----------------------------------------------//
-
-		public function place_order()
+		public function address_update()
 		{
+
 			$_POST = json_decode(file_get_contents("php://input"), TRUE);
 
 			if(!$this->checkMethod())
@@ -1033,7 +1158,7 @@ class Mobileapi extends CI_Controller {
 			if($_POST == FALSE)
 			{
 				$res = array();
-				$res["opn"] = "Login";
+				$res["opn"] = "Address Update";
 				$res["scode"] = 204;
 				$res["message"] = "Input error";
 
@@ -1043,8 +1168,53 @@ class Mobileapi extends CI_Controller {
 
 			$user_id=$this->input->post("user_id");
 			$address_id=$this->input->post("address_id");
-			$cus_notes=$this->input->post("cus_notes");
-			$data['result']=$this->mobileapimodel->place_order($user_id,$address_id,$cus_notes);
+			$country_id=$this->input->post("country_id");
+			$state=$this->input->post("state");
+			$city=$this->input->post("city");
+			$pincode=$this->input->post("pincode");
+			$house_no=$this->input->post("house_no");
+			$street=$this->input->post("street");
+			$landmark=$this->input->post("landmark");
+			$full_name=$this->input->post("full_name");
+			$mobile_number=$this->input->post("mobile_number");
+			$email_address=$this->input->post("email_address");
+			$alternative_mobile_number=$this->input->post("alternative_mobile_number");
+			$address_type=$this->input->post("address_type");
+			$address_mode=$this->input->post("address_mode");
+			$status=$this->input->post("status");
+			$data['result']=$this->mobileapimodel->address_update($user_id,$address_id,$country_id,$state,$city,$pincode,$house_no,$street,$landmark,$full_name,$mobile_number,$email_address,$alternative_mobile_number,$address_type,$address_mode,$status);
+			$response = $data['result'];
+			//print_r($response);
+			echo json_encode($response);
+		}
+//-----------------------------------------------//
+
+//-----------------------------------------------//
+		public function address_set_default()
+		{
+
+			$_POST = json_decode(file_get_contents("php://input"), TRUE);
+
+			if(!$this->checkMethod())
+			{
+				return FALSE;
+			}
+
+			if($_POST == FALSE)
+			{
+				$res = array();
+				$res["opn"] = "Address Update";
+				$res["scode"] = 204;
+				$res["message"] = "Input error";
+
+				echo json_encode($res);
+				return;
+			}
+
+			$address_id=$this->input->post("address_id");
+			$address_mode=$this->input->post("address_mode");
+			
+			$data['result']=$this->mobileapimodel->address_set_default($address_id,$address_mode);
 			$response = $data['result'];
 			//print_r($response);
 			echo json_encode($response);
@@ -1055,7 +1225,6 @@ class Mobileapi extends CI_Controller {
 
 		public function view_orders()
 		{
-
 			$_POST = json_decode(file_get_contents("php://input"), TRUE);
 
 			if(!$this->checkMethod())
@@ -1075,7 +1244,8 @@ class Mobileapi extends CI_Controller {
 			}
 
 			$user_id=$this->input->post("user_id");
-			$data['result']=$this->mobileapimodel->view_orders($user_id);
+			$status=$this->input->post("status");
+			$data['result']=$this->mobileapimodel->view_orders($user_id,$status);
 			$response = $data['result'];
 			//print_r($response);
 			echo json_encode($response);
@@ -1083,9 +1253,8 @@ class Mobileapi extends CI_Controller {
 //-----------------------------------------------//
 
 //-----------------------------------------------//
-		public function check_my_order()
+		public function view_order_details()
 		{
-
 		$_POST = json_decode(file_get_contents("php://input"), TRUE);
 
 			if(!$this->checkMethod())
@@ -1105,7 +1274,7 @@ class Mobileapi extends CI_Controller {
 			}
 
 			$order_id=$this->input->post("order_id");
-			$data['result']=$this->mobileapimodel->check_my_order($order_id);
+			$data['result']=$this->mobileapimodel->view_order_details($order_id);
 			$response = $data['result'];
 			//print_r($response);
 			echo json_encode($response);
@@ -1113,10 +1282,8 @@ class Mobileapi extends CI_Controller {
 //-----------------------------------------------//
 
 //-----------------------------------------------//
-
-		public function search_product()
+		public function track_order()
 		{
-
 		$_POST = json_decode(file_get_contents("php://input"), TRUE);
 
 			if(!$this->checkMethod())
@@ -1135,9 +1302,8 @@ class Mobileapi extends CI_Controller {
 				return;
 			}
 
-			$search_name=$this->input->post("search_name");
-			$user_id=$this->input->post("user_id");
-			$data['result']=$this->mobileapimodel->search_product($search_name,$user_id);
+			$order_id=$this->input->post("order_id");
+			$data['result']=$this->mobileapimodel->track_order($order_id);
 			$response = $data['result'];
 			//print_r($response);
 			echo json_encode($response);
@@ -1208,6 +1374,67 @@ class Mobileapi extends CI_Controller {
 
 //-----------------------------------------------//
 
+//-----------------------------------------------//
+
+	public function notification_update()
+	{
+	 $_POST = json_decode(file_get_contents("php://input"), TRUE);
+
+		if(!$this->checkMethod())
+		{
+			return FALSE;
+		}
+
+		if($_POST == FALSE)
+		{
+			$res = array();
+			$res["opn"] = "Login";
+			$res["scode"] = 204;
+			$res["message"] = "Input error";
+
+			echo json_encode($res);
+			return;
+		}
+		$user_id = $this->input->post("user_id");
+		$status = $this->input->post("status");
+		$data['result']=$this->mobileapimodel->notification_update($user_id,$status);
+		$response = $data['result'];
+		//print_r($response);
+		echo json_encode($response);
+	}
+
+//-----------------------------------------------//
+
+//-----------------------------------------------//
+
+	public function newsletter_update()
+	{
+	 $_POST = json_decode(file_get_contents("php://input"), TRUE);
+
+		if(!$this->checkMethod())
+		{
+			return FALSE;
+		}
+
+		if($_POST == FALSE)
+		{
+			$res = array();
+			$res["opn"] = "Login";
+			$res["scode"] = 204;
+			$res["message"] = "Input error";
+
+			echo json_encode($res);
+			return;
+		}
+		$user_id = $this->input->post("user_id");
+		$status = $this->input->post("status");
+		$data['result']=$this->mobileapimodel->newsletter_update($user_id,$status);
+		$response = $data['result'];
+		//print_r($response);
+		echo json_encode($response);
+	}
+
+//-----------------------------------------------//
 
 
 //-----------------------------------------------//
@@ -1278,5 +1505,65 @@ class Mobileapi extends CI_Controller {
 	}
 
 //-----------------------------------------------//
+
+//-----------------------------------------------//
+
+    public function update_profilepic()
+	{
+	  	$_POST = json_decode(file_get_contents("php://input"), TRUE);
+
+		$user_id = $this->uri->segment(3);
+		$profile = $_FILES["user_pic"]["name"];
+		$temp = pathinfo($profile, PATHINFO_EXTENSION);
+		$userFileName = round(microtime(true)) . '.' . $temp;
+		$uploadPicdir = 'assets/front/profile/';
+		$profilepic = $uploadPicdir.$userFileName;
+		move_uploaded_file($_FILES['user_pic']['tmp_name'], $profilepic);
+
+		$data['result']=$this->apiandroidmodel->update_profilepic($user_id,$userFileName);
+		$response = $data['result'];
+		echo json_encode($response);
+	}
+
+//-----------------------------------------------//
+
+
+//-----------------------------------------------//
+
+		public function search_product()
+		{
+
+		$_POST = json_decode(file_get_contents("php://input"), TRUE);
+
+			if(!$this->checkMethod())
+			{
+				return FALSE;
+			}
+
+			if($_POST == FALSE)
+			{
+				$res = array();
+				$res["opn"] = "Login";
+				$res["scode"] = 204;
+				$res["message"] = "Input error";
+
+				echo json_encode($res);
+				return;
+			}
+			$user_id=$this->input->post("user_id");
+			$search_name=$this->input->post("search_name");
+			
+			$data['result']=$this->mobileapimodel->search_product($user_id,$search_name);
+			$response = $data['result'];
+			//print_r($response);
+			echo json_encode($response);
+		}
+//-----------------------------------------------//
+
+
+
+
+
+
 
 }
