@@ -506,7 +506,7 @@ class Mobileapimodel extends CI_Model {
 
 //#################### Home page list ####################//
 
-    function home_page(){
+    function home_page($user_id){
 
       //----- Home Banner----//
       $select="SELECT * FROM banner WHERE status='Active'";
@@ -572,12 +572,37 @@ class Mobileapimodel extends CI_Model {
              if($res->num_rows()>0){
                 $result=$res->result();
                 foreach($result  as $rows){
+					$product_id = $rows->id;
+					
 					$prod_size_chart = $rows->prod_size_chart;
 					if ($prod_size_chart!=''){
 						$product_size_url = base_url().'assets/products/charts/'.$prod_size_chart;
 					}else {
 						$product_size_url = "";
 					}
+					
+					$select_rev = "SELECT COUNT(product_id) AS review_count,ROUND(AVG(rating)) AS average FROM product_review AS pr WHERE product_id='$product_id'";
+					$res_rev=$this->db->query($select_rev);
+						if($res_rev->num_rows()>0){
+							$result_rev=$res_rev->result();
+							foreach($result_rev as $rows_rev){
+								$review_count = $rows_rev->review_count;
+								$review_average = $rows_rev->average;
+							}
+						}
+					
+					if ($user_id != ''){
+						$select_wish="SELECT * FROM cus_wishlist WHERE customer_id='$user_id' AND product_id='$product_id'";
+						 $res_wish=$this->db->query($select_wish);
+							 if($res_wish->num_rows()>0){
+								 $wishlisted = "1";
+							 }else{
+								 $wishlisted = "0";
+							 }
+					}else {
+						$wishlisted = "0";
+					}
+					
                     $product_list[]=array(
                       "id"=>$rows->id,
                       "product_name"=>$rows->product_name,
@@ -598,6 +623,8 @@ class Mobileapimodel extends CI_Model {
                       "product_meta_desc"=>$rows->product_meta_desc,
                       "product_meta_keywords"=>$rows->product_meta_keywords,
                       "stocks_left"=>$rows->stocks_left,
+					  "review_average"=>$review_average,
+					  "wishlisted"=>$wishlisted
                     );
                 }
 				$prd_list = array("status" => "success","msg"=>"products list","data"=>$product_list);
@@ -607,17 +634,39 @@ class Mobileapimodel extends CI_Model {
 
 
              //--------Popular  Product  list----//
-             $select="SELECT pvc.*,p.* FROM product_view_count AS pvc LEFT JOIN products AS p ON p.id=pvc.product_id WHERE p.status='Active' ORDER BY pvc.view_count DESC";
+             $select="SELECT pvc.*,p.*,p.id AS product_id FROM product_view_count AS pvc LEFT JOIN products AS p ON p.id=pvc.product_id WHERE p.status='Active' ORDER BY pvc.view_count DESC";
              $res=$this->db->query($select);
               if($res->num_rows()>0){
                  $result=$res->result();
                  foreach($result  as $rows){
-					 
+					$product_id = $rows->product_id;
 					$prod_size_chart = $rows->prod_size_chart;
 					if ($prod_size_chart!=''){
 						$product_size_url = base_url().'assets/products/charts/'.$prod_size_chart;
 					}else {
 						$product_size_url = "";
+					}
+					
+					$select_rev = "SELECT COUNT(product_id) AS review_count,ROUND(AVG(rating)) AS average FROM product_review AS pr WHERE product_id='$product_id'";
+					$res_rev=$this->db->query($select_rev);
+						if($res_rev->num_rows()>0){
+							$result_rev=$res_rev->result();
+							foreach($result_rev as $rows_rev){
+								$review_count = $rows_rev->review_count;
+								$review_average = $rows_rev->average;
+							}
+						}
+					
+					if ($user_id != ''){
+						$select_wish="SELECT * FROM cus_wishlist WHERE customer_id='$user_id' AND product_id='$product_id'";
+						 $res_wish=$this->db->query($select_wish);
+							 if($res_wish->num_rows()>0){
+								 $wishlisted = "1";
+							 }else{
+								 $wishlisted = "0";
+							 }
+					}else {
+						$wishlisted = "0";
 					}
 					
                      $popular_product_list[]=array(
@@ -640,6 +689,8 @@ class Mobileapimodel extends CI_Model {
                        "product_meta_desc"=>$rows->product_meta_desc,
                        "product_meta_keywords"=>$rows->product_meta_keywords,
                        "stocks_left"=>$rows->stocks_left,
+					   "review_average"=>$review_average,
+					   "wishlisted"=>$wishlisted
                      );
                  }
                $popular_prd_list = array("status" => "success","msg"=>"popular products","data"=>$popular_product_list);
@@ -715,12 +766,24 @@ class Mobileapimodel extends CI_Model {
         $result=$res->result();
         foreach($result  as $rows){
 			$prod_size_chart = $rows->prod_size_chart;
+			$product_id = $rows->id;
+			
 			if ($prod_size_chart!=''){
 				$product_size_url = base_url().'assets/products/charts/'.$prod_size_chart;
 			}else {
 				$product_size_url = "";
 			}
-					
+			
+			$select_rev = "SELECT COUNT(product_id) AS review_count,ROUND(AVG(rating)) AS average FROM product_review AS pr WHERE product_id='$product_id'";
+			$res_rev=$this->db->query($select_rev);
+				if($res_rev->num_rows()>0){
+					$result_rev=$res_rev->result();
+					foreach($result_rev as $rows_rev){
+						$review_count = $rows_rev->review_count;
+						$review_average = $rows_rev->average;
+					}
+				}
+						
             $product_list[]=array(
               "id"=>$rows->id,
               "product_name"=>$rows->product_name,
@@ -741,7 +804,8 @@ class Mobileapimodel extends CI_Model {
               "product_meta_desc"=>$rows->product_meta_desc,
               "product_meta_keywords"=>$rows->product_meta_keywords,
               "stocks_left"=>$rows->stocks_left,
-              "wishlisted"=>$rows->wishlisted,
+			  "review_average"=>$review_average,
+              "wishlisted"=>$rows->wishlisted
             );
         }
       $data = array("status" => "success","msg"=>"Products found","product_list"=>$product_list);

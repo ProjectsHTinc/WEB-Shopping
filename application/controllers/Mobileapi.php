@@ -319,8 +319,9 @@ class Mobileapi extends CI_Controller {
 			echo json_encode($res);
 			return;
 		}
-
-		$data['result']=$this->mobileapimodel->home_page();
+		
+		$user_id = $this->input->post("user_id");
+		$data['result']=$this->mobileapimodel->home_page($user_id);
 		$response = $data['result'];
 		echo json_encode($response);
 	}
