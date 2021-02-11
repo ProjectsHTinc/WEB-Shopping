@@ -581,7 +581,7 @@ class Mobileapimodel extends CI_Model {
 						$product_size_url = "";
 					}
 					
-					$select_rev = "SELECT COUNT(product_id) AS review_count,ROUND(AVG(rating)) AS average FROM product_review AS pr WHERE product_id='$product_id'";
+					$select_rev = "SELECT COUNT(product_id) AS review_count,IFNULL(ROUND(AVG(rating)),'0') AS average FROM product_review AS pr WHERE product_id='$product_id'";
 					$res_rev=$this->db->query($select_rev);
 						if($res_rev->num_rows()>0){
 							$result_rev=$res_rev->result();
@@ -647,7 +647,7 @@ class Mobileapimodel extends CI_Model {
 						$product_size_url = "";
 					}
 					
-					$select_rev = "SELECT COUNT(product_id) AS review_count,ROUND(AVG(rating)) AS average FROM product_review AS pr WHERE product_id='$product_id'";
+					$select_rev = "SELECT COUNT(product_id) AS review_count,IFNULL(ROUND(AVG(rating)),'0') AS average FROM product_review AS pr WHERE product_id='$product_id'";
 					$res_rev=$this->db->query($select_rev);
 						if($res_rev->num_rows()>0){
 							$result_rev=$res_rev->result();
@@ -774,7 +774,7 @@ class Mobileapimodel extends CI_Model {
 				$product_size_url = "";
 			}
 			
-			$select_rev = "SELECT COUNT(product_id) AS review_count,ROUND(AVG(rating)) AS average FROM product_review AS pr WHERE product_id='$product_id'";
+			$select_rev = "SELECT COUNT(product_id) AS review_count,IFNULL(ROUND(AVG(rating)),'0') AS average FROM product_review AS pr WHERE product_id='$product_id'";
 			$res_rev=$this->db->query($select_rev);
 				if($res_rev->num_rows()>0){
 					$result_rev=$res_rev->result();
@@ -911,7 +911,7 @@ class Mobileapimodel extends CI_Model {
 
 
           //---product rating ---//
-          $select="SELECT COUNT(product_id) AS review_count,ROUND(AVG(rating)) AS average FROM product_review AS pr WHERE product_id='$product_id'";
+          $select="SELECT COUNT(product_id) AS review_count,IFNULL(ROUND(AVG(rating)),'0') AS average FROM product_review AS pr WHERE product_id='$product_id'";
           $res=$this->db->query($select);
            if($res->num_rows()>0){
               $result=$res->result();
