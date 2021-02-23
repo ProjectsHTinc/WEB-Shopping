@@ -758,11 +758,12 @@ class Mobileapimodel extends CI_Model {
    
 	if ($sub_cat_id == ''){
 		$select="SELECT p.*,IFNULL(cw.customer_id,'0') AS wishlisted FROM products AS p LEFT JOIN  cus_wishlist AS cw ON cw.product_id=p.id AND cw.customer_id='$cus_id' WHERE cat_id='$cat_id' AND status='Active'";
-  } else{
+	} else{
 		$select="SELECT p.*,IFNULL(cw.customer_id,'0') AS wishlisted FROM products AS p LEFT JOIN  cus_wishlist AS cw ON cw.product_id=p.id AND cw.customer_id='$cus_id' WHERE cat_id='$cat_id' AND sub_cat_id='$sub_cat_id' AND status='Active'";
-  }
-    $res=$this->db->query($select);
+	}
+	$res=$this->db->query($select);
      if($res->num_rows()>0){
+		$total_products = $res->num_rows();
         $result=$res->result();
         foreach($result  as $rows){
 			$prod_size_chart = $rows->prod_size_chart;
@@ -808,7 +809,7 @@ class Mobileapimodel extends CI_Model {
               "wishlisted"=>$rows->wishlisted
             );
         }
-      $data = array("status" => "success","msg"=>"Products found","product_list"=>$product_list);
+      $data = array("status" => "success","msg"=>"Products found","total_product"=>$total_products,"product_list"=>$product_list);
      }else{
         $data = array("status" => "error","msg"=>"No Products found");
      }
@@ -823,6 +824,8 @@ class Mobileapimodel extends CI_Model {
         $cus_id=0;
       }else{
         $cus_id=$user_id;
+		$sQuery = "INSERT INTO recent_viewed_items (customer_id,item_id,created_at) VALUES ('$user_id','$product_id',now())";
+		$insert_user = $this->db->query($sQuery);
       }
 
       $select="SELECT p.*,IFNULL(cw.customer_id,'0') AS wishlisted FROM products as p LEFT JOIN  cus_wishlist AS cw ON cw.product_id=p.id AND cw.customer_id='$cus_id' WHERE p.id='$product_id'  AND p.status='Active'";
@@ -832,6 +835,8 @@ class Mobileapimodel extends CI_Model {
           foreach($result  as $rows){  }
 		  
 		  $prod_size_chart = $rows->prod_size_chart;
+		  $cat_id = $rows->cat_id;
+		  
 			if ($prod_size_chart!=''){
 				$product_size_url = base_url().'assets/products/charts/'.$prod_size_chart;
 			}else {
@@ -860,7 +865,7 @@ class Mobileapimodel extends CI_Model {
                 "wishlisted"=>$rows->wishlisted,
               );
 
-        $product_details = array("status" => "success","msg"=>"product details","product_details"=>$prd_details);
+			$product_details = array("status" => "success","msg"=>"product details","product_details"=>$prd_details);
        }else{
           $product_details = array("status" => "error","msg"=>"No Records Found");
        }
@@ -910,6 +915,59 @@ class Mobileapimodel extends CI_Model {
           }
 
 
+
+	$select="SELECT p.*,IFNULL(cw.customer_id,'0') AS wishlisted FROM products AS p LEFT JOIN  cus_wishlist AS cw ON cw.product_id=p.id AND cw.customer_id='$cus_id' WHERE cat_id='$cat_id' AND status='Active'";
+	
+	$res=$this->db->query($select);
+     if($res->num_rows()>0){
+        $result=$res->result();
+        foreach($result  as $rows){
+			$prod_size_chart = $rows->prod_size_chart;
+			$product_id = $rows->id;
+			
+			if ($prod_size_chart!=''){
+				$product_size_url = base_url().'assets/products/charts/'.$prod_size_chart;
+			}else {
+				$product_size_url = "";
+			}
+			
+			$select_rev = "SELECT COUNT(product_id) AS review_count,IFNULL(ROUND(AVG(rating)),'0') AS average FROM product_review AS pr WHERE product_id='$product_id'";
+			$res_rev=$this->db->query($select_rev);
+				if($res_rev->num_rows()>0){
+					$result_rev=$res_rev->result();
+					foreach($result_rev as $rows_rev){
+						$review_count = $rows_rev->review_count;
+						$review_average = $rows_rev->average;
+					}
+				}
+						
+            $related_product_list[]=array(
+              "id"=>$rows->id,
+              "product_name"=>$rows->product_name,
+              "sku_code"=>$rows->sku_code,
+              "product_cover_img"=>base_url().'assets/products/'.$rows->product_cover_img,
+              "prod_size_chart"=>$prod_size_chart,
+              "product_description"=>$rows->product_description,
+              "offer_status"=>$rows->offer_status,
+              "specification_status"=>$rows->specification_status,
+              "combined_status"=>$rows->combined_status,
+              "prod_actual_price"=>$rows->prod_actual_price,
+              "prod_mrp_price"=>$rows->prod_mrp_price,
+              "offer_percentage"=>$rows->offer_percentage,
+              "delivery_fee_status"=>$rows->delivery_fee_status,
+              "prod_return_policy"=>$rows->prod_return_policy,
+              "prod_cod"=>$rows->prod_cod,
+              "product_meta_title"=>$rows->product_meta_title,
+              "product_meta_desc"=>$rows->product_meta_desc,
+              "product_meta_keywords"=>$rows->product_meta_keywords,
+              "stocks_left"=>$rows->stocks_left,
+			  "review_average"=>$review_average,
+              "wishlisted"=>$rows->wishlisted
+            );
+        }
+	 }
+     
+	  
           //---product rating ---//
           $select="SELECT COUNT(product_id) AS review_count,IFNULL(ROUND(AVG(rating)),'0') AS average FROM product_review AS pr WHERE product_id='$product_id'";
           $res=$this->db->query($select);
@@ -921,12 +979,15 @@ class Mobileapimodel extends CI_Model {
                     "average"=>$rows->average,
                   );
 
-            $product_review = array("status" => "success","msg"=>"Review found","product_review"=>$prd_review);
+			 $product_review = array("status" => "success","msg"=>"Review found","product_review"=>$prd_review);
            }else{
              $product_review = array("status" => "error","msg"=>"No Review");
            }
 		   
-        $data=array("status"=>"success","msg"=>"product details","product_details"=>$product_details,"product_specification"=>$prod_specs,"product_review"=>$product_review);
+		   
+		   
+		   
+        $data=array("status"=>"success","msg"=>"product details","product_details"=>$product_details,"product_specification"=>$prod_specs,"related_products"=>$related_product_list,"product_review"=>$product_review);
         return $data;
 
     }
@@ -1409,7 +1470,7 @@ class Mobileapimodel extends CI_Model {
         }
         $today = date("Ymd");
         $rand = strtoupper(substr(uniqid(sha1(time())),0,4));
-        $order_id = 'SHOP'.$today . $rand . $order_id;
+        $order_id = 'SHOP'.$today . $rand . $order_id.'-'.$user_id;
         $select_cart="SELECT sum(total_amount) as total_amount,sum(quantity) as total_quantity FROM product_cart WHERE cus_id='$user_id' AND status='Pending'";
         $result=$this->db->query($select_cart);
         $res_cart=$result->result();
@@ -1417,7 +1478,7 @@ class Mobileapimodel extends CI_Model {
         $total=$total_amount->total_amount;
 
         $tot_quantity=$total_amount->total_quantity;
-        $insert="INSERT INTO purchase_order (order_id,cus_id,purchase_date,cus_address_id,total_amount,status,cus_notes,created_at,created_by) VALUES('$order_id','$user_id',NOW(),'$address_id','$total','Success','$cus_notes',NOW(),'$user_id')";
+        $insert="INSERT INTO purchase_order (order_id,cus_id,purchase_date,cus_address_id,total_amount,paid_amount,status,cus_notes,created_at,created_by) VALUES('$order_id','$user_id',NOW(),'$address_id','$total','$total','Success','$cus_notes',NOW(),'$user_id')";
         $res=$this->db->query($insert);
 		//$insert_order_id = $this->db->insert_id();
 
@@ -1478,6 +1539,109 @@ class Mobileapimodel extends CI_Model {
           return $data;
       }
 
+//################ Apply Promo Code ########################//
+
+      function apply_promo_code($user_id,$purchase_order_id,$promo_code){
+		  
+		$check_code = "SELECT * FROM promo_code WHERE promo_code = '$promo_code' AND status = 'Active'";
+        $res=$this->db->query($check_code);
+
+        if($res->num_rows()>0){
+            foreach($res->result() as $rows) {
+                $promo_id = $rows->id;
+				$promo_title = $rows->promo_title;
+				$promo_percentage = $rows->promo_percentage;
+            }
+			$promo_details[]=array(
+				  "promo_id"=>$promo_id,
+				  "promo_title"=>$promo_title,
+				  "promo_percentage"=>$promo_percentage
+				);
+			$check_promo = "SELECT * FROM promo_code_history WHERE promo_id = '$promo_id' AND purchase_order_id = '$purchase_order_id' AND customer_id = '$user_id'";
+			$res=$this->db->query($check_promo);
+
+			if($res->num_rows()>0){
+				$data = array("status" => "already","msg"=>"Promo Code Already Used");
+			} else {
+				
+				$select_order ="SELECT * FROM purchase_order WHERE id = '$purchase_order_id'";
+				$result=$this->db->query($select_order);
+				$res_cart=$result->result();
+				foreach($res_cart as $total_amount){
+					 $total=$total_amount->total_amount;
+					 $promo_value = ($total / 100) * $promo_percentage;
+					 $paid_amount = ($total - $promo_value);
+				}
+
+				$insert="INSERT INTO promo_code_history (promo_id,purchase_order_id,customer_id,order_value,promo_amount,final_amount,created_at) VALUES('$promo_id','$purchase_order_id','$user_id','$total','$promo_value','$paid_amount',NOW())";
+				$res=$this->db->query($insert);
+
+				$update_promo ="UPDATE purchase_order SET promo_amount='$promo_value',paid_amount='$paid_amount',updated_at=NOW(),updated_by='$user_id' WHERE id='$purchase_order_id'";
+				$res_promo=$this->db->query($update_promo);
+				
+				 $check_order = "SELECT
+							po.id as purchse_order_id,
+							po.*,
+							ca.*,
+							cm.country_name
+						FROM
+							purchase_order AS po
+						LEFT JOIN cus_address AS ca
+						ON
+							ca.id = po.cus_address_id
+						LEFT JOIN country_master as cm
+						ON ca.country_id = cm.id
+						WHERE
+							po.id = '$purchase_order_id'";
+					$res=$this->db->query($check_order);
+					$result=$res->result();
+					$data = array("status" => "success","msg"=>"Order Details","order_details"=>$result,"promo_details"=>$promo_details);
+			}
+		
+		} else {
+			$data = array("status" => "error","msg"=>"Promo Code Error");
+        }
+          return $data;
+      }
+
+	//################ Remove Promo Code ########################//
+
+      function remove_promo_code($user_id,$purchase_order_id,$promo_code_id){
+		  
+			$del_promo = "DELETE FROM promo_code_history WHERE id = '$promo_code_id' AND purchase_order_id = '$purchase_order_id' AND customer_id = '$user_id'";
+			$res=$this->db->query($del_promo);
+	
+			$select_order ="SELECT * FROM purchase_order WHERE id = '$purchase_order_id'";
+			$result=$this->db->query($select_order);
+			$res_cart=$result->result();
+			foreach($res_cart as $total_amount){
+				 $total=$total_amount->total_amount;
+			}
+
+			$update_promo ="UPDATE purchase_order SET promo_amount='0.00',paid_amount='$total' WHERE id='$purchase_order_id'";
+			$res_promo=$this->db->query($update_promo);
+				
+			 $check_order = "SELECT
+						po.id as purchse_order_id,
+						po.*,
+						ca.*,
+						cm.country_name
+					FROM
+						purchase_order AS po
+					LEFT JOIN cus_address AS ca
+					ON
+						ca.id = po.cus_address_id
+					LEFT JOIN country_master as cm
+					ON ca.country_id = cm.id
+					WHERE
+						po.id = '$purchase_order_id'";
+				$res=$this->db->query($check_order);
+				$result=$res->result();
+				$data = array("status" => "success","msg"=>"Order Details","order_details"=>$result);
+
+          return $data;
+      }
+	  
 //################ Order Address change ########################//
 
 	function select_order_address($address_id){
@@ -1578,6 +1742,57 @@ class Mobileapimodel extends CI_Model {
 		return $data;
 	}
 	
+	
+	//################ Use Wallet ########################//
+
+      function use_wallet($user_id,$purchase_order_id){
+		  
+		$check_wallet = "SELECT * FROM customer_wallet WHERE id = '$user_id'";
+        $res = $this->db->query($check_wallet);
+
+        if($res->num_rows()>0){
+            foreach($res->result() as $rows) {
+                echo $amt_in_wallet = $rows->amt_in_wallet;
+            }
+		}
+
+		$check_order = "SELECT * FROM purchase_order WHERE id = '$purchase_order_id' AND cus_id = '$user_id'";
+        $res = $this->db->query($check_order);
+
+        if($res->num_rows()>0){
+            foreach($res->result() as $rows) {
+                echo $paid_amount = $rows->paid_amount;
+            }
+		}
+		
+		
+		
+		exit;
+		
+		$check_order = "SELECT
+					po.id as purchse_order_id,
+					po.*,
+					ca.*,
+					cm.country_name
+				FROM
+					purchase_order AS po
+				LEFT JOIN cus_address AS ca
+				ON
+					ca.id = po.cus_address_id
+				LEFT JOIN country_master as cm
+				ON ca.country_id = cm.id
+				WHERE
+					po.id = '$purchase_order_id'";
+			$res=$this->db->query($check_order);
+			$result=$res->result();
+			$data = array("status" => "success","msg"=>"Order Details","order_details"=>$result);
+
+
+          return $data;
+      }
+
+	
+	
 
 //################# View customer orders #######################//
       function view_orders($user_id,$status){
@@ -1589,8 +1804,12 @@ class Mobileapimodel extends CI_Model {
 		}
         $res=$this->db->query($select);
         if($res->num_rows()>0){
+			$order_count = $res->num_rows();
             $result=$res->result();
-            foreach($result  as $rows){
+			$i = 1;
+            foreach($result as $rows){
+				$sorder_id = $rows->order_id;
+				
                 $order_details[]=array(
                   "id"=>$rows->id,
                   "order_id"=>$rows->order_id,
@@ -1611,8 +1830,20 @@ class Mobileapimodel extends CI_Model {
                   "alternative_mobile_number"=>$rows->alternative_mobile_number,
 				  "order_status"=>$rows->order_status
                 );
-            }
-              $data = array("status" => "success","msg"=>"orders found","order_details"=>$order_details);
+			
+				if ($i == 1){
+					$select_pic="SELECT p.product_cover_img FROM product_cart AS pc LEFT JOIN products AS p ON p.id = pc.product_id LEFT JOIN purchase_order AS pur ON pur.order_id = pc.order_id WHERE pc.order_id = '$sorder_id' ORDER BY pc.id LIMIT 1 ";
+					$res_pic=$this->db->query($select_pic);
+						if($res_pic->num_rows()>0){
+							$result_pic=$res_pic->result();
+							foreach($result_pic  as $rows_pic){
+								 $product_cover_img = base_url().'assets/products/'.$rows_pic->product_cover_img;
+							}
+						}
+						$i = $i+1;
+					}
+				}
+              $data = array("status" => "success","msg"=>"orders found","order_count"=>$order_count,"order_pic"=>$product_cover_img,"order_details"=>$order_details);
           }else{
               $data = array("status" => "error","msg"=>"No orders found");
           }
@@ -1645,6 +1876,22 @@ LEFT JOIN products AS p ON p.id=pc.product_id LEFT JOIN product_combined AS comb
           }
           return $data;
       }
+
+
+//###############  Save Customer Card details #########################//
+      function save_card_details($user_id,$card_holder_name,$card_number,$card_expiry_month,$card_expiry_year){
+        $select="SELECT * FROM saved_cards WHERE card_number ='$card_number'";
+        $res=$this->db->query($select);
+        if($res->num_rows()== 0){
+			$insert="INSERT INTO saved_cards (customer_id,card_holder_name,card_number,card_expiry_month,card_expiry_year,created_at,created_by,updated_at,updated_by) VALUES('$user_id','$card_holder_name','$card_number','$card_expiry_month','$card_expiry_year',NOW(),'$user_id',NOW(),'$user_id')";
+			$result=$this->db->query($insert);
+            $data = array("status" => "success","msg"=>"Card Details Saved");
+          }else{
+              $data = array("status" => "error","msg"=>"Already Exist");
+          }
+          return $data;
+      }
+
 
 
 //################# Track customer orders #######################//
@@ -1810,11 +2057,103 @@ LEFT JOIN products AS p ON p.id=pc.product_id LEFT JOIN product_combined AS comb
                   "wishlisted"=>$rows->wishlisted,
                 );
             }
-		 $data = array("status" => "success","msg"=>"Product Search  found","product_list"=>$product_list);
+			
+			$insert="INSERT INTO recent_search (customer_id,search_text,created_at) VALUES('$user_id','$search_name',NOW())";
+			$result=$this->db->query($insert);
+		 
+			$data = array("status" => "success","msg"=>"Product Search  found","product_list"=>$product_list);
         }
+		
+		
         return $data;
       }
-//########################################//
 
+
+//################ Search product List ########################//
+      function recent_search_list($user_id){
+		if($user_id=='0'){
+			$cus_id=0;
+		}else{
+			$cus_id=$user_id;
+		}
+		$select="SELECT * FROM recent_search WHERE customer_id = '$cus_id'";
+		$res=$this->db->query($select);
+		$result=$res->result();
+		if($res->num_rows()>0){
+			
+			$data = array("status" => "success","msg"=>"Search Key Words","search_keywords"=>$result);
+		} else {
+			$data = array("status" => "error","msg"=>"No Records Found");
+		}
+
+        return $data;
+      }
+
+
+//################ Wallet history ########################//
+      function customer_wallet_history($user_id){
+
+		$select="SELECT * FROM customer_wallet WHERE customer_id = '$user_id'";
+		$res=$this->db->query($select);
+		
+		if($res->num_rows()>0){
+			$result=$res->result();
+			foreach($result  as $rows){
+				$amt_in_wallet=$rows->amt_in_wallet;
+			}
+		} else {
+				$amt_in_wallet='0.00';
+		}
+
+		$select="SELECT * FROM customer_wallet_history WHERE customer_id = '$user_id'";
+		$res=$this->db->query($select);
+		$result=$res->result();
+		if($res->num_rows()>0){
+			$data = array("status" => "success","msg"=>"Wallet Details","wallet_amount"=>$amt_in_wallet,"wallet_history"=>$result);
+		} else {
+			$result = '0.00';
+			$data = array("status" => "success","msg"=>"Wallet Details","wallet_amount"=>$amt_in_wallet,"wallet_history"=>$result);
+		}
+        return $data;
+      }
+
+	
+//################ Add Money Wallet ########################//
+      function add_money_wallet($user_id,$amount){
+
+		$today = date("Ymd");
+        $rand = strtoupper(substr(uniqid(sha1(time())),0,4));
+        $order_id = 'WALT'.$today . $rand . '-'. $user_id;
+
+		$data = array("status" => "success","msg"=>"Add Money to Wallet","order_id"=>$order_id,"amount"=>$amount);
+		
+        return $data;
+      }
+	  
+  
+	  
+//################ Return reason list ########################//
+      function return_reason_list($user_id){
+		  
+		$select="SELECT * FROM return_reason_master WHERE status = 'Active'";
+		$res=$this->db->query($select);
+		$result=$res->result();
+		if($res->num_rows()>0){
+			$data = array("status" => "success","msg"=>"Reason List","reason_list"=>$result);
+		} else {
+			$data = array("status" => "error","msg"=>"No Reason List");
+		}
+        return $data;
+      }
+	  
+//################ Return reason request ########################//
+      function return_order_request($user_id,$purchase_order_id,$question_id,$answer_text){
+		  
+		$insert="INSERT INTO return_item_feedback (customer_id,purchase_order_id,question_id,answer_text,status,created_at,created_by ) VALUES('$user_id','$purchase_order_id','$question_id','$answer_text','Active',NOW(),'$user_id')";
+		$result=$this->db->query($insert);
+		 
+		$data = array("status" => "success","msg"=>"Return request added");
+        return $data;
+      }
 }
 ?>

@@ -78,12 +78,12 @@ include("connection.php");
 	
 	if($order_status==="Success")
 	{
-		//echo "<br>Thank you for shopping with us. Your credit card has been charged and your transaction is successful. We will be shipping your order to you soon.";
 		
 		$query = "UPDATE purchase_order SET status = 'Success' WHERE order_id = '" .$orderid. "'";
 	    $result = $mysqli->query($query);
 	    
-	    header("Location: https://www.happysanztech.com/lamore/cust_orders/");
+		echo "<br>Thank you for shopping with us. Your transaction is successful. We will be shipping your order to you soon.";
+	    //header("Location: https://www.happysanztech.com/lamore/cust_orders/");
         exit();
 		
 	}

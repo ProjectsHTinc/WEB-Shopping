@@ -1008,6 +1008,71 @@ class Mobileapi extends CI_Controller {
 
 //-----------------------------------------------//
 
+		public function apply_promo_code()
+		{
+			$_POST = json_decode(file_get_contents("php://input"), TRUE);
+
+			if(!$this->checkMethod())
+			{
+				return FALSE;
+			}
+
+			if($_POST == FALSE)
+			{
+				$res = array();
+				$res["opn"] = "Promo Code Apply";
+				$res["scode"] = 204;
+				$res["message"] = "Input error";
+
+				echo json_encode($res);
+				return;
+			}
+
+			$user_id=$this->input->post("user_id");
+			$purchase_order_id=$this->input->post("purchase_order_id");
+			$promo_code=$this->input->post("promo_code");
+			$data['result']=$this->mobileapimodel->apply_promo_code($user_id,$purchase_order_id,$promo_code);
+			$response = $data['result'];
+			//print_r($response);
+			echo json_encode($response);
+		}
+//-----------------------------------------------//
+
+
+//-----------------------------------------------//
+
+		public function remove_promo_code()
+		{
+			$_POST = json_decode(file_get_contents("php://input"), TRUE);
+
+			if(!$this->checkMethod())
+			{
+				return FALSE;
+			}
+
+			if($_POST == FALSE)
+			{
+				$res = array();
+				$res["opn"] = "Promo Code Apply";
+				$res["scode"] = 204;
+				$res["message"] = "Input error";
+
+				echo json_encode($res);
+				return;
+			}
+
+			$user_id = $this->input->post("user_id");
+			$purchase_order_id = $this->input->post("purchase_order_id");
+			$promo_code_id = $this->input->post("promo_code_id");
+			$data['result']=$this->mobileapimodel->remove_promo_code($user_id,$purchase_order_id,$promo_code_id);
+			$response = $data['result'];
+			//print_r($response);
+			echo json_encode($response);
+		}
+//-----------------------------------------------//
+
+//-----------------------------------------------//
+
 		public function select_order_address()
 		{
 			$_POST = json_decode(file_get_contents("php://input"), TRUE);
@@ -1222,6 +1287,38 @@ class Mobileapi extends CI_Controller {
 		}
 //-----------------------------------------------//
 
+
+//-----------------------------------------------//
+
+		public function use_wallet()
+		{
+			$_POST = json_decode(file_get_contents("php://input"), TRUE);
+
+			if(!$this->checkMethod())
+			{
+				return FALSE;
+			}
+
+			if($_POST == FALSE)
+			{
+				$res = array();
+				$res["opn"] = "Use Wallet";
+				$res["scode"] = 204;
+				$res["message"] = "Input error";
+
+				echo json_encode($res);
+				return;
+			}
+
+			$user_id=$this->input->post("user_id");
+			$purchase_order_id=$this->input->post("purchase_order_id");
+			$data['result']=$this->mobileapimodel->use_wallet($user_id,$purchase_order_id);
+			$response = $data['result'];
+			//print_r($response);
+			echo json_encode($response);
+		}
+//-----------------------------------------------//
+
 //-----------------------------------------------//
 
 		public function view_orders()
@@ -1276,6 +1373,40 @@ class Mobileapi extends CI_Controller {
 
 			$order_id=$this->input->post("order_id");
 			$data['result']=$this->mobileapimodel->view_order_details($order_id);
+			$response = $data['result'];
+			//print_r($response);
+			echo json_encode($response);
+		}
+//-----------------------------------------------//
+
+//-----------------------------------------------//
+		public function save_card_details()
+		{
+		$_POST = json_decode(file_get_contents("php://input"), TRUE);
+
+			if(!$this->checkMethod())
+			{
+				return FALSE;
+			}
+
+			if($_POST == FALSE)
+			{
+				$res = array();
+				$res["opn"] = "Card Save";
+				$res["scode"] = 204;
+				$res["message"] = "Input error";
+
+				echo json_encode($res);
+				return;
+			}
+
+			$user_id=$this->input->post("user_id");
+			$card_holder_name=$this->input->post("card_holder_name");
+			$card_number=$this->input->post("card_number");
+			$card_expiry_month=$this->input->post("card_expiry_month");
+			$card_expiry_year=$this->input->post("card_expiry_year");
+			
+			$data['result']=$this->mobileapimodel->save_card_details($user_id,$card_holder_name,$card_number,$card_expiry_month,$card_expiry_year);
 			$response = $data['result'];
 			//print_r($response);
 			echo json_encode($response);
@@ -1544,7 +1675,7 @@ class Mobileapi extends CI_Controller {
 			if($_POST == FALSE)
 			{
 				$res = array();
-				$res["opn"] = "Login";
+				$res["opn"] = "Search Products";
 				$res["scode"] = 204;
 				$res["message"] = "Input error";
 
@@ -1561,9 +1692,164 @@ class Mobileapi extends CI_Controller {
 		}
 //-----------------------------------------------//
 
+//-----------------------------------------------//
+
+		public function recent_search_list()
+		{
+
+		$_POST = json_decode(file_get_contents("php://input"), TRUE);
+
+			if(!$this->checkMethod())
+			{
+				return FALSE;
+			}
+
+			if($_POST == FALSE)
+			{
+				$res = array();
+				$res["opn"] = "Products Search List";
+				$res["scode"] = 204;
+				$res["message"] = "Input error";
+
+				echo json_encode($res);
+				return;
+			}
+			$user_id=$this->input->post("user_id");
+			
+			$data['result']=$this->mobileapimodel->recent_search_list($user_id);
+			$response = $data['result'];
+			//print_r($response);
+			echo json_encode($response);
+		}
+//-----------------------------------------------//
 
 
+//-----------------------------------------------//
 
+		public function customer_wallet_history()
+		{
+
+		$_POST = json_decode(file_get_contents("php://input"), TRUE);
+
+			if(!$this->checkMethod())
+			{
+				return FALSE;
+			}
+
+			if($_POST == FALSE)
+			{
+				$res = array();
+				$res["opn"] = "Wallet History";
+				$res["scode"] = 204;
+				$res["message"] = "Input error";
+
+				echo json_encode($res);
+				return;
+			}
+			$user_id=$this->input->post("user_id");
+			$data['result']=$this->mobileapimodel->customer_wallet_history($user_id);
+			$response = $data['result'];
+			//print_r($response);
+			echo json_encode($response);
+		}
+//-----------------------------------------------//
+
+//-----------------------------------------------//
+
+		public function add_money_wallet()
+		{
+
+		$_POST = json_decode(file_get_contents("php://input"), TRUE);
+
+			if(!$this->checkMethod())
+			{
+				return FALSE;
+			}
+
+			if($_POST == FALSE)
+			{
+				$res = array();
+				$res["opn"] = "Wallet History";
+				$res["scode"] = 204;
+				$res["message"] = "Input error";
+
+				echo json_encode($res);
+				return;
+			}
+			$user_id=$this->input->post("user_id");
+			$amount=$this->input->post("amount");
+			
+			$data['result']=$this->mobileapimodel->add_money_wallet($user_id,$amount);
+			$response = $data['result'];
+			//print_r($response);
+			echo json_encode($response);
+		}
+//-----------------------------------------------//
+
+//-----------------------------------------------//
+
+		public function return_reason_list()
+		{
+
+		$_POST = json_decode(file_get_contents("php://input"), TRUE);
+
+			if(!$this->checkMethod())
+			{
+				return FALSE;
+			}
+
+			if($_POST == FALSE)
+			{
+				$res = array();
+				$res["opn"] = "Reason List";
+				$res["scode"] = 204;
+				$res["message"] = "Input error";
+
+				echo json_encode($res);
+				return;
+			}
+			$user_id=$this->input->post("user_id");
+			
+			$data['result']=$this->mobileapimodel->return_reason_list($user_id);
+			$response = $data['result'];
+			//print_r($response);
+			echo json_encode($response);
+		}
+//-----------------------------------------------//
+
+//-----------------------------------------------//
+
+		public function return_order_request()
+		{
+
+		$_POST = json_decode(file_get_contents("php://input"), TRUE);
+
+			if(!$this->checkMethod())
+			{
+				return FALSE;
+			}
+
+			if($_POST == FALSE)
+			{
+				$res = array();
+				$res["opn"] = "Reason List";
+				$res["scode"] = 204;
+				$res["message"] = "Input error";
+
+				echo json_encode($res);
+				return;
+			}
+			$user_id=$this->input->post("user_id");
+			$purchase_order_id=$this->input->post("purchase_order_id");
+			$question_id=$this->input->post("reason_question_id");
+			$answer_text=$this->input->post("answer_text");
+
+			$data['result']=$this->mobileapimodel->return_order_request($user_id,$purchase_order_id,$question_id,$answer_text);
+			$response = $data['result'];
+			//print_r($response);
+			echo json_encode($response);
+		}
+//-----------------------------------------------//
 
 
 

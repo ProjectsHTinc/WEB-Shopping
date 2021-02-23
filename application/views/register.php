@@ -22,33 +22,36 @@
         <div class="register-account">
             <div class="container-fluid">
                 <div class="row">
-					<div class="col-sm-12">
+				<div class="col-sm-2"></div>
+					<div class="col-sm-8">
                     <div class="register-title">
                         <h3 class="mb-10">REGISTER ACCOUNT</h3>
                         <p class="mb-10">If you already have an account with us, please login at the <a href="<?php echo base_url(); ?>login/">login page</a>.</p>
                     </div>
 					</div>
+				<div class="col-sm-2"></div>
                 </div>
                 <!-- Row End -->
                 <div class="row">
-				<div class="col-sm-12">
+				<div class="col-sm-2"></div>
+				<div class="col-sm-8">
                     <form class="form-horizontal pb-100" name="registration"  id="registration" method="post" action="">
                         <fieldset>
                             <legend>Your Personal Details</legend>
                             <div class="form-group">
-                                <label class="control-label col-sm-3" for="f-name"><span class="require">*</span>Name</label>
+                                <label class="control-label col-sm-3" for="f-name">Name <span class="require">*</span></label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" name="name" id="name" placeholder="Name">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-sm-3" for="email"><span class="require">*</span>Email Address</label>
+                                <label class="control-label col-sm-3" for="email">Email Address <span class="require">*</span></label>
                                 <div class="col-sm-9">
                                     <input type="email" class="form-control" name="email" id="email" placeholder="Email address">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-sm-3" for="number"><span class="require">*</span>Mobile Number</label>
+                                <label class="control-label col-sm-3" for="number">Mobile Number <span class="require">*</span></label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" name="mobile" id="mobile" placeholder="Mobile Number">
                                 </div>
@@ -57,13 +60,13 @@
                         <fieldset>
                             <legend>Your Password</legend>
                             <div class="form-group">
-                                <label class="control-label col-sm-3" for="pwd"><span class="require">*</span>Password:</label>
+                                <label class="control-label col-sm-3" for="pwd">Password <span class="require">*</span></label>
                                 <div class="col-sm-9">
                                     <input type="password" class="form-control" name="pwd" id="pwd" placeholder="Password">
                                 </div>
                             </div>
                              <div class="form-group">
-                                <label class="control-label col-sm-3" for="pwd-confirm"><span class="require">*</span>Confirm Password</label>
+                                <label class="control-label col-sm-3" for="pwd-confirm">Confirm Password <span class="require">*</span></label>
                                 <div class="col-sm-9">
                                     <input type="password" class="form-control" name="pwdconfirm" id="pwdconfirm" placeholder="Confirm password">
                                 </div>
@@ -90,6 +93,7 @@
                         </div>
                     </form>
                 </div>
+				<div class="col-sm-2"></div>
 				</div>
                 <!-- Row End -->
             </div>

@@ -22,13 +22,19 @@
         <div class="register-account">
             <div class="container-fluid">
                 <div class="row">
+				<div class="col-sm-2"></div>
+				<div class="col-sm-8">
                     <div class="register-title">
                         <h3 class="mb-10">Forgot Password</h3>
-                        <p class="mb-10">If you already have an account with us, please login at the login page.</p>
+                        <p class="mb-10">If you already have an account with us, please login at the <a href="<?php echo base_url(); ?>login/">login page</a>.</p>
                     </div>
+				</div>
+				<div class="col-sm-2"></div>
                 </div>
                 <!-- Row End -->
                 <div class="row">
+				<div class="col-sm-2"></div>
+				<div class="col-sm-8">
                     <form class="form-horizontal pb-100" name="registration"  id="registration" method="post" action="">
                         <fieldset>
                             <legend>Your Personal Details</legend>
@@ -40,7 +46,7 @@
                             </div>
                         </fieldset>
                          <div class="alert alert-danger alert-dismissible" id="error" style="display:none;">
-    						<strong>Sorry!.. Please Check Your Email id.
+    						<strong>Sorry!.. Please Check Your Email id.</strong>
   						</div>
                         <div class="alert alert-success alert-dismissible" id="reset" style="display:none;">
     						<strong>Password Reset!</strong> New Password sent to your Email Address.
@@ -54,6 +60,8 @@
                             </div>
                         </div>
                     </form>
+					</div>
+					<div class="col-sm-2"></div>
                 </div>
                 <!-- Row End -->
             </div>
