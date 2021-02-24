@@ -1383,7 +1383,7 @@ class Mobileapi extends CI_Controller {
 //-----------------------------------------------//
 
 //-----------------------------------------------//
-		public function view_order_details()
+		public function view_order_cart_details()
 		{
 		$_POST = json_decode(file_get_contents("php://input"), TRUE);
 
@@ -1444,6 +1444,9 @@ class Mobileapi extends CI_Controller {
 			echo json_encode($response);
 		}
 //-----------------------------------------------//
+
+
+
 
 //-----------------------------------------------//
 		public function track_order()

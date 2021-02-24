@@ -1864,7 +1864,7 @@ class Mobileapimodel extends CI_Model {
 	  
 //################ Use CCAvenue ########################//
 
-      function use_ccavenue($user_id,$purchase_order_id){
+      /* function use_ccavenue($user_id,$purchase_order_id){
 		  
 		$update_order ="UPDATE purchase_order SET payment_status='$amt_in_wallet',paid_amount='$spaid_amount',updated_at=NOW(),updated_by='$user_id' WHERE id='$purchase_order_id'";
 		$res=$this->db->query($update_order);
@@ -1888,7 +1888,7 @@ class Mobileapimodel extends CI_Model {
 			$data = array("status" => "success","msg"=>"Order Details","order_details"=>$result);
 
           return $data;
-      }
+      } */
 
 
 //################# View customer orders #######################//
@@ -1949,7 +1949,7 @@ class Mobileapimodel extends CI_Model {
       }
 
 //###############  Customer order details #########################//
-      function view_order_details($order_id){
+      function view_order_cart_details($order_id){
         $select="SELECT pc.id as cart_id,ca.*,pur.cus_address_id,c.*,p.id as product_id,p.product_name,p.product_cover_img,am.attribute_value,am.attribute_name,ams.attribute_value AS size,pc.*,comb.id FROM product_cart AS pc
 LEFT JOIN products AS p ON p.id=pc.product_id LEFT JOIN product_combined AS comb ON comb.id=pc.product_combined_id LEFT JOIN attribute_masters AS am ON am.id=comb.mas_color_id LEFT JOIN attribute_masters AS ams ON ams.id=comb.mas_size_id LEFT JOIN purchase_order AS pur ON pur.order_id=pc.order_id LEFT JOIN customers AS c ON pur.cus_id=c.id LEFT JOIN cus_address AS ca ON ca.id=pur.cus_address_id WHERE pc.order_id='$order_id'";
         $res=$this->db->query($select);
