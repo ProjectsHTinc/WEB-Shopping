@@ -78,7 +78,6 @@ include("connection.php");
 	
 	if($order_status==="Success")
 	{
-		
 		$query = "UPDATE purchase_order SET status = 'Success' WHERE order_id = '" .$orderid. "'";
 	    $result = $mysqli->query($query);
 	    

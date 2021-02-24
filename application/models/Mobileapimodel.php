@@ -1752,23 +1752,44 @@ class Mobileapimodel extends CI_Model {
 
         if($res->num_rows()>0){
             foreach($res->result() as $rows) {
-                echo $amt_in_wallet = $rows->amt_in_wallet;
+                $amt_in_wallet = $rows->amt_in_wallet;
             }
-		}
 
 		$check_order = "SELECT * FROM purchase_order WHERE id = '$purchase_order_id' AND cus_id = '$user_id'";
         $res = $this->db->query($check_order);
 
         if($res->num_rows()>0){
             foreach($res->result() as $rows) {
-                echo $paid_amount = $rows->paid_amount;
+                $paid_amount = $rows->paid_amount;
             }
 		}
 		
-		
-		
-		exit;
-		
+		if ($paid_amount<=$amt_in_wallet){
+			$balance_amt_in_wallet = $amt_in_wallet - $paid_amount;
+			$spaid_amount = '0.00';
+			
+			$update_order ="UPDATE purchase_order SET wallet_amount='$paid_amount',paid_amount='$spaid_amount',payment_status='Wallet', updated_at=NOW(),updated_by='$user_id' WHERE id='$purchase_order_id'";
+				$res=$this->db->query($update_order);
+
+			$insert_wallet="INSERT INTO customer_wallet_history (customer_id,order_id,transaction_amt,notes,status,created_at,created_by) VALUES('$user_id','$purchase_order_id','$paid_amount','Debited from wallet','Debited',NOW(),'$user_id')";
+				$res=$this->db->query($insert_wallet);
+			
+			$update_wallet ="UPDATE customer_wallet SET total_amt_used = total_amt_used + $paid_amount,amt_in_wallet = amt_in_wallet- $paid_amount WHERE customer_id ='$user_id'";
+				$res=$this->db->query($update_wallet);
+
+		}else {
+			$spaid_amount = $paid_amount - $amt_in_wallet;
+			
+			$update_order ="UPDATE purchase_order SET wallet_amount='$amt_in_wallet',paid_amount='$spaid_amount',updated_at=NOW(),updated_by='$user_id' WHERE id='$purchase_order_id'";
+				$res=$this->db->query($update_order);
+
+			$insert_wallet="INSERT INTO customer_wallet_history (customer_id,order_id,transaction_amt,notes,status,created_at,created_by) VALUES('$user_id','$purchase_order_id','$amt_in_wallet','Debited from wallet','Debited',NOW(),'$user_id')";
+				$res=$this->db->query($insert_wallet);
+
+			$update_wallet ="UPDATE customer_wallet SET total_amt_used = total_amt_used + $amt_in_wallet,amt_in_wallet = amt_in_wallet- $amt_in_wallet WHERE customer_id ='$user_id'";
+				$res=$this->db->query($update_wallet);
+		}
+
 		$check_order = "SELECT
 					po.id as purchse_order_id,
 					po.*,
@@ -1787,12 +1808,88 @@ class Mobileapimodel extends CI_Model {
 			$result=$res->result();
 			$data = array("status" => "success","msg"=>"Order Details","order_details"=>$result);
 
+		} else {
+			$data = array("status" => "error","msg"=>"No Wallet");
+		}
+          return $data;
+      }
+
+//################ Remove Wallet ########################//
+
+      function remove_wallet($user_id,$purchase_order_id){
+
+		$check_order = "SELECT * FROM purchase_order WHERE id = '$purchase_order_id' AND cus_id = '$user_id'";
+        $res = $this->db->query($check_order);
+
+        if($res->num_rows()>0){
+            foreach($res->result() as $rows) {
+                $wallet_amount = $rows->wallet_amount;
+            }
+		}
+
+		if ($wallet_amount !='0.00'){
+			$update_order = "UPDATE purchase_order SET paid_amount = paid_amount + $wallet_amount ,wallet_amount = '0.00',payment_status ='',status='Pending'  WHERE id = '$purchase_order_id' AND cus_id = '$user_id'";
+			$res=$this->db->query($update_order);
+			
+			 $update_wallet = "UPDATE customer_wallet SET total_amt_used = total_amt_used - $wallet_amount,amt_in_wallet = amt_in_wallet + $wallet_amount WHERE customer_id ='$user_id'";
+			$res=$this->db->query($update_wallet);
+			
+			 $insert_wallet = "INSERT INTO customer_wallet_history (customer_id,order_id,transaction_amt,notes,status,created_at,created_by) VALUES('$user_id','$purchase_order_id','$wallet_amount','Cancel from wallet','Credited',NOW(),'$user_id')";
+			$res=$this->db->query($insert_wallet);
+		} else {
+			$data = array("status" => "error","msg"=>"No Wallet Added");
+		}
+
+		$check_order = "SELECT
+					po.id as purchse_order_id,
+					po.*,
+					ca.*,
+					cm.country_name
+				FROM
+					purchase_order AS po
+				LEFT JOIN cus_address AS ca
+				ON
+					ca.id = po.cus_address_id
+				LEFT JOIN country_master as cm
+				ON ca.country_id = cm.id
+				WHERE
+					po.id = '$purchase_order_id'";
+			$res=$this->db->query($check_order);
+			$result=$res->result();
+			$data = array("status" => "success","msg"=>"Order Details","order_details"=>$result);
 
           return $data;
       }
 
-	
-	
+	  
+//################ Use CCAvenue ########################//
+
+      function use_ccavenue($user_id,$purchase_order_id){
+		  
+		$update_order ="UPDATE purchase_order SET payment_status='$amt_in_wallet',paid_amount='$spaid_amount',updated_at=NOW(),updated_by='$user_id' WHERE id='$purchase_order_id'";
+		$res=$this->db->query($update_order);
+
+		$check_order = "SELECT
+					po.id as purchse_order_id,
+					po.*,
+					ca.*,
+					cm.country_name
+				FROM
+					purchase_order AS po
+				LEFT JOIN cus_address AS ca
+				ON
+					ca.id = po.cus_address_id
+				LEFT JOIN country_master as cm
+				ON ca.country_id = cm.id
+				WHERE
+					po.id = '$purchase_order_id'";
+			$res=$this->db->query($check_order);
+			$result=$res->result();
+			$data = array("status" => "success","msg"=>"Order Details","order_details"=>$result);
+
+          return $data;
+      }
+
 
 //################# View customer orders #######################//
       function view_orders($user_id,$status){
