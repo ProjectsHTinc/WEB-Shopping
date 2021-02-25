@@ -31,6 +31,8 @@
 	echo "</center>";
 
 exit;
+
+
 	for($i = 0; $i < $dataSize; $i++)
 	{
 		$information=explode('=',$decryptValues[$i]);
