@@ -11,7 +11,7 @@
 	$decryptValues = explode('&', $rcvdString);
 	$dataSize = sizeof($decryptValues);
 
-echo "aaa";
+
 
 	echo "<center>";
 	for($i = 0; $i < $dataSize; $i++) 
@@ -29,9 +29,6 @@ echo "aaa";
 	}
 	echo "</table><br>";
 	echo "</center>";
-
-exit;
-
 
 
 
