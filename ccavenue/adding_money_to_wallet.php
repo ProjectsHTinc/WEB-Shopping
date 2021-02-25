@@ -97,10 +97,11 @@
 			$result = $mysqli->query($insert_sp);
 			 echo "<br><br><br>";
 
-			echo $insert_sph="SELECT * FROM customer_wallet WHERE customer_id='$user_id'";
-			$result= mysqli_query($link, $insert_sph);
-			 echo "<br><br><br>";
+			echo $insert_sp="SELECT * FROM customer_wallet WHERE customer_id='$user_id'";
+			$result = $mysqli->query($insert_sp);
+			echo "<br><br><br>";
 			echo mysqli_num_rows($result);
+			
 			 echo "<br><br><br>";
 			 if (mysqli_num_rows($result) == 0) {
 			   echo $wallet_query="INSERT INTO customer_wallet (customer_id,amt_in_wallet,total_amt_in_wallet,status,updated_at,updated_by) VALUES ('$user_id','$amount','$amount','Active',NOW(),'$user_id')";
