@@ -80,7 +80,7 @@
 											<input type="hidden" name="order_id" value="<?php echo $order_id;?>"/>
 											<input type="hidden" name="amount" value="<?php echo number_format((float)$wallet_amount, 2, '.', '');?>"/>
 											<input type="hidden" name="currency" value="INR"/>
-											<input type="hidden" name="redirect_url" value="<?php echo base_url(); ?>ccavenue/ccavResponseHandler.php"/>
+											<input type="hidden" name="redirect_url" value="<?php echo base_url(); ?>ccavenue/adding_money_to_wallet.php"/>
 											<input type="hidden" name="cancel_url" value="<?php echo base_url(); ?>"/>
 											<input type="hidden" name="language" value="EN"/>
 											<input type="submit" value="Add Money" class="btn btn-primary">
