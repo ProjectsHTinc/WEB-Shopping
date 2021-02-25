@@ -75,7 +75,7 @@
                                         <div class="form-group row">
                                             <label for="f-name" class="col-lg-4 col-md-4 col-form-label">Amount: <span class="require"></span></label>
                                             <div class="col-lg-4 col-md-4"><?php echo number_format((float)$wallet_amount, 2, '.', '');?></div>
-											<div class="col-lg-4 col-md-4"><form method="post" name="customerData"  class="confirm_process" action="<?php echo base_url(); ?>ccavenue/ccavRequestHandler.php">
+											<div class="col-lg-4 col-md-4"><form method="post" name="customerData"  class="confirm_process" action="<?php echo base_url(); ?>ccavenue/walletRequestHandler.php">
 											<input type="hidden" name="merchant_id" value="216134"/>
 											<input type="hidden" name="order_id" value="<?php echo $order_id;?>"/>
 											<input type="hidden" name="amount" value="<?php echo number_format((float)$wallet_amount, 2, '.', '');?>"/>
