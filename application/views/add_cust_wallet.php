@@ -7,7 +7,7 @@
                             <h1>My Account</h1>
                             <ul class="breadcrumb-list breadcrumb">
                                 <li><a href="<?php echo base_url(); ?>">home</a></li>
-                                <li>Orders</li>
+                                <li>Add Money to Wallet</li>
                             </ul>
                         </div>
                     </div>
@@ -15,7 +15,6 @@
             </div>
         </div>
         <!-- Page Breadcrumb End -->
-		
 		
         <!-- My Account Page Start Here -->
         <div class="my-account white-bg pb-100">
@@ -56,8 +55,8 @@
                             <!-- Nav tabs -->
                             <ul class="nav flex-column dashboard-list" role="tablist">
                                 <li><a href="<?php echo base_url(); ?>myaccount/">Dashboard</a></li>
-                                <li class="active"><a href="<?php echo base_url(); ?>cust_orders/">Orders</a></li>
-								<li><a href="<?php echo base_url(); ?>cust_wallet/">Wallet</a></li>
+                                <li><a href="<?php echo base_url(); ?>cust_orders/">Orders</a></li>
+								<li class="active"><a href="<?php echo base_url(); ?>cust_wallet/">Wallet</a></li>
                                 <li><a href="<?php echo base_url(); ?>cust_address/">Addresses</a></li>
                                 <li><a href="<?php echo base_url(); ?>cust_details/">Account Details</a></li>
                                 <li><a href="<?php echo base_url(); ?>cust_change_password/">Change Password</a></li>
@@ -65,54 +64,52 @@
                             </ul>
                         </div>
                         
-                        
-                        <div class="col-lg-10 col-md-10">
+							<div class="col-lg-8 col-md-8">
                             <!-- Tab panes -->
                             <div class="tab-content dashboard-content mt-all-40">
-                                
-                                <div id="orders" class="tab-pane fade in active">
-                                    <h3>Orders</h3>
-                                    <div class="table-responsive">
-                        <?php
-                        if (count($orders)>0){
-						?>
-                                        <table class="table">
-                                            <thead>
-                                                <tr>
-                                                    <th>Order</th>
-                                                    <th>Date</th>
-                                                    <th>Status</th>
-                                                    <th>Total</th>
-                                                    <th>Actions</th>	 	 	 	
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            <?php foreach($orders as $order){ 
-											$id = $order->id;
-											$order_id = $order->order_id;
-											$purchase_date = $order->purchase_date;
-											$dispDate = date("d M Y", strtotime($purchase_date));
-											$status = $order->status;
-											$total_amount = $order->total_amount;
-											?>
-                                                <tr>
-                                                    <td><?php echo $order_id;?></td>
-                                                    <td><?php echo $dispDate; ?></td>
-                                                    <td><?php echo $status; ?></td>
-                                                    <td>₹<?php echo $total_amount;?></td>
-                                                    <td><a class="view" href="<?php echo base_url(); ?>home/cust_order_details/<?php echo $id;?>/">view</a></td>
-                                                </tr>
-                                           <?php } ?>
-                                            </tbody>
-                                        </table>
-                               <?php } ?>
+      
+                                <div id="account-details" class="tab-pane fade in active">
+                                    <h3>Add Money to Wallet </h3>
+                                    <div class="register-form login-form clearfix">
+                                    <form class="form-horizontal pb-100" name="review_wallet"  id="review_wallet" method="post" action="<?php echo base_url(); ?>review_wallet/">
+                                        <fieldset>
+                                        <div class="form-group row">
+                                            <label for="f-name" class="col-lg-4 col-md-4 col-form-label">Enter Amount: <span class="require">*</span></label>
+                                            <div class="col-lg-8 col-md-8">
+												<input type="text" class="form-control" name="wallet_amount" id="wallet_amount" placeholder="Amount">
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <div class="buttons newsletter-input">
+                                        <div class="pull-right">
+                                            <input type="submit" value="Add" class="newsletter-btn">
+                                        </div>
+                                    </div>
+                                    </form>
                                     </div>
                                 </div>
-                                
                             </div>
+                        </div>
+                        
+                        <div class="col-lg-2 col-md-2 pro-img">
+                        
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <!-- My Account Page End Here -->
+<script language="javascript">
+
+	$('#review_wallet').validate({ // initialize the plugin
+    rules: {
+		wallet_amount: {
+            required: true,digits: true,
+        }
+    },
+    messages: {
+		wallet_amount: { required:"Enter Amount"}
+    },
+    
+});
+</script>

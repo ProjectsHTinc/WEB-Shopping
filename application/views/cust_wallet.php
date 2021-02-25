@@ -7,7 +7,7 @@
                             <h1>My Account</h1>
                             <ul class="breadcrumb-list breadcrumb">
                                 <li><a href="<?php echo base_url(); ?>">home</a></li>
-                                <li>Orders</li>
+                                <li>Wallet History</li>
                             </ul>
                         </div>
                     </div>
@@ -56,8 +56,8 @@
                             <!-- Nav tabs -->
                             <ul class="nav flex-column dashboard-list" role="tablist">
                                 <li><a href="<?php echo base_url(); ?>myaccount/">Dashboard</a></li>
-                                <li class="active"><a href="<?php echo base_url(); ?>cust_orders/">Orders</a></li>
-								<li><a href="<?php echo base_url(); ?>cust_wallet/">Wallet</a></li>
+                                <li><a href="<?php echo base_url(); ?>cust_orders/">Orders</a></li>
+								<li class="active"><a href="<?php echo base_url(); ?>cust_wallet/">Wallet</a></li>
                                 <li><a href="<?php echo base_url(); ?>cust_address/">Addresses</a></li>
                                 <li><a href="<?php echo base_url(); ?>cust_details/">Account Details</a></li>
                                 <li><a href="<?php echo base_url(); ?>cust_change_password/">Change Password</a></li>
@@ -69,38 +69,46 @@
                         <div class="col-lg-10 col-md-10">
                             <!-- Tab panes -->
                             <div class="tab-content dashboard-content mt-all-40">
-                                
+                              <?php
+									if (count($wallet)>0){
+										foreach($wallet as $res_wallet){
+											$wallet_amt = $res_wallet->amt_in_wallet;
+										}
+									}else {
+											$wallet_amt = '0.00';
+									}
+								?>
                                 <div id="orders" class="tab-pane fade in active">
-                                    <h3>Orders</h3>
+								<div class="row pb-20">
+										<div class="col-md-6"> <h2>Wallet - ₹ <?php echo $wallet_amt; ?></h2></div><div class="col-md-6 text-right"><a class="view" href="<?php echo base_url(); ?>add_wallet/">Add</a></div>
+                                 </div>
                                     <div class="table-responsive">
-                        <?php
-                        if (count($orders)>0){
-						?>
+								<?php
+									if (count($wallet_history)>0){
+								?>
                                         <table class="table">
                                             <thead>
                                                 <tr>
-                                                    <th>Order</th>
-                                                    <th>Date</th>
-                                                    <th>Status</th>
-                                                    <th>Total</th>
-                                                    <th>Actions</th>	 	 	 	
+													<th>Date</th>
+													<th>Amount</th>
+													<th>Notes</th>
+                                                    <th>Status</th>	
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                            <?php foreach($orders as $order){ 
-											$id = $order->id;
-											$order_id = $order->order_id;
-											$purchase_date = $order->purchase_date;
-											$dispDate = date("d M Y", strtotime($purchase_date));
-											$status = $order->status;
-											$total_amount = $order->total_amount;
+                                            <?php foreach($wallet_history as $history){ 
+											$transaction_amt = $history->transaction_amt;
+											$notes = $history->notes;
+											$transaction_date = $history->created_at;
+											$dispDate = date("d M Y", strtotime($transaction_date));
+											$status = $history->status;
+											
 											?>
                                                 <tr>
-                                                    <td><?php echo $order_id;?></td>
-                                                    <td><?php echo $dispDate; ?></td>
-                                                    <td><?php echo $status; ?></td>
-                                                    <td>₹<?php echo $total_amount;?></td>
-                                                    <td><a class="view" href="<?php echo base_url(); ?>home/cust_order_details/<?php echo $id;?>/">view</a></td>
+													<td><?php echo $dispDate; ?></td>
+													<td>₹<?php echo $transaction_amt;?></td>
+													<td><?php echo $notes; ?></td>
+                                                    <td><?php echo $status;?></td>
                                                 </tr>
                                            <?php } ?>
                                             </tbody>

@@ -306,6 +306,19 @@ Class Homemodel extends CI_Model
 	  	return $res;
    }
    
+   function cust_wallet($cust_session_id){
+		$sql="SELECT * FROM customer_wallet WHERE customer_id = '$cust_session_id'";
+	  	$resu=$this->db->query($sql);
+	  	$res=$resu->result();
+	  	return $res;
+   }
+   
+      function cust_wallet_history($cust_session_id){
+		$sql="SELECT * FROM customer_wallet_history WHERE customer_id = '$cust_session_id'";
+	  	$resu=$this->db->query($sql);
+	  	$res=$resu->result();
+	  	return $res;
+   }
    
 	function add_cust_address($cust_id,$ncountry_id,$nname,$naddress1,$naddress2,$ntown,$nstate,$nzip,$nemail,$nphone,$nphone1,$nlandmark){
 			

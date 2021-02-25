@@ -225,6 +225,66 @@ class Home extends CI_Controller {
 		}
 	}
 	
+	public function cust_wallet()
+	{
+		$cust_session_id = $this->session->userdata('cust_session_id');
+		$datas['main_catmenu'] = $this->homemodel->get_main_catmenu();
+		$datas['count_cart_session'] = $this->homemodel->cart_list();
+		$datas['count_wishlist'] = $this->homemodel->list_wishlist();
+		$datas['tag_result'] = $this->homemodel->list_tags();
+		$datas['wallet'] = $this->homemodel->cust_wallet($cust_session_id);
+		$datas['wallet_history'] = $this->homemodel->cust_wallet_history($cust_session_id);
+		//print_r($datas['wallet']);
+		//exit;
+		if ($cust_session_id !='') {
+			$this->load->view('front_header',$datas);
+			$this->load->view('cust_wallet');
+			$this->load->view('front_footer',$datas);
+		} else {
+			redirect(base_url()."login/");
+		}
+	}
+	
+	public function add_cust_wallet()
+	{
+		$cust_session_id = $this->session->userdata('cust_session_id');
+		$datas['main_catmenu'] = $this->homemodel->get_main_catmenu();
+		$datas['count_cart_session'] = $this->homemodel->cart_list();
+		$datas['count_wishlist'] = $this->homemodel->list_wishlist();
+		$datas['tag_result'] = $this->homemodel->list_tags();
+		//print_r($datas['wallet']);
+		//exit;
+		if ($cust_session_id !='') {
+			$this->load->view('front_header',$datas);
+			$this->load->view('add_cust_wallet');
+			$this->load->view('front_footer',$datas);
+		} else {
+			redirect(base_url()."login/");
+		}
+	}
+	
+	public function review_cust_wallet()
+	{
+		$cust_session_id = $this->session->userdata('cust_session_id');
+		$datas['main_catmenu'] = $this->homemodel->get_main_catmenu();
+		$datas['count_cart_session'] = $this->homemodel->cart_list();
+		$datas['count_wishlist'] = $this->homemodel->list_wishlist();
+		$datas['tag_result'] = $this->homemodel->list_tags();
+		$datas['wallet_amount'] = $this->input->post('wallet_amount');
+		$today = date("Ymd");
+        $rand = strtoupper(substr(uniqid(sha1(time())),0,4));
+		$datas['order_id'] = 'WALT'.$today . $rand . '-'. $cust_session_id;
+		//print_r($datas['wallet_amount']);
+		//exit;
+		if ($cust_session_id !='') {
+			$this->load->view('front_header',$datas);
+			$this->load->view('review_cust_wallet',$datas);
+			$this->load->view('front_footer',$datas);
+		} else {
+			redirect(base_url()."login/");
+		}
+	}
+	
 	public function cust_address()
 	{
 		$cust_session_id = $this->session->userdata('cust_session_id');

@@ -62,6 +62,7 @@ if (!empty($cust_details)){
                             <ul class="nav flex-column dashboard-list" role="tablist">
                                 <li><a href="<?php echo base_url(); ?>myaccount/">Dashboard</a></li>
                                 <li><a href="<?php echo base_url(); ?>cust_orders/">Orders</a></li>
+								<li><a href="<?php echo base_url(); ?>cust_wallet/">Wallet</a></li>
                                 <li class="active"><a href="<?php echo base_url(); ?>cust_address/">Addresses</a></li>
                                 <li><a href="<?php echo base_url(); ?>cust_details/">Account Details</a></li>
                                 <li><a href="<?php echo base_url(); ?>cust_change_password/">Change Password</a></li>
