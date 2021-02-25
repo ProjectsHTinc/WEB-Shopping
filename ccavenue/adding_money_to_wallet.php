@@ -88,17 +88,20 @@
 
        echo $sQuery = "INSERT INTO ccavenue_status (order_id,user_id,track_id,bank_ref_no,order_status,failure_message,payment_mode,card_name,status_code,status_message,currency,amount,billing_name,billing_address, billing_city,billing_state,billing_zip,billing_country,billing_tel,billing_email,delievery_name,delievery_address,delievery_city,delievery_state,delievery_zip,delievery_country,delievery_tel,merch_param1,merch_param2,merch_param3,merch_param4,merch_param5,vault,offer_type,offer_code,discount_value, mer_amt,eci_value,retry,response_code,billing_notes,trans_date,bin_country) VALUES ('$orderid','$user_id','$track_id','$bank_ref_no','$order_status','$failure_message','$payment_mode','$card_name','$status_code','$status_message','$currency','$amount','$billing_name','$billing_address','$billing_city','$billing_state','$billing_zip','$billing_country','$billing_tel','$billing_email','$delievery_name','$delievery_address','$delievery_city','$delievery_state','$delievery_zip','$delievery_country','$delievery_tel','$merch_param1','$merch_param2','$merch_param3','$merch_param4','$merch_param5','$vault','$offer_type','$offer_code','$discount_value','$mer_amt','$eci_value','$retry','$response_code','$billing_notes','$transdate','$bin_country')";
 	   $result = $mysqli->query($sQuery);
-       
+       echo "<br><br><br>";
 
 
     	if($order_status=="Success")
     	{
-			echo $insert_sp="INSERT INTO customer_wallet_history (customer_id,transaction_amt,status,notes,created_at,created_by) VALUES ('$user_id','$amount','Credited','Added money to wallet',NOW(),'$user_id')";
+			echo $insert_sp="INSERT INTO customer_wallet_history (customer_id,order_id,transaction_amt,status,notes,created_at,created_by) VALUES ('$user_id','$orderid','$amount','Credited','Added money to wallet',NOW(),'$user_id')";
 			$result = $mysqli->query($insert_sp);
-			
+			 echo "<br><br><br>";
 
-			$insert_sph="SELECT * FROM customer_wallet WHERE customer_id='$user_id'";
+			echo $insert_sph="SELECT * FROM customer_wallet WHERE customer_id='$user_id'";
 			$result= mysqli_query($link, $insert_sph);
+			 echo "<br><br><br>";
+			echo mysqli_num_rows($result);
+			 echo "<br><br><br>";
 			 if (mysqli_num_rows($result) == 0) {
 			   echo $wallet_query="INSERT INTO customer_wallet (customer_id,amt_in_wallet,total_amt_in_wallet,status,updated_at,updated_by) VALUES ('$user_id','$amount','$amount','Active',NOW(),'$user_id')";
 			 }else{
