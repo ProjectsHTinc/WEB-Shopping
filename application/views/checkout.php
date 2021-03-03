@@ -361,10 +361,9 @@
                                                 <td><strong><span class="amount">₹<?php echo number_format((float)$total_amount, 2, '.', ''); ?></span></strong>
                                                 </td>
                                             </tr>
-                                        </tfoot>
+										</tfoot>
                                     </table>
                                 </div>
-                                <div class="payment-method">
                                     <div class="payment-accordion">
                                         <div class="order-button-payment">
                                         <input type="hidden" name="total_amt" value="<?php echo number_format((float)$total_amount, 2, '.', '');?>" />
@@ -376,11 +375,38 @@
                             <?php } ?>
                         </div>
                     </form>
+					
+					
                 </div>
             </div>
         </div>
         <!-- checkout-area end -->
+		
  <script language="javascript">
+
+	function promo_apply() {
+	if($("#checkout").validate()){
+            var promo_code = document.getElementById("promo_code").value;
+		if ( promo_code == ""){
+			$("#res_message").html("Please enter promo code!..");
+		}else {
+			$.ajax({
+				type:"POST",
+				cache:false,
+				data:{"promo_code": promo_code},
+				url:'<?php echo base_url(); ?>/home/apply_promo',
+				success: function (html) {
+					 console.log(html);
+					$("#res_message").html(html);
+				  //$('#add').val('data sent');
+				  //$('#msg').html(html);
+				  // $('#pprice').html("Price: $"+html);
+				}
+			});
+		}
+	}
+}
+		 
 	$('#checkout').validate({ // initialize the plugin
 	ignore: ":hidden",
     rules: {

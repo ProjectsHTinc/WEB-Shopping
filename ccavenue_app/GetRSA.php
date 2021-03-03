@@ -1,7 +1,7 @@
 <?php
 $url = "https://secure.ccavenue.com/transaction/getRSAKey";
 $fields = array(
-        'access_code'=>"AVQM86GG76CA98MQAC",
+        'access_code'=>"AVAU84GD83BV10UAVB",
         'order_id'=>$_POST["order_id"]
 );
 

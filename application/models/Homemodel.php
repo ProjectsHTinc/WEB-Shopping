@@ -1059,22 +1059,32 @@ Class Homemodel extends CI_Model
 	  	
 		$today = date("Ymd");
 		$rand = strtoupper(substr(uniqid(sha1(time())),0,4));
-		$order_id = 'Lil'.$today . $rand . $order_id;
+		//$order_id = 'SHOP'.$today . $rand . $order_id;
+		$order_id = 'SHOP'.$today . $rand . $order_id.'-'.$cust_id;
+		$order_sess_id =  array("order_id"=>$order_id);
+		$this->session->set_userdata($order_sess_id);
 		
-		$inssql = "INSERT INTO purchase_order(order_id ,browser_sess_id ,cus_id ,purchase_date,cus_address_id,total_amount,status,cus_notes,created_at,created_by) VALUES('$order_id','$browser_sess_id','$cust_id',now(),'$address_id','$total_amt','Pending','$ncheckout_mess',now(),'$cust_id')";
+		$inssql = "INSERT INTO purchase_order(order_id ,browser_sess_id ,cus_id ,purchase_date,cus_address_id,total_amount,paid_amount,status,cus_notes,created_at,created_by) VALUES('$order_id','$browser_sess_id','$cust_id',now(),'$address_id','$total_amt','$total_amt','Pending','$ncheckout_mess',now(),'$cust_id')";
 		$insert = $this->db->query($inssql);
 
-		$updatesql = "UPDATE product_cart SET order_id='$order_id',cus_id='$cust_id' WHERE browser_sess_id='$browser_sess_id'";
+
+		$check_product_cart="SELECT * FROM product_cart";
+		$res=$this->db->query($check_product_cart);
+		if($res->num_rows()>0){
+			$updatesql = "UPDATE product_cart SET order_id='$order_id',cus_id='$cust_id' WHERE browser_sess_id='$browser_sess_id' AND order_id !=''";
+		}else{
+			$updatesql = "UPDATE product_cart SET order_id='$order_id',cus_id='$cust_id' WHERE browser_sess_id='$browser_sess_id'";
+		}
 		$update = $this->db->query($updatesql);
 		
-		
+		/*
 		$subject = "Order Confirmation - Your Order with LittleAmore [".$order_id."] has been successfully placed!";
 		$htmlContent = "Hi ".$nname.", Order successfully placed.<br><br>Your order will be delivered with in One Week.<br>We are pleased to confirm your order no ".$order_id.".<br><br>Thank you for shopping with LittleAMore!";
 		$this->sendMail($nemail,$subject,$htmlContent);
 		
 		$mobile_message = "Order Confirmation - Your Order with LittleAmore [".$order_id."] has been successfully placed!";
 		$this->sendSMS($nphone,$mobile_message);
-			
+		*/
 		$res=array('order_id'=>$order_id,'address'=>$address);
 		
 		return $res;
@@ -1106,16 +1116,26 @@ Class Homemodel extends CI_Model
 	  	
 		$today = date("Ymd");
 		$rand = strtoupper(substr(uniqid(sha1(time())),0,4));
-		$order_id = 'Lil'.$today . $rand . $order_id;
-
+		//$order_id = 'SHOP'.$today . $rand . $order_id;
+		$order_id = 'SHOP'.$today . $rand . $order_id.'-'.$cust_id;
+		$order_sess_id =  array("order_id"=>$order_id);
+		$this->session->set_userdata($order_sess_id);
 		
-		$inssql = "INSERT INTO purchase_order(order_id ,browser_sess_id ,cus_id ,purchase_date,cus_address_id,total_amount,status,cus_notes,created_at,created_by) VALUES('$order_id','$browser_sess_id','$cust_id',now(),'$address_id','$total_amt','Pending','$scheckout_mess',now(),'$cust_id')";
+		$inssql = "INSERT INTO purchase_order(order_id ,browser_sess_id ,cus_id ,purchase_date,cus_address_id,total_amount,paid_amount,status,cus_notes,created_at,created_by) VALUES('$order_id','$browser_sess_id','$cust_id',now(),'$address_id','$total_amt','$total_amt','Pending','$scheckout_mess',now(),'$cust_id')";
 		$insert = $this->db->query($inssql);
 		
-		$updatesql = "UPDATE product_cart SET order_id='$order_id',cus_id='$cust_id' WHERE browser_sess_id='$browser_sess_id'";
+		$check_product_cart="SELECT * FROM product_cart WHERE order_id!=''";
+		$res=$this->db->query($check_product_cart);
+		if($res->num_rows()>0){
+			$updatesql = "UPDATE product_cart SET order_id='$order_id',cus_id='$cust_id' WHERE browser_sess_id='$browser_sess_id' AND order_id =''";
+		}else{
+			$updatesql = "UPDATE product_cart SET order_id='$order_id',cus_id='$cust_id' WHERE browser_sess_id='$browser_sess_id'";
+		}
 		$update = $this->db->query($updatesql);
+
 		
 		
+	/*	
 		 $subject = "Order Confirmation - Your Order with LittleAmore [".$order_id."] has been successfully placed!";
 		 $htmlContent = "Hi ".$oname.", Order successfully placed.<br><br>Your order will be delivered with in One Week.<br>We are pleased to confirm your order no ".$order_id.".<br><br>Thank you for shopping with LittleAMore!";
 		$this->sendMail($oemail,$subject,$htmlContent);
@@ -1123,7 +1143,7 @@ Class Homemodel extends CI_Model
 		
 		$mobile_message = "Order Confirmation - Your Order with LittleAmore [".$order_id."] has been successfully placed!";
 		$this->sendSMS($ophone,$mobile_message);
-		
+	*/
 		$res=array('order_id'=>$order_id,'address'=>$address);
 		
 		return $res;
@@ -1271,5 +1291,211 @@ Class Homemodel extends CI_Model
 		echo "send";
    }
    
+   function apply_promo($user_id,$order_id,$promo_code){
+
+		$check_order = "SELECT * FROM purchase_order WHERE order_id = '$order_id' AND cus_id = '$user_id'";
+        $res=$this->db->query($check_order);
+
+        if($res->num_rows()>0){
+            foreach($res->result() as $rows) {
+                $purchase_order_id = $rows->id;
+            }
+		}
+		
+		$check_code = "SELECT * FROM promo_code WHERE promo_code = '$promo_code' AND status = 'Active'";
+        $res=$this->db->query($check_code);
+
+        if($res->num_rows()>0){
+            foreach($res->result() as $rows) {
+                $promo_id = $rows->id;
+				$promo_title = $rows->promo_title;
+				$promo_percentage = $rows->promo_percentage;
+            }
+
+			$check_promo = "SELECT * FROM promo_code_history WHERE promo_id = '$promo_id' AND purchase_order_id = '$purchase_order_id' AND customer_id = '$user_id'";
+			$res=$this->db->query($check_promo);
+
+			if($res->num_rows()>0){
+				$data = "Already";
+			} else {
+				
+				$select_order ="SELECT * FROM purchase_order WHERE id = '$purchase_order_id'";
+				$result=$this->db->query($select_order);
+				$res_cart=$result->result();
+				foreach($res_cart as $total_amount){
+					 $total=$total_amount->total_amount;
+					 $promo_value = ($total / 100) * $promo_percentage;
+					 $paid_amount = ($total - $promo_value);
+				}
+
+				$insert="INSERT INTO promo_code_history (promo_id,purchase_order_id,customer_id,order_value,promo_amount,final_amount,created_at) VALUES('$promo_id','$purchase_order_id','$user_id','$total','$promo_value','$paid_amount',NOW())";
+				$res=$this->db->query($insert);
+
+				$update_promo ="UPDATE purchase_order SET promo_amount='$promo_value',paid_amount='$paid_amount',updated_at=NOW(),updated_by='$user_id' WHERE id='$purchase_order_id'";
+				$res_promo=$this->db->query($update_promo);
+				
+				$data = "Added";
+			}
+		} else {
+			$data = "Error";
+        }
+		echo $data;
+   }
+   
+   function promo_review($order_session_id,$cust_session_id){
+
+		 $check_order = "SELECT
+						po.id as purchse_order_id,
+						po.*,
+						ca.*,
+						cm.country_name
+					FROM
+						purchase_order AS po
+					LEFT JOIN cus_address AS ca
+					ON
+						ca.id = po.cus_address_id
+					LEFT JOIN country_master as cm
+					ON ca.country_id = cm.id
+					WHERE
+						po.order_id = '$order_session_id'";
+				$res=$this->db->query($check_order);
+				$result=$res->result();
+			return $result;
+   }
+   
+      function remove_promo($order_session_id,$cust_session_id){
+
+		$check_order = "SELECT * FROM purchase_order WHERE order_id = '$order_session_id' AND cus_id = '$cust_session_id'";
+        $res=$this->db->query($check_order);
+
+        if($res->num_rows()>0){
+            foreach($res->result() as $rows) {
+                $purchase_order_id = $rows->id;
+            }
+		}
+		
+			$del_promo = "DELETE FROM promo_code_history WHERE purchase_order_id = '$purchase_order_id' AND customer_id = '$cust_session_id'";
+			$res=$this->db->query($del_promo);
+	
+			$select_order ="SELECT * FROM purchase_order WHERE id = '$purchase_order_id'";
+			$result=$this->db->query($select_order);
+			$res_cart=$result->result();
+			foreach($res_cart as $total_amount){
+				 $total=$total_amount->total_amount;
+			}
+
+			$update_promo ="UPDATE purchase_order SET promo_amount='0.00',paid_amount='$total' WHERE id='$purchase_order_id'";
+			$res_promo=$this->db->query($update_promo);
+			redirect(base_url().'home/promo_review/');
+   }
+   
+   
+   function review_cart_list($order_session_id,$cust_session_id){
+
+		  $sql = "SELECT A.*,B.product_name,B.product_cover_img,B.stocks_left FROM product_cart A,products B WHERE A.product_id = B.id AND A.cus_id = '$cust_session_id' AND A.order_id = '$order_session_id' AND A.status='Pending' ORDER BY A.id";
+	
+				$res=$this->db->query($sql);
+				$result=$res->result();
+			return $result;
+   }
+   
+   function wallet_apply($order_id,$user_id){
+
+		$check_order = "SELECT * FROM purchase_order WHERE order_id = '$order_id' AND cus_id = '$user_id'";
+        $res=$this->db->query($check_order);
+
+        if($res->num_rows()>0){
+            foreach($res->result() as $rows) {
+                  $purchase_order_id = $rows->id;
+				  $paid_amount = $rows->paid_amount;
+            }
+		}
+		
+		 $check_wallet = "SELECT * FROM customer_wallet WHERE id = '$user_id'";
+        $res = $this->db->query($check_wallet);
+
+        if($res->num_rows()>0){
+            foreach($res->result() as $rows) {
+                 $amt_in_wallet = $rows->amt_in_wallet;
+            }
+		}
+		
+		if ($paid_amount<=$amt_in_wallet){
+			$balance_amt_in_wallet = $amt_in_wallet - $paid_amount;
+			$spaid_amount = '0.00';
+			
+			 $update_order ="UPDATE purchase_order SET wallet_amount='$paid_amount',paid_amount='$spaid_amount',payment_status='Wallet', status = 'Success', updated_at=NOW(),updated_by='$user_id' WHERE id='$purchase_order_id'";
+			$res=$this->db->query($update_order);
+
+			$update_cart = "UPDATE product_cart SET status = 'Success' WHERE order_id = '$order_id'";
+			$res=$this->db->query($update_cart);
+			
+			 $insert_wallet="INSERT INTO customer_wallet_history (customer_id,order_id,transaction_amt,notes,status,created_at,created_by) VALUES('$user_id','$purchase_order_id','$paid_amount','Debited from wallet','Debited',NOW(),'$user_id')";
+			$res=$this->db->query($insert_wallet);
+			
+			 $update_wallet ="UPDATE customer_wallet SET total_amt_used = total_amt_used + $paid_amount,amt_in_wallet = amt_in_wallet- $paid_amount WHERE customer_id ='$user_id'";
+			$res=$this->db->query($update_wallet);
+			
+			redirect(base_url().'cust_orders/');
+		}else {
+			$spaid_amount = $paid_amount - $amt_in_wallet;
+			
+			$update_order ="UPDATE purchase_order SET wallet_amount='$amt_in_wallet',paid_amount='$spaid_amount',updated_at=NOW(),updated_by='$user_id' WHERE id='$purchase_order_id'";
+			$res=$this->db->query($update_order);
+
+			$insert_wallet="INSERT INTO customer_wallet_history (customer_id,order_id,transaction_amt,notes,status,created_at,created_by) VALUES('$user_id','$purchase_order_id','$amt_in_wallet','Debited from wallet','Debited',NOW(),'$user_id')";
+			$res=$this->db->query($insert_wallet);
+
+			$update_wallet ="UPDATE customer_wallet SET total_amt_used = total_amt_used + $amt_in_wallet,amt_in_wallet = amt_in_wallet- $amt_in_wallet WHERE customer_id ='$user_id'";
+			$res=$this->db->query($update_wallet);
+		
+			redirect(base_url().'home/wallet_review/');
+		}
+		
+   }
+   
+   function remove_wallet($order_session_id,$cust_session_id){
+	   
+		$check_order = "SELECT * FROM purchase_order WHERE order_id = '$order_session_id' AND cus_id = '$cust_session_id'";
+        $res=$this->db->query($check_order);
+
+        if($res->num_rows()>0){
+            foreach($res->result() as $rows) {
+                $purchase_order_id = $rows->id;
+            }
+		}
+		
+		$check_order = "SELECT * FROM purchase_order WHERE id = '$purchase_order_id' AND cus_id = '$cust_session_id'";
+        $res = $this->db->query($check_order);
+
+        if($res->num_rows()>0){
+            foreach($res->result() as $rows) {
+                $wallet_amount = $rows->wallet_amount;
+            }
+		}
+
+		if ($wallet_amount !='0.00'){
+			$update_order = "UPDATE purchase_order SET paid_amount = paid_amount + $wallet_amount ,wallet_amount = '0.00',payment_status ='',status='Pending'  WHERE id = '$purchase_order_id' AND cus_id = '$cust_session_id'";
+			$res=$this->db->query($update_order);
+			
+			 $update_wallet = "UPDATE customer_wallet SET total_amt_used = total_amt_used - $wallet_amount,amt_in_wallet = amt_in_wallet + $wallet_amount WHERE customer_id ='$cust_session_id'";
+			$res=$this->db->query($update_wallet);
+			
+			 $insert_wallet = "INSERT INTO customer_wallet_history (customer_id,order_id,transaction_amt,notes,status,created_at,created_by) VALUES('$cust_session_id','$purchase_order_id','$wallet_amount','Cancel from wallet','Credited',NOW(),'$cust_session_id')";
+			$res=$this->db->query($insert_wallet);
+		} 
+		
+		redirect(base_url().'home/wallet_review/');
+   }
+   
+   function cod_apply($order_id){
+			$update_order = "UPDATE purchase_order SET status = 'Success',payment_status = 'COD' WHERE order_id = '$order_id'";
+			$res=$this->db->query($update_order);
+			
+			$update_cart = "UPDATE product_cart SET status = 'Success' WHERE order_id = '$order_id'";
+			$res=$this->db->query($update_cart);
+			
+			redirect(base_url().'cust_orders/');
+   }
 
 }

@@ -607,7 +607,10 @@ class Home extends CI_Controller {
 		$datas['count_wishlist'] = $this->homemodel->list_wishlist();
 		$datas['tag_result'] = $this->homemodel->list_tags();
 		//$datas['cart_process'] = $this->homemodel->cart_process();
+		$datas['count_cart_session'] = $this->homemodel->cart_list();
 		$cust_session_id = $this->session->userdata('cust_session_id');
+		$datas['wallet_status'] = $this->homemodel->cust_wallet($cust_session_id);
+		
 		
 		if ($cust_session_id !='') {
 			$address_value = $this->input->post('address_value');
@@ -652,9 +655,40 @@ class Home extends CI_Controller {
 					$datas['res_orders']=$this->homemodel->checkout_addressid($cust_session_id,$ocountry_id,$oname,$oaddress1,$oaddress2,$otown,$ostate,$ozip,$oemail,$ophone,$ophone1,$olandmark,$scheckout_mess,$address_id,$total_amt);
 				}
 			}
-			$datas['count_cart_session'] = $this->homemodel->cart_list();
+			
 			$this->load->view('front_header',$datas);
 			$this->load->view('cart_process',$datas);
+			$this->load->view('front_footer',$datas);
+			
+			//$this->session->unset_userdata('__ci_last_regenerate');
+			//$this->session->unset_userdata('browser_sess_id');
+		
+			} else {
+			redirect(base_url()."login/");
+		}
+	}
+	
+	public function promo_review()
+	{
+		$datas['count_cart_session'] = $this->homemodel->cart_list();
+		$datas['main_catmenu'] = $this->homemodel->get_main_catmenu();
+		$datas['cart_list'] = $this->homemodel->cart_list();
+		$datas['count_wishlist'] = $this->homemodel->list_wishlist();
+		$datas['tag_result'] = $this->homemodel->list_tags();
+		
+		$order_session_id = $this->session->userdata('order_id');
+		$cust_session_id = $this->session->userdata('cust_session_id');
+		
+		$datas['wallet_status'] = $this->homemodel->cust_wallet($cust_session_id);
+
+		
+		if ($cust_session_id !='') {
+			$datas['res_orders']=$this->homemodel->promo_review($order_session_id,$cust_session_id);
+			//$datas['res_promo']=$this->homemodel->promo_details($order_session_id,$cust_session_id);
+			$datas['res_cart_list'] = $this->homemodel->review_cart_list($order_session_id,$cust_session_id);
+
+			$this->load->view('front_header',$datas);
+			$this->load->view('promo_review',$datas);
 			$this->load->view('front_footer',$datas);
 			
 			//$this->session->unset_userdata('__ci_last_regenerate');
@@ -767,4 +801,70 @@ class Home extends CI_Controller {
 		$this->load->view('pdfreport', $datas);
 	}
 	
+	public function apply_promo()
+	   {
+		 $user_id = $this->session->userdata('cust_session_id');
+		 $promo_code = $this->input->post('promo_code');
+		 $order_id = $this->input->post('order_id');
+		 $datas['res']= $this->homemodel->apply_promo($user_id,$order_id,$promo_code);
+	  }
+	  
+	  
+	public function remove_promo()
+	  {
+		$order_session_id = $this->session->userdata('order_id');
+		$cust_session_id = $this->session->userdata('cust_session_id');
+		$datas['res']= $this->homemodel->remove_promo($order_session_id,$cust_session_id);
+	  }
+	  
+	  public function wallet_apply()
+	   {
+		 $user_id = $this->session->userdata('cust_session_id');
+		 $order_id = $this->input->post('order_id');
+		 $datas['res']= $this->homemodel->wallet_apply($order_id,$user_id);
+	  }
+	  
+	public function wallet_review()
+	{
+		$datas['count_cart_session'] = $this->homemodel->cart_list();
+		$datas['main_catmenu'] = $this->homemodel->get_main_catmenu();
+		$datas['cart_list'] = $this->homemodel->cart_list();
+		$datas['count_wishlist'] = $this->homemodel->list_wishlist();
+		$datas['tag_result'] = $this->homemodel->list_tags();
+		
+		$order_session_id = $this->session->userdata('order_id');
+		$cust_session_id = $this->session->userdata('cust_session_id');
+		
+		$datas['wallet_status'] = $this->homemodel->cust_wallet($cust_session_id);
+
+		if ($cust_session_id !='') {
+			$datas['res_orders']=$this->homemodel->promo_review($order_session_id,$cust_session_id);
+			//$datas['res_promo']=$this->homemodel->promo_details($order_session_id,$cust_session_id);
+			$datas['res_cart_list'] = $this->homemodel->review_cart_list($order_session_id,$cust_session_id);
+
+			$this->load->view('front_header',$datas);
+			$this->load->view('wallet_review',$datas);
+			$this->load->view('front_footer',$datas);
+			
+			//$this->session->unset_userdata('__ci_last_regenerate');
+			//$this->session->unset_userdata('browser_sess_id');
+		
+			} else {
+			redirect(base_url()."login/");
+		}
+	}
+	
+	public function remove_wallet()
+	{
+		$order_session_id = $this->session->userdata('order_id');
+		$cust_session_id = $this->session->userdata('cust_session_id');
+		$datas['res']= $this->homemodel->remove_wallet($order_session_id,$cust_session_id);
+	}
+	
+	public function cod_apply()
+	{
+		$order_id=$this->input->post('order_id');
+		$datas['res']= $this->homemodel->cod_apply($order_id);
+		
+	}
 }

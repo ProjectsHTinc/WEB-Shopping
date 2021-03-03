@@ -4,13 +4,31 @@
     include('Crypto.php');
     include("connection.php");
 
-	$workingKey = '7FB71109FBD688214546E4C2BFF63D8B';		//Working Key should be provided here.
+	$workingKey = '3A5F7172E7947B223888492581B32ED2';		//Working Key should be provided here.
 	$encResponse = $_POST["encResp"];			            //This is the response sent by the CCAvenue Server
 	$rcvdString = decrypt($encResponse,$workingKey);		//Crypto Decryption used as per the specified working key.
 	$order_status = "";
 	$decryptValues = explode('&', $rcvdString);
 	$dataSize = sizeof($decryptValues);
 
+/*
+	echo "<center>";
+	for($i = 0; $i < $dataSize; $i++) 
+	{
+		$information=explode('=',$decryptValues[$i]);
+		if($i==3)	$order_status=$information[1];
+	}
+
+
+	echo "<table cellspacing=4 cellpadding=4>";
+	for($i = 0; $i < $dataSize; $i++) 
+	{
+		$information=explode('=',$decryptValues[$i]);
+	    	echo '<tr><td>'.$information[0].'</td><td>'.$information[1].'</td></tr>';
+	}
+	echo "</table><br>";
+	echo "</center>";
+*/
 
 	for($i = 0; $i < $dataSize; $i++)
 	{
@@ -67,20 +85,20 @@
 
 
        $sQuery = "INSERT INTO ccavenue_status (order_id,user_id,track_id,bank_ref_no,order_status,failure_message,payment_mode,card_name,status_code,status_message,currency,amount,billing_name,billing_address, billing_city,billing_state,billing_zip,billing_country,billing_tel,billing_email,delievery_name,delievery_address,delievery_city,delievery_state,delievery_zip,delievery_country,delievery_tel,merch_param1,merch_param2,merch_param3,merch_param4,merch_param5,vault,offer_type,offer_code,discount_value, mer_amt,eci_value,retry,response_code,billing_notes,trans_date,bin_country) VALUES ('$orderid','$user_id','$track_id','$bank_ref_no','$order_status','$failure_message','$payment_mode','$card_name','$status_code','$status_message','$currency','$amount','$billing_name','$billing_address','$billing_city','$billing_state','$billing_zip','$billing_country','$billing_tel','$billing_email','$delievery_name','$delievery_address','$delievery_city','$delievery_state','$delievery_zip','$delievery_country','$delievery_tel','$merch_param1','$merch_param2','$merch_param3','$merch_param4','$merch_param5','$vault','$offer_type','$offer_code','$discount_value','$mer_amt','$eci_value','$retry','$response_code','$billing_notes','$transdate','$bin_country')";
-          mysqli_query($link, $sQuery);
+       mysqli_query($link, $sQuery);
 
 
     	if($order_status=="Success")
     	{
-			$insert_sp="INSERT INTO customer_wallet_history (customer_id,transaction_amt,status,notes,created_at,created_by) VALUES ('$user_id','$amount','Credited','Added money to wallet',NOW(),'$user_id')";
+			$insert_sp="INSERT INTO customer_wallet_history (customer_id,order_id,transaction_amt,status,notes,created_at,created_by) VALUES ('$user_id','$orderid','$amount','Credited','Added money to wallet',NOW(),'$user_id')";
 			mysqli_query($link, $insert_sp);
 
-			$insert_sph="SELECT * FROM user_wallet WHERE customer_id='$user_id'";
+			$insert_sph="SELECT * FROM customer_wallet WHERE customer_id='$user_id'";
 			$result= mysqli_query($link, $insert_sph);
 			 if (mysqli_num_rows($result) == 0) {
-			   $wallet_query="INSERT INTO user_wallet (customer_id,amt_in_wallet,total_amt_in_wallet,status,updated_at,updated_by) VALUES ('$user_id','$amount','$amount','Active',NOW(),'$user_id')";
+			   $wallet_query="INSERT INTO customer_wallet (customer_id,amt_in_wallet,total_amt_in_wallet,total_amt_used,status,updated_at,updated_by) VALUES ('$user_id','$amount','$amount','0.00','Active',NOW(),'$user_id')";
 			 }else{
-				$wallet_query="UPDATE user_wallet SET amt_in_wallet=amt_in_wallet+'$amount',total_amt_in_wallet=total_amt_in_wallet+'$amount' WHERE customer_id='$user_id'";
+				$wallet_query="UPDATE customer_wallet SET amt_in_wallet=amt_in_wallet+'$amount',total_amt_in_wallet=total_amt_in_wallet+'$amount' WHERE customer_id='$user_id'";
 			 }
 			  mysqli_query($link, $wallet_query);
 			  $response["status"] = "Success";

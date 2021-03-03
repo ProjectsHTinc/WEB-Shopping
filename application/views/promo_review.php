@@ -22,13 +22,13 @@
                 <div class="row">
                     <div class="col-lg-6 col-md-6">
                      <?php
-                        if (count($res_orders['address'])>0){
-							foreach($res_orders['address'] as $olist){ }
+                        if (count($res_orders)>0){
+							foreach($res_orders as $olist){ }
 						?>
                              <h3>Delivery Details</h3>
                              		<div class="col-md-12">
                                      <div class="checkout-form-list mtb-20">
-                                            <label>Order ID : <?php echo $res_orders['order_id']; ?></label>
+                                            <label>Order ID : <?php echo $olist->order_id; ?></label>
                                                 <p><?php echo $olist->full_name; ?></p>
                                                 <p><?php echo $olist->house_no; ?>, <?php echo $olist->street; ?></p>
                                                 <p><?php echo $olist->city; ?>, <?php echo $olist->state; ?></p>
@@ -44,9 +44,8 @@
                          <?php } ?>
                    </div>
                      <div class="col-lg-6 col-md-6">
-					 
                          <?php
-                        if (count($cart_list)>0){
+                        if (count($res_cart_list)>0){
 						?>
                             <div class="your-order">
                                 <h3>Your order</h3>
@@ -56,14 +55,14 @@
                                         <thead>
                                             <tr>
                                                 <th class="product-name">Product</th>
-                                                <th class="product-total">Total</th>
+                                                <th class="product-total"  style="text-align:right">Total</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                         
 <?php 
 									$total_amount = '0';
-									foreach($cart_list as $clist){ 
+									foreach($res_cart_list as $clist){ 
 										$cart_id = $clist->id;
 										$sproduct_id = $clist->product_id;
 										$product_combined_id = $clist->product_combined_id;
@@ -93,7 +92,7 @@
                                             <tr class="cart_item">
                                                 <td class="product-name"><?php echo $product_name;?> <strong class="product-quantity"> × <?php echo $quantity;?></strong>
                                                 </td>
-                                                <td class="product-total">
+                                                <td class="product-total" style="text-align:right">
                                                     <span class="amount">₹<?php echo $stotal;?></span>
                                                 </td>
                                             </tr>
@@ -103,19 +102,33 @@
                                         <tfoot>
                                             <tr class="cart-subtotal">
                                                 <th>Cart Subtotal</th>
-                                                <td><span class="amount">₹<?php echo number_format((float)$total_amount, 2, '.', ''); ?></span></td>
+                                                <td  style="text-align:right"><span class="amount">₹<?php echo number_format((float)$total_amount, 2, '.', ''); ?></span></td>
                                             </tr>
+											<?php foreach($res_orders as $olist){ 
+											
+											$promo_amount = $olist->promo_amount;
+											$paid_amount = $olist->paid_amount;
+											
+											} ?>
+											<?php if ($promo_amount != '0.00'){ ?>
+											<tr >
+                                                <th style="color:#d50303;">Promo Amount <a href="<?php echo base_url(); ?>home/remove_promo/" onclick="return confirm('Are you sure?')"><i class="fa fa-times" aria-hidden="true"></i></a></th>
+                                                <td  style="text-align:right"><span class="amount" style="color:#d50303;">₹<?php echo number_format((float)$promo_amount, 2, '.', ''); ?></span></td>
+                                            </tr>
+											<?php } ?>											
                                             <tr class="order-total">
                                                 <th>Order Total</th>
-                                                <td><strong><span class="amount">₹<?php echo number_format((float)$total_amount, 2, '.', ''); ?></span></strong>
+                                                <td  style="text-align:right"><strong><span class="amount">₹<?php echo number_format((float)$paid_amount, 2, '.', ''); ?></span></strong>
                                                 </td>
                                             </tr>
 											
                                         </tfoot>
                                     </table>
 									
-						
+									
+									
 									<form method="post" name="customerData" id="customerData" class="confirm_process">
+									<?php if ($promo_amount == '0.00'){ ?>
 									<table>
 										<tbody>
 										<tr>
@@ -124,6 +137,7 @@
 										</tbody>
 									</table>
 									<div id="res_message"></div>
+									<?php } ?>		
 									<table>
 										<tbody>
 										<tr>
@@ -144,14 +158,14 @@
 										</tr>
 										</tbody>
 									</table>
-								</form>
+									</form>
                                 </div>
 
 								<div id="showOne" class="myDiv">
                                     <div class="payment-accordion">
                                         <div class="order-button-payment" name="COD" id="COD">
 										<form method="post" name="frmCOD" id="frmCOD" class="confirm_process" action="<?php echo base_url(); ?>home/cod_apply/">
-											<input type="hidden" name="order_id" id="order_id" value="<?php echo $res_orders['order_id'];?>"/>
+											<input type="hidden" name="order_id" id="order_id" value="<?php echo $olist->order_id;;?>"/>
 											<input type="submit" value="Cash on Delivery" class="btn btn-primary">
 											</form>
 			                          </div>
@@ -162,7 +176,7 @@
                                     <div class="payment-accordion">
                                         <div class="order-button-payment" name="Wallet"  id="Wallet">
 										<form method="post" name="frmWallet" id="frmWallet" class="confirm_process" action="<?php echo base_url(); ?>home/wallet_apply/">
-											<input type="hidden" name="order_id" id="order_id" value="<?php echo $res_orders['order_id'];?>"/>
+											<input type="hidden" name="order_id" id="order_id" value="<?php echo $olist->order_id;;?>"/>
 											<input type="submit" value="Use Wallet" class="btn btn-primary">
 											</form>
 			                          </div>
@@ -174,8 +188,8 @@
                                         <div class="order-button-payment" name="CCAvenue" id="CCAvenue">
 										<form method="post" name="CCAvenueData" id="CCAvenueData" class="confirm_process" action="<?php echo base_url(); ?>ccavenue/ccavRequestHandler.php">
 											<input type="hidden" name="merchant_id" value="216134"/>
-											<input type="hidden" name="order_id" id="order_id" value="<?php echo $res_orders['order_id'];?>"/>
-											<input type="hidden" name="amount" value="<?php echo number_format((float)$total_amount, 2, '.', '');?>"/>
+											<input type="hidden" name="order_id" id="order_id" value="<?php echo $olist->order_id;;?>"/>
+											<input type="hidden" name="amount" value="<?php echo number_format((float)$paid_amount, 2, '.', '');?>"/>
 											<input type="hidden" name="currency" value="INR"/>
 											<input type="hidden" name="redirect_url" value="<?php echo base_url(); ?>ccavenue/ccavResponseHandler.php"/>
 											<input type="hidden" name="cancel_url" value="<?php echo base_url(); ?>"/>
@@ -185,7 +199,8 @@
 			                          </div>
                                     </div>
                                 </div>
-								
+
+
                             </div>
                             <?php } ?>
                         </div>

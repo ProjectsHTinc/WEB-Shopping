@@ -40,7 +40,7 @@ include("connection.php");
 		{
 			while ($row = mysqli_fetch_array($result))
 			{
-				$purchase_amount = $row['total_amount'];
+				$purchase_amount = $row['paid_amount'];
 			}
 		} 
 			
