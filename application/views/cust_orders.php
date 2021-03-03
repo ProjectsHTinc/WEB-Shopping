@@ -83,24 +83,29 @@
                                                     <th>Date</th>
                                                     <th>Status</th>
                                                     <th>Total</th>
+													<th>Paid</th>
                                                     <th>Actions</th>	 	 	 	
                                                 </tr>
                                             </thead>
                                             <tbody>
                                             <?php foreach($orders as $order){ 
-											$id = $order->id;
+											$purchase_order_id = $order->id;
 											$order_id = $order->order_id;
 											$purchase_date = $order->purchase_date;
 											$dispDate = date("d M Y", strtotime($purchase_date));
 											$status = $order->status;
 											$total_amount = $order->total_amount;
+											$paid_amount = $order->paid_amount;
+											$id=base64_encode($purchase_order_id);
+											$return_status = $order->return_status;
 											?>
                                                 <tr>
                                                     <td><?php echo $order_id;?></td>
                                                     <td><?php echo $dispDate; ?></td>
                                                     <td><?php echo $status; ?></td>
                                                     <td>₹<?php echo $total_amount;?></td>
-                                                    <td><a class="view" href="<?php echo base_url(); ?>home/cust_order_details/<?php echo $id;?>/">view</a></td>
+													 <td>₹<?php echo $paid_amount;?></td>
+                                                    <td><a class="view" href="<?php echo base_url(); ?>home/cust_order_details/<?php echo $id;?>/">View</a>&nbsp; <?php if ($return_status =='0') { ?><a class="view" href="<?php echo base_url(); ?>home/order_return_request/<?php echo $id;?>/">Return</a><?php } else { ?> <a class="view" href="#">Return Requested</a> <?php } ?></td>
                                                 </tr>
                                            <?php } ?>
                                             </tbody>

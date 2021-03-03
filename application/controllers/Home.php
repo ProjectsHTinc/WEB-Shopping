@@ -207,8 +207,9 @@ class Home extends CI_Controller {
 		}
 	}
 	
-	public function cust_order_details($order_id)
+	public function cust_order_details($id)
 	{
+		$order_id=base64_decode($id);
 		$cust_session_id = $this->session->userdata('cust_session_id');
 		$datas['main_catmenu'] = $this->homemodel->get_main_catmenu();
 		$datas['count_cart_session'] = $this->homemodel->cart_list();
@@ -223,6 +224,35 @@ class Home extends CI_Controller {
 		} else {
 			redirect(base_url()."login/");
 		}
+	}
+	
+	public function order_return_request($id)
+	{
+		$order_id=base64_decode($id);
+		$cust_session_id = $this->session->userdata('cust_session_id');
+		$datas['main_catmenu'] = $this->homemodel->get_main_catmenu();
+		$datas['count_cart_session'] = $this->homemodel->cart_list();
+		$datas['count_wishlist'] = $this->homemodel->list_wishlist();
+		$datas['tag_result'] = $this->homemodel->list_tags();
+		$datas['address_details'] = $this->homemodel->cust_order_address($order_id);
+		$datas['retun_questions'] = $this->homemodel->retun_questions();
+		if ($cust_session_id !='') {
+			$this->load->view('front_header',$datas);
+			$this->load->view('order_return_request');
+			$this->load->view('front_footer',$datas);
+		} else {
+			redirect(base_url()."login/");
+		}
+	}
+	
+	public function return_request_add()
+	{
+		$customer_id = $this->session->userdata('cust_session_id');
+		$question_id=$this->input->post('question_id');
+		$pruchase_order_id=$this->input->post('pruchase_order_id');
+		$return_notes=$this->input->post('return_notes');
+		
+		$datas['res']= $this->homemodel->return_request_add($customer_id,$question_id,$pruchase_order_id,$return_notes);
 	}
 	
 	public function cust_wallet()

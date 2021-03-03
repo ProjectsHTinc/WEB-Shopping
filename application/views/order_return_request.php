@@ -71,92 +71,67 @@
                             <div class="tab-content dashboard-content mt-all-40">
                                 
                                 <div id="orders" class="tab-pane fade in active">
-                                    <h3>Order Details</h3>
+                                    <h3>Retun Request</h3>
                                     <div class="table-content table-responsive">
                        
                         <?php
                        if (count($address_details)>0){
 						   foreach($address_details as $order_address){ 
-									$timestamp = strtotime($order_address->purchase_date);
-									$print_total_amount = $order_address->total_amount;
-									 $print_paid_amount = $order_address->paid_amount;
-									 $print_promo_amount = $order_address->promo_amount;
-									 $print_wallet_amount = $order_address->wallet_amount;
-									 $print_payment_status = $order_address->payment_status;
-									
+							$timestamp = strtotime($order_address->purchase_date);
+							$print_total_amount = $order_address->total_amount;
+							$print_paid_amount = $order_address->paid_amount;
+							$print_promo_amount = $order_address->promo_amount;
+							$print_wallet_amount = $order_address->wallet_amount;
+							$print_payment_status = $order_address->payment_status;
 						   }
+					   }
 						?>
-                         <table width="100%" class="table">
+						
+                         <table width="100%" class="table" style="border:0px;">
                           <tr>
-                            <td style="text-align:left;line-height:30px;width:50%">
-							<?php echo $order_address->full_name; ?><br>
-							<?php echo $order_address->house_no; ?>, <?php echo $order_address->street; ?><br>
-							<?php echo $order_address->state; ?>, <?php echo $order_address->city; ?><br>
-							<?php echo $order_address->pincode; ?><br>
-							<?php echo $order_address->country_name; ?><br>
-							<?php echo $order_address->mobile_number; ?><br>
-							<?php echo $order_address->email_address; ?><br>
+						   
+                            <td style="text-align:left;line-height:30px;width:75%">
+							<form name="return" id="return" method="post" action="<?php echo base_url(); ?>home/return_request_add/">
+							 <table  class="table">
+							<?php
+								if (count($retun_questions)>0){
+									$i=1;
+									foreach($retun_questions as $questions){
+							?>
+								<tr>
+									<td><input type="radio" name="question_id" value="<?php echo $questions->id; ?>" style="height:10px;" <?php if ($i == '1') echo "checked"; ?>   /></td>
+									<td style="text-align:left;line-height:30px;"><p><?php echo $questions->question;?><p></td>
+								</tr>
+						<?php
+									$i = $i+1;
+								}
+							}
+						?>
+								<tr> 
+									<td></td>
+									<td style="text-align:left;"><p style="font-weight:bold;">Notes</p><textarea id="return_notes" name="return_notes" rows="3" cols="50" style="margin-top:20px;"></textarea></td>
+								</tr>
+								<tr> 
+									<td></td>
+									<td style="text-align:left;">
+									<input type="hidden" name="pruchase_order_id" id="pruchase_order_id" value="<?php echo $order_address->pruchase_order_id;?>"/>
+									<button type="submit" class="return-customer-btn">Submit</button></td>
+								</tr>
+							
+							</table>
+							</form>
 							</td>
-                            <td style="text-align:left;line-height:30px;width:50%;">
+							
+							<td style="text-align:left;line-height:30px;width:25%;">
 								Order ID : <?php echo $order_address->order_id; ?><br>
 								Order Date : <?php echo date('d/m/Y', $timestamp); ?><br>
 								Order Status : <?php echo $order_address->order_stauts; ?><br>
 								Payment Mode : <?php echo $print_payment_status; ?>
 							</td>
+							
                           </tr>
                         </table>
-                        <?php
-						}
-						if (count($order_details)>0){
-						?>
-                                        <table width="100%" class="table">
-                                            <thead>
-                                                <tr>
-                                                    <th style="width:40%">Product Name</th>
-                                                    <th style="width:20%">Quantity</th>
-                                                    <th style="width:20%;text-align:right;">Total</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            <?php 
-												foreach($order_details as $order){
-											?>
-                                                <tr>
-                                                    <td style="text-align:left;width:60%"><?php echo $order->product_name; ?></td>
-                                                    <td style="width:20%"><?php echo $order->quantity; ?></td>
-                                                    <td style="width:20%;text-align:right;">₹<?php echo $order->total_amount; ?></td>
-                                                </tr>
-                                           <?php } ?>
-										  </table>
-										<table width="100%" class="table">
-												<tr>
-                                                    <th style="width:60%">&nbsp;</th>
-                                                    <th style="width:20%;text-align:right;"><b>Total Amount</b></th>
-                                                    <th style="width:20%;text-align:right;"><b>₹<?php echo $print_total_amount; ?></b></th>
-                                                </tr>
-												<?php if ($print_promo_amount!='0.00'){ ?>
-												<tr>
-                                                    <th style="width:60%">&nbsp;</th>
-                                                    <th style="width:20%;text-align:right;"><b>Promo Amount</b></th>
-                                                    <th style="width:20%;text-align:right;"><b>₹<?php echo $print_promo_amount; ?></b></th>
-                                                </tr>
-												<?php } ?>
-												<?php if ($print_wallet_amount!='0.00'){ ?>
-												<tr>
-                                                    <th style="width:60%">&nbsp;</th>
-                                                    <th style="width:20%;text-align:right;"><b>Wallet Amount</b></th>
-                                                    <th style="width:20%;text-align:right;"><b>₹<?php echo $print_wallet_amount; ?></b></th>
-                                                </tr>
-												<?php } ?>
-												<tr>
-                                                    <th style="width:60%">&nbsp;</th>
-                                                    <th style="width:20%;text-align:right;"><b>Paid Amount</b></th>
-                                                    <th style="width:20%;text-align:right;"><b>₹<?php echo $print_paid_amount; ?></b></th>
-                                                </tr>
 
-                                             </tbody>
-                                        </table>
-                               <?php } ?>
                                     </div>
                                 </div>
                                 

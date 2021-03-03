@@ -114,7 +114,7 @@
 																	<option value="Processing">Processing</option>
 																	<option value="Shipped">Shipped</option>
 																	<option value="Out for Delivery">Out for Delivery</option>
-																	<option value="Payment Error">Payment Error</option>
+																	<option value="Delivered">Delivered</option>
 																</select>
 																	<script> </script>
 																<input type="hidden" id="order_id" name="order_id" value="">
@@ -159,7 +159,7 @@ $('#order_status').change(function(){
 });
 $('#exampleModal').on('show.bs.modal', function(e) {
 		 	var bookId = $(e.relatedTarget).data('id');
-    	$(e.currentTarget).find('input[name="order_id"]').val(bookId);
+			$(e.currentTarget).find('input[name="order_id"]').val(bookId);
 			var order_status = $(e.relatedTarget).data('order-status');
 			$(e.currentTarget).find('input[name="order_status"]').val(order_status);
 			var order_status = $(e.relatedTarget).data('order-status');

@@ -285,7 +285,14 @@ Class Homemodel extends CI_Model
 
 
      function cust_orders($cust_session_id){
-		$sql="SELECT * from purchase_order WHERE cus_id = '$cust_session_id'";
+		//$sql="SELECT * from purchase_order WHERE cus_id = '$cust_session_id'";
+		$sql="SELECT
+				c.*,
+				IFNULL(p.purchase_order_id,'0') as return_status
+			FROM
+				purchase_order c
+			LEFT JOIN return_item_feedback p ON
+				c.id = p.purchase_order_id WHERE c.cus_id = '$cust_session_id'";
 	  	$resu=$this->db->query($sql);
 	  	$res=$resu->result();
 	  	return $res;
@@ -298,9 +305,23 @@ Class Homemodel extends CI_Model
 	  	return $res;
    }
    
+   function retun_questions(){
+		$sql="SELECT * FROM return_reason_master WHERE status='Active'";
+	  	$resu=$this->db->query($sql);
+	  	$res=$resu->result();
+	  	return $res;
+   }
+   
+      function return_request_add($customer_id,$question_id,$pruchase_order_id,$return_notes){
+		$create = "INSERT INTO return_item_feedback(customer_id,purchase_order_id,question_id,answer_text,status,created_at,created_by) VALUES('$customer_id','$pruchase_order_id','$question_id','$return_notes','Active',now(),'$customer_id')";
+		$res = $this->db->query($create);
+		
+		redirect(base_url().'cust_orders/');
+   }
+   
    
      function cust_order_address($order_id){
-		$sql="SELECT A.*,B.*,C.*, A.status AS order_stauts from purchase_order A, cus_address B, country_master C WHERE A.id = '$order_id' AND A.cus_address_id = B.id AND B.country_id = C.id";
+		$sql="SELECT A.id AS pruchase_order_id,A.*,B.*,C.*, A.status AS order_stauts from purchase_order A, cus_address B, country_master C WHERE A.id = '$order_id' AND A.cus_address_id = B.id AND B.country_id = C.id";
 	  	$resu=$this->db->query($sql);
 	  	$res=$resu->result();
 	  	return $res;
