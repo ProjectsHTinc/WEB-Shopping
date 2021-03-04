@@ -1089,14 +1089,12 @@ Class Homemodel extends CI_Model
 		$insert = $this->db->query($inssql);
 
 
-		echo $check_product_cart="SELECT * FROM product_cart WHERE order_id !=''";
+		$check_product_cart="SELECT * FROM product_cart WHERE order_id =='' AND cus_id='$cust_session_id' AND browser_sess_id='$browser_sess_id'";
 		$res=$this->db->query($check_product_cart);
 		if($res->num_rows()>0){
-			echo $updatesql = "UPDATE product_cart SET order_id='$order_id',cus_id='$cust_session_id' WHERE browser_sess_id='$browser_sess_id' AND order_id !=''";
-		}else{
-			echo $updatesql = "UPDATE product_cart SET order_id='$order_id',cus_id='$cust_session_id' WHERE browser_sess_id='$browser_sess_id'";
+			$updatesql = "UPDATE product_cart SET order_id='$order_id' WHERE browser_sess_id='$browser_sess_id' AND cus_id='$cust_session_id' ";
+			$update = $this->db->query($updatesql);
 		}
-		$update = $this->db->query($updatesql);
 		exit;
 		/*
 		$subject = "Order Confirmation - Your Order with LittleAmore [".$order_id."] has been successfully placed!";
