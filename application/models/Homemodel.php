@@ -1049,7 +1049,7 @@ Class Homemodel extends CI_Model
    
     function checkout_address($cust_session_id,$ncountry_id,$nname,$naddress1,$naddress2,$ntown,$nstate,$nzip,$nemail,$nphone,$nphone1,$nlandmark,$ncheckout_mess,$total_amt){
 		
-			echo $browser_sess_id  = $this->session->userdata('browser_sess_id');
+			$browser_sess_id  = $this->session->userdata('browser_sess_id');
 			$check_order = "SELECT * FROM purchase_order ORDER BY id DESC LIMIT 1";
 			$res=$this->db->query($check_order);
 
@@ -1097,7 +1097,7 @@ Class Homemodel extends CI_Model
 			echo $updatesql = "UPDATE product_cart SET order_id='$order_id',cus_id='$cust_session_id' WHERE browser_sess_id='$browser_sess_id'";
 		}
 		$update = $this->db->query($updatesql);
-		
+		exit;
 		/*
 		$subject = "Order Confirmation - Your Order with LittleAmore [".$order_id."] has been successfully placed!";
 		$htmlContent = "Hi ".$nname.", Order successfully placed.<br><br>Your order will be delivered with in One Week.<br>We are pleased to confirm your order no ".$order_id.".<br><br>Thank you for shopping with LittleAMore!";
@@ -1148,9 +1148,9 @@ Class Homemodel extends CI_Model
 		$check_product_cart="SELECT * FROM product_cart WHERE order_id !=''";
 		$res=$this->db->query($check_product_cart);
 		if($res->num_rows()>0){
-			$updatesql = "UPDATE product_cart SET order_id='$order_id',cus_id='$cust_id' WHERE browser_sess_id='$browser_sess_id' AND order_id =''";
+			 $updatesql = "UPDATE product_cart SET order_id='$order_id',cus_id='$cust_id' WHERE browser_sess_id='$browser_sess_id' AND order_id =''";
 		}else{
-			$updatesql = "UPDATE product_cart SET order_id='$order_id',cus_id='$cust_id' WHERE browser_sess_id='$browser_sess_id'";
+			 $updatesql = "UPDATE product_cart SET order_id='$order_id',cus_id='$cust_id' WHERE browser_sess_id='$browser_sess_id'";
 		}
 		$update = $this->db->query($updatesql);
 
