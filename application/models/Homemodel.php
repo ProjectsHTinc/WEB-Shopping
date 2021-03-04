@@ -144,7 +144,8 @@ Class Homemodel extends CI_Model
 		}else{
 		//echo 'Message successfully delivered' . PHP_EOL;  
 		}
-		fclose($fp);    
+		fclose($fp);
+	  }
 }
 
 //#################### SMS End ####################//
