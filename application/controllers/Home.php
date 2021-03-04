@@ -638,7 +638,7 @@ class Home extends CI_Controller {
 		$datas['tag_result'] = $this->homemodel->list_tags();
 		//$datas['cart_process'] = $this->homemodel->cart_process();
 		$datas['count_cart_session'] = $this->homemodel->cart_list();
-		$cust_session_id = $this->session->userdata('cust_session_id');
+		echo $cust_session_id = $this->session->userdata('cust_session_id');
 		$datas['wallet_status'] = $this->homemodel->cust_wallet($cust_session_id);
 		
 		
@@ -706,8 +706,8 @@ class Home extends CI_Controller {
 		$datas['count_wishlist'] = $this->homemodel->list_wishlist();
 		$datas['tag_result'] = $this->homemodel->list_tags();
 		
-		echo $order_session_id = $this->session->userdata('order_id');
-		echo $cust_session_id = $this->session->userdata('cust_session_id');
+		$order_session_id = $this->session->userdata('order_id');
+		$cust_session_id = $this->session->userdata('cust_session_id');
 		
 		$datas['wallet_status'] = $this->homemodel->cust_wallet($cust_session_id);
 

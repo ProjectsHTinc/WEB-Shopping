@@ -1047,9 +1047,9 @@ Class Homemodel extends CI_Model
 			return $datas;
    }
    
-    function checkout_address($cust_id,$ncountry_id,$nname,$naddress1,$naddress2,$ntown,$nstate,$nzip,$nemail,$nphone,$nphone1,$nlandmark,$ncheckout_mess,$total_amt){
+    function checkout_address($cust_session_id,$ncountry_id,$nname,$naddress1,$naddress2,$ntown,$nstate,$nzip,$nemail,$nphone,$nphone1,$nlandmark,$ncheckout_mess,$total_amt){
 		
-			$browser_sess_id  = $this->session->userdata('browser_sess_id');
+			echo $browser_sess_id  = $this->session->userdata('browser_sess_id');
 			$check_order = "SELECT * FROM purchase_order ORDER BY id DESC LIMIT 1";
 			$res=$this->db->query($check_order);
 
@@ -1062,39 +1062,39 @@ Class Homemodel extends CI_Model
 				$order_id = 1;
 			}
 			
-		$check_address="SELECT * FROM cus_address WHERE cus_id = '$cust_id'";
+		$check_address="SELECT * FROM cus_address WHERE cus_id = '$cust_session_id'";
 		$res=$this->db->query($check_address);
 		if($res->num_rows()>0){
 			$address_mode = '0';
 		}else{
 			$address_mode = '1';
 		}
-		$create = "INSERT INTO cus_address(cus_id,country_id,state,city,pincode,house_no,street,landmark,full_name,mobile_number,alternative_mobile_number,email_address,address_type_id,address_mode,status,created_at,created_by) VALUES('$cust_id','$ncountry_id','$nstate','$ntown','$nzip','$naddress1','$naddress2','$nlandmark','$nname','$nphone','$nphone1','$nemail','1','$address_mode','Active',now(),'$cust_id')";
+		$create = "INSERT INTO cus_address(cus_id,country_id,state,city,pincode,house_no,street,landmark,full_name,mobile_number,alternative_mobile_number,email_address,address_type_id,address_mode,status,created_at,created_by) VALUES('$cust_session_id','$ncountry_id','$nstate','$ntown','$nzip','$naddress1','$naddress2','$nlandmark','$nname','$nphone','$nphone1','$nemail','1','$address_mode','Active',now(),'$cust_session_id')";
 		$res = $this->db->query($create);
 		$address_id = $this->db->insert_id();
 		
 		
-		$sql="SELECT A.*, B.country_name, C.address_type FROM cus_address A, country_master B, address_master C WHERE A.cus_id = '$cust_id' AND A.country_id = B.id AND A.address_type_id  = C.id AND A.id = '$address_id' AND A.status = 'Active'";
+		$sql="SELECT A.*, B.country_name, C.address_type FROM cus_address A, country_master B, address_master C WHERE A.cus_id = '$cust_session_id' AND A.country_id = B.id AND A.address_type_id  = C.id AND A.id = '$address_id' AND A.status = 'Active'";
 	  	$resu=$this->db->query($sql);
 	  	$address=$resu->result();
 	  	
 		$today = date("Ymd");
 		$rand = strtoupper(substr(uniqid(sha1(time())),0,4));
 		//$order_id = 'SHOP'.$today . $rand . $order_id;
-		$order_id = 'SHOP'.$today . $rand . $order_id.'-'.$cust_id;
+		$order_id = 'SHOP'.$today . $rand . $order_id.'-'.$cust_session_id;
 		$order_sess_id =  array("order_id"=>$order_id);
 		$this->session->set_userdata($order_sess_id);
 		
-		$inssql = "INSERT INTO purchase_order(order_id ,browser_sess_id ,cus_id ,purchase_date,cus_address_id,total_amount,paid_amount,status,cus_notes,created_at,created_by) VALUES('$order_id','$browser_sess_id','$cust_id',now(),'$address_id','$total_amt','$total_amt','Pending','$ncheckout_mess',now(),'$cust_id')";
+		$inssql = "INSERT INTO purchase_order(order_id ,browser_sess_id ,cus_id ,purchase_date,cus_address_id,total_amount,paid_amount,status,cus_notes,created_at,created_by) VALUES('$order_id','$browser_sess_id','$cust_session_id',now(),'$address_id','$total_amt','$total_amt','Pending','$ncheckout_mess',now(),'$cust_session_id')";
 		$insert = $this->db->query($inssql);
 
 
-		$check_product_cart="SELECT * FROM product_cart WHERE order_id !=''";
+		echo $check_product_cart="SELECT * FROM product_cart WHERE order_id !=''";
 		$res=$this->db->query($check_product_cart);
 		if($res->num_rows()>0){
-			$updatesql = "UPDATE product_cart SET order_id='$order_id',cus_id='$cust_id' WHERE browser_sess_id='$browser_sess_id' AND order_id !=''";
+			echo $updatesql = "UPDATE product_cart SET order_id='$order_id',cus_id='$cust_session_id' WHERE browser_sess_id='$browser_sess_id' AND order_id !=''";
 		}else{
-			$updatesql = "UPDATE product_cart SET order_id='$order_id',cus_id='$cust_id' WHERE browser_sess_id='$browser_sess_id'";
+			echo $updatesql = "UPDATE product_cart SET order_id='$order_id',cus_id='$cust_session_id' WHERE browser_sess_id='$browser_sess_id'";
 		}
 		$update = $this->db->query($updatesql);
 		
