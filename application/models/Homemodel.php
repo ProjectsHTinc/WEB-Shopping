@@ -1092,7 +1092,7 @@ Class Homemodel extends CI_Model
 		$check_product_cart="SELECT * FROM product_cart WHERE order_id ='' AND cus_id='$cust_session_id'";
 		$res=$this->db->query($check_product_cart);
 		if($res->num_rows()>0){
-			$updatesql = "UPDATE product_cart SET order_id='$order_id', browser_sess_id='$browser_sess_id' WHERE cus_id='$cust_session_id' ";
+			$updatesql = "UPDATE product_cart SET order_id='$order_id', browser_sess_id='$browser_sess_id' WHERE cus_id='$cust_session_id' AND order_id ='' ";
 			$update = $this->db->query($updatesql);
 		}
 
@@ -1146,7 +1146,7 @@ Class Homemodel extends CI_Model
 		$check_product_cart="SELECT * FROM product_cart WHERE order_id ='' AND cus_id='$cust_session_id'";
 		$res=$this->db->query($check_product_cart);
 		if($res->num_rows()>0){
-			$updatesql = "UPDATE product_cart SET order_id='$order_id', browser_sess_id='$browser_sess_id' WHERE cus_id='$cust_session_id' ";
+			$updatesql = "UPDATE product_cart SET order_id='$order_id', browser_sess_id='$browser_sess_id' WHERE cus_id='$cust_session_id' AND order_id =''";
 			$update = $this->db->query($updatesql);
 		}
 
