@@ -127,11 +127,13 @@ class Mobileapimodel extends CI_Model {
 		  $insert_sql = "INSERT INTO login_history (customer_id,login_portal,created_at) VALUES ('".$cust_id. "','".$login_portal. "',now())";
           $insert_result = $this->db->query($insert_sql);
 		  
-		  $gcmQuery = "SELECT * FROM cus_notification_master WHERE cus_id = '$cust_id' LIMIT 1";
-          //$gcmQuery = "SELECT * FROM cus_notification_master WHERE mob_key like '%" .$mob_key. "%' LIMIT 1";
+		  
+          echo $gcmQuery = "SELECT * FROM cus_notification_master WHERE mob_key like '%" .$mob_key. "%' LIMIT 1";
           $gcm_result = $this->db->query($gcmQuery);
           $gcm_ress = $gcm_result->result();
 echo $gcm_result->num_rows();
+
+exit;
           if($gcm_result->num_rows()==0)
           {
 				$sQuery = "INSERT INTO cus_notification_master (cus_id,mob_key,mobile_type,created_at ) VALUES ('". $cust_id . "','". $mob_key . "','". $mobile_type . "',now())";
