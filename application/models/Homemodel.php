@@ -1089,10 +1089,10 @@ Class Homemodel extends CI_Model
 		$insert = $this->db->query($inssql);
 
 
-		$check_product_cart="SELECT * FROM product_cart WHERE order_id ='' AND cus_id='$cust_session_id' AND browser_sess_id='$browser_sess_id'";
+		$check_product_cart="SELECT * FROM product_cart WHERE order_id ='' AND cus_id='$cust_session_id'";
 		$res=$this->db->query($check_product_cart);
 		if($res->num_rows()>0){
-			$updatesql = "UPDATE product_cart SET order_id='$order_id' WHERE browser_sess_id='$browser_sess_id' AND cus_id='$cust_session_id' ";
+			$updatesql = "UPDATE product_cart SET order_id='$order_id', browser_sess_id='$browser_sess_id' WHERE cus_id='$cust_session_id' ";
 			$update = $this->db->query($updatesql);
 		}
 
@@ -1143,10 +1143,10 @@ Class Homemodel extends CI_Model
 		$inssql = "INSERT INTO purchase_order(order_id ,browser_sess_id ,cus_id ,purchase_date,cus_address_id,total_amount,paid_amount,status,cus_notes,created_at,created_by) VALUES('$order_id','$browser_sess_id','$cust_id',now(),'$address_id','$total_amt','$total_amt','Pending','$scheckout_mess',now(),'$cust_id')";
 		$insert = $this->db->query($inssql);
 		
-		$check_product_cart="SELECT * FROM product_cart WHERE order_id ='' AND cus_id='$cust_session_id' AND browser_sess_id='$browser_sess_id'";
+		$check_product_cart="SELECT * FROM product_cart WHERE order_id ='' AND cus_id='$cust_session_id'";
 		$res=$this->db->query($check_product_cart);
 		if($res->num_rows()>0){
-			$updatesql = "UPDATE product_cart SET order_id='$order_id' WHERE browser_sess_id='$browser_sess_id' AND cus_id='$cust_session_id' ";
+			$updatesql = "UPDATE product_cart SET order_id='$order_id', browser_sess_id='$browser_sess_id' WHERE cus_id='$cust_session_id' ";
 			$update = $this->db->query($updatesql);
 		}
 
