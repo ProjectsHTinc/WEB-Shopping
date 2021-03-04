@@ -81,6 +81,72 @@ Class Homemodel extends CI_Model
         curl_close($ch);
 	}
 
+
+	function send_notification($head,$message,$gcm_key,$mobile_type)
+	{
+      if($mobile_type == '1'){
+
+			$url = 'https://fcm.googleapis.com/fcm/send';
+			$fields = array (
+					'to' => $gcm_key,
+					'priority' => 'high',
+					'notification' => array (
+						"body" => $message,
+						"title" => "OSA",
+						"icon" => "myicon"
+					)
+			);
+			$fields = json_encode ( $fields );
+			
+			 $headers = array (
+					  'Authorization: key=' . "AAAAuoTcq58:APA91bEyV2z6t4yhSgEpIrNWSO_NFsEp5-5dPwpnQd0BMyxwYEjIXHvyHqzgNsY29bpq2l23nK9FUSxVbWlW96XxL3Ua6oHdCsCcy7Z8XpMXr74orBo3t1zwmF18xxtsqJnsV7SZKizt",
+					  'Content-Type: application/json'
+			  );
+
+			$ch = curl_init ();
+			curl_setopt ( $ch, CURLOPT_URL, $url );
+			curl_setopt ( $ch, CURLOPT_POST, true );
+			curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
+			curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+			curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
+			$rew = curl_exec ( $ch );
+			curl_close ( $ch );
+
+      }else{
+
+
+		$passphrase = 'HS123';
+		$loction ='assets/notification/skilex.pem';
+
+		$body['aps'] = array(
+			'alert' => array(
+				'body' => $message,
+				'action-loc-key' => $head
+			)
+		);
+		$payload = json_encode($body);
+
+		$ctx = stream_context_create();
+		stream_context_set_option($ctx, 'ssl', 'local_cert', $loction);
+		stream_context_set_option($ctx, 'ssl', 'passphrase', $passphrase);
+
+		// Open a connection to the APNS server
+		$fp = stream_socket_client('ssl://gateway.sandbox.push.apple.com:2195', $err, $errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx);
+
+		if (!$fp)
+		exit("Failed to connect: $err $errstr" . PHP_EOL);
+
+		$msg = chr(0) . pack("n", 32) . pack("H*", str_replace(" ", "", $gcm_key)) . pack("n", strlen($payload)) . $payload;
+		$result = fwrite($fp, $msg, strlen($msg));
+
+		if (!$result){
+		//echo 'Message not delivered' . PHP_EOL;
+		}else{
+		//echo 'Message successfully delivered' . PHP_EOL;  
+		}
+		fclose($fp);    
+}
+
 //#################### SMS End ####################//
 
 	function random_password( $length = 8 ) {
@@ -1062,57 +1128,76 @@ Class Homemodel extends CI_Model
 				$order_id = 1;
 			}
 			
-		$check_address="SELECT * FROM cus_address WHERE cus_id = '$cust_session_id'";
-		$res=$this->db->query($check_address);
-		if($res->num_rows()>0){
-			$address_mode = '0';
-		}else{
-			$address_mode = '1';
-		}
-		$create = "INSERT INTO cus_address(cus_id,country_id,state,city,pincode,house_no,street,landmark,full_name,mobile_number,alternative_mobile_number,email_address,address_type_id,address_mode,status,created_at,created_by) VALUES('$cust_session_id','$ncountry_id','$nstate','$ntown','$nzip','$naddress1','$naddress2','$nlandmark','$nname','$nphone','$nphone1','$nemail','1','$address_mode','Active',now(),'$cust_session_id')";
-		$res = $this->db->query($create);
-		$address_id = $this->db->insert_id();
+			$check_address="SELECT * FROM cus_address WHERE cus_id = '$cust_session_id'";
+			$res=$this->db->query($check_address);
+			if($res->num_rows()>0){
+				$address_mode = '0';
+			}else{
+				$address_mode = '1';
+			}
+			
+			$create = "INSERT INTO cus_address(cus_id,country_id,state,city,pincode,house_no,street,landmark,full_name,mobile_number,alternative_mobile_number,email_address,address_type_id,address_mode,status,created_at,created_by) VALUES('$cust_session_id','$ncountry_id','$nstate','$ntown','$nzip','$naddress1','$naddress2','$nlandmark','$nname','$nphone','$nphone1','$nemail','1','$address_mode','Active',now(),'$cust_session_id')";
+			$res = $this->db->query($create);
+			$address_id = $this->db->insert_id();
 		
 		
-		$sql="SELECT A.*, B.country_name, C.address_type FROM cus_address A, country_master B, address_master C WHERE A.cus_id = '$cust_session_id' AND A.country_id = B.id AND A.address_type_id  = C.id AND A.id = '$address_id' AND A.status = 'Active'";
-	  	$resu=$this->db->query($sql);
-	  	$address=$resu->result();
+			$sql="SELECT A.*, B.country_name, C.address_type FROM cus_address A, country_master B, address_master C WHERE A.cus_id = '$cust_session_id' AND A.country_id = B.id AND A.address_type_id  = C.id AND A.id = '$address_id' AND A.status = 'Active'";
+			$resu=$this->db->query($sql);
+			$address=$resu->result();
 	  	
-		$today = date("Ymd");
-		$rand = strtoupper(substr(uniqid(sha1(time())),0,4));
-		//$order_id = 'SHOP'.$today . $rand . $order_id;
-		$order_id = 'SHOP'.$today . $rand . $order_id.'-'.$cust_session_id;
-		$order_sess_id =  array("order_id"=>$order_id);
-		$this->session->set_userdata($order_sess_id);
-		
-		$inssql = "INSERT INTO purchase_order(order_id ,browser_sess_id ,cus_id ,purchase_date,cus_address_id,total_amount,paid_amount,status,cus_notes,created_at,created_by) VALUES('$order_id','$browser_sess_id','$cust_session_id',now(),'$address_id','$total_amt','$total_amt','Pending','$ncheckout_mess',now(),'$cust_session_id')";
-		$insert = $this->db->query($inssql);
+			$today = date("Ymd");
+			$rand = strtoupper(substr(uniqid(sha1(time())),0,4));
+			//$order_id = 'SHOP'.$today . $rand . $order_id;
+			$order_id = 'SHOP'.$today . $rand . $order_id.'-'.$cust_session_id;
+			$order_sess_id =  array("order_id"=>$order_id);
+			$this->session->set_userdata($order_sess_id);
+			
+			$inssql = "INSERT INTO purchase_order(order_id ,browser_sess_id ,cus_id ,purchase_date,cus_address_id,total_amount,paid_amount,status,cus_notes,created_at,created_by) VALUES('$order_id','$browser_sess_id','$cust_session_id',now(),'$address_id','$total_amt','$total_amt','Pending','$ncheckout_mess',now(),'$cust_session_id')";
+			$insert = $this->db->query($inssql);
 
 
-		$check_product_cart="SELECT * FROM product_cart WHERE order_id ='' AND cus_id='$cust_session_id'";
-		$res=$this->db->query($check_product_cart);
-		if($res->num_rows()>0){
-			$updatesql = "UPDATE product_cart SET order_id='$order_id', browser_sess_id='$browser_sess_id' WHERE cus_id='$cust_session_id' AND order_id ='' ";
-			$update = $this->db->query($updatesql);
-		}
+			$check_product_cart="SELECT * FROM product_cart WHERE order_id ='' AND cus_id='$cust_session_id'";
+			$res=$this->db->query($check_product_cart);
+			if($res->num_rows()>0){
+				$updatesql = "UPDATE product_cart SET order_id='$order_id', browser_sess_id='$browser_sess_id' WHERE cus_id='$cust_session_id' AND order_id ='' ";
+				$update = $this->db->query($updatesql);
+			}
+			
+			$check_notifi_status = "SELECT * FROM customer_details WHERE customer_id = '$cust_session_id' AND notification_status = '1'";
+			$res=$this->db->query($check_notifi_status);
+			if($res->num_rows()>0){
+				$check_gcm = "SELECT * FROM cus_notification_master WHERE cus_id = '$cust_session_id'";
+				$res_gcm=$this->db->query($check_gcm);
 
-		/*
-		$subject = "Order Confirmation - Your Order with LittleAmore [".$order_id."] has been successfully placed!";
-		$htmlContent = "Hi ".$nname.", Order successfully placed.<br><br>Your order will be delivered with in One Week.<br>We are pleased to confirm your order no ".$order_id.".<br><br>Thank you for shopping with LittleAMore!";
-		$this->sendMail($nemail,$subject,$htmlContent);
-		
-		$mobile_message = "Order Confirmation - Your Order with LittleAmore [".$order_id."] has been successfully placed!";
-		$this->sendSMS($nphone,$mobile_message);
-		*/
-		$res=array('order_id'=>$order_id,'address'=>$address);
-		
-		return $res;
+				if($res_gcm->num_rows()>0){
+					foreach($res_gcm->result() as $rows) {
+						$mob_key = $rows->mob_key;
+						$mobile_type = $rows->mobile_type;
+					}
+				}
+			}
+
+			/*
+			$subject = "Order Confirmation - Your Order with LittleAmore [".$order_id."] has been successfully placed!";
+			$htmlContent = "Hi ".$nname.", Order successfully placed.<br><br>Your order will be delivered with in One Week.<br>We are pleased to confirm your order no ".$order_id.".<br><br>Thank you for shopping with LittleAMore!";
+			$this->sendMail($nemail,$subject,$htmlContent);
+			
+			$mobile_message = "Order Confirmation - Your Order with LittleAmore [".$order_id."] has been successfully placed!";
+			$this->sendSMS($nphone,$mobile_message);
+			
+			$title='LittleAMore';
+			$this->sendNotification($title,$subject,$mob_key,$mobile_type);
+			*/
+			
+			$res=array('order_id'=>$order_id,'address'=>$address);
+			return $res;
    }
 
 
 
-   function checkout_addressid($cust_session_id,$ocountry_id,$oname,$oaddress1,$oaddress2,$otown,$ostate,$ozip,$oemail,$ophone,$ophone1,$olandmark,$scheckout_mess,$address_id,$total_amt){
-		$browser_sess_id  = $this->session->userdata('browser_sess_id');
+	function checkout_addressid($cust_session_id,$ocountry_id,$oname,$oaddress1,$oaddress2,$otown,$ostate,$ozip,$oemail,$ophone,$ophone1,$olandmark,$scheckout_mess,$address_id,$total_amt){
+			
+			$browser_sess_id  = $this->session->userdata('browser_sess_id');
 		
 			$update="UPDATE cus_address SET country_id ='$ocountry_id',state ='$ostate',city ='$otown',pincode='$ozip',house_no ='$oaddress1',street ='$oaddress2',landmark ='$olandmark',full_name ='$oname',mobile_number ='$ophone',email_address ='$oemail',alternative_mobile_number='$ophone1' WHERE id='$address_id'";
 			$res=$this->db->query($update);	
@@ -1150,13 +1235,27 @@ Class Homemodel extends CI_Model
 			$update = $this->db->query($updatesql);
 		}
 
-		
+		$check_notifi_status = "SELECT * FROM customer_details WHERE customer_id = '$cust_session_id' AND notification_status = '1'";
+		$res=$this->db->query($check_notifi_status);
+		if($res->num_rows()>0){
+			$check_gcm = "SELECT * FROM cus_notification_master WHERE cus_id = '$cust_session_id'";
+			$res_gcm=$this->db->query($check_gcm);
+
+			if($res_gcm->num_rows()>0){
+				foreach($res_gcm->result() as $rows) {
+					$mob_key = $rows->mob_key;
+					$mobile_type = $rows->mobile_type;
+				}
+			}
+		}
 		
 	/*	
-		 $subject = "Order Confirmation - Your Order with LittleAmore [".$order_id."] has been successfully placed!";
-		 $htmlContent = "Hi ".$oname.", Order successfully placed.<br><br>Your order will be delivered with in One Week.<br>We are pleased to confirm your order no ".$order_id.".<br><br>Thank you for shopping with LittleAMore!";
+		$subject = "Order Confirmation - Your Order with LittleAmore [".$order_id."] has been successfully placed!";
+		$htmlContent = "Hi ".$oname.", Order successfully placed.<br><br>Your order will be delivered with in One Week.<br>We are pleased to confirm your order no ".$order_id.".<br><br>Thank you for shopping with LittleAMore!";
 		$this->sendMail($oemail,$subject,$htmlContent);
 		
+		$title='LittleAMore';
+		$this->sendNotification($title,$subject,$mob_key,$mobile_type);
 		
 		$mobile_message = "Order Confirmation - Your Order with LittleAmore [".$order_id."] has been successfully placed!";
 		$this->sendSMS($ophone,$mobile_message);

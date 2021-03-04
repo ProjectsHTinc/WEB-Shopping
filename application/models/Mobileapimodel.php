@@ -127,7 +127,7 @@ class Mobileapimodel extends CI_Model {
 		  $insert_sql = "INSERT INTO login_history (customer_id,login_portal,created_at) VALUES ('".$cust_id. "','".$login_portal. "',now())";
           $insert_result = $this->db->query($insert_sql);
 		  
-          $gcmQuery = "SELECT * FROM cus_notification_master WHERE mob_key like '%" .$mob_key. "%' LIMIT 1";
+          $gcmQuery = "SELECT * FROM cus_notification_master WHERE mob_key = '$mob_key' LIMIT 1";
           $gcm_result = $this->db->query($gcmQuery);
           $gcm_ress = $gcm_result->result();
 
@@ -232,7 +232,7 @@ class Mobileapimodel extends CI_Model {
 		  $insert_sql = "INSERT INTO login_history (customer_id,login_portal,created_at) VALUES ('".$cust_id. "','".$login_portal. "',now())";
           $insert_result = $this->db->query($insert_sql);
 		  
-          $gcmQuery = "SELECT * FROM cus_notification_master WHERE mob_key like '%" .$mob_key. "%' LIMIT 1";
+          $gcmQuery = "SELECT * FROM cus_notification_master WHERE mob_key = '$mob_key' LIMIT 1";
           $gcm_result = $this->db->query($gcmQuery);
           $gcm_ress = $gcm_result->result();
 
@@ -320,7 +320,7 @@ class Mobileapimodel extends CI_Model {
 					$insert_sql = "INSERT INTO login_history (customer_id,login_portal,created_at) VALUES ('".$id. "','".$login_portal. "',now())";
 					$insert_result = $this->db->query($insert_sql);
 					
-                    $gcmQuery = "SELECT * FROM cus_notification_master WHERE mob_key like '%" .$mob_key. "%' LIMIT 1";
+                    $gcmQuery = "SELECT * FROM cus_notification_master WHERE mob_key = '$mob_key' LIMIT 1";
                     $gcm_result = $this->db->query($gcmQuery);
                     $gcm_ress = $gcm_result->result();
 
