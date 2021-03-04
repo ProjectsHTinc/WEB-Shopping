@@ -129,13 +129,14 @@ class Mobileapimodel extends CI_Model {
 		  
           $gcmQuery = "SELECT * FROM cus_notification_master WHERE mob_key = '$mob_key' LIMIT 1";
           $gcm_result = $this->db->query($gcmQuery);
-          $gcm_ress = $gcm_result->result();
+          //$gcm_ress = $gcm_result->result();
 
-          if($gcm_result->num_rows()==0)
+          if($gcm_result->num_rows()>0)
           {
-				$sQuery = "INSERT INTO cus_notification_master (cus_id,mob_key,mobile_type,created_at ) VALUES ('". $cust_id . "','". $mob_key . "','". $mobile_type . "',now())";
-				$update_gcm = $this->db->query($sQuery);
-          }
+          }else{
+			  $sQuery = "INSERT INTO cus_notification_master (cus_id,mob_key,mobile_type,created_at ) VALUES ('". $cust_id . "','". $mob_key . "','". $mobile_type . "',now())";
+			  $update_gcm = $this->db->query($sQuery);
+		  }
 
 			  $response = array("status" => "success", "msg" => "Login Successfully", "userData" => $userData);
 			  return $response;
@@ -234,13 +235,14 @@ class Mobileapimodel extends CI_Model {
 		  
           $gcmQuery = "SELECT * FROM cus_notification_master WHERE mob_key = '$mob_key' LIMIT 1";
           $gcm_result = $this->db->query($gcmQuery);
-          $gcm_ress = $gcm_result->result();
+          //$gcm_ress = $gcm_result->result();
 
-          if($gcm_result->num_rows()==0)
+          if($gcm_result->num_rows()>0)
           {
-            $sQuery = "INSERT INTO cus_notification_master (cus_id,mob_key,mobile_type,created_at ) VALUES ('". $cust_id . "','". $mob_key . "','". $mobile_type . "',now())";
-            $update_gcm = $this->db->query($sQuery);
-          }
+          }else{
+			  $sQuery = "INSERT INTO cus_notification_master (cus_id,mob_key,mobile_type,created_at ) VALUES ('". $cust_id . "','". $mob_key . "','". $mobile_type . "',now())";
+			  $update_gcm = $this->db->query($sQuery);
+		  }
 
               $response = array("status" => "success", "msg" => "Login Successfully", "userData" => $userData);
               return $response;
