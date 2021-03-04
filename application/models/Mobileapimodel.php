@@ -130,7 +130,7 @@ class Mobileapimodel extends CI_Model {
           $gcmQuery = "SELECT * FROM cus_notification_master WHERE mob_key = '$mob_key' LIMIT 1";
           $gcm_result = $this->db->query($gcmQuery);
           //$gcm_ress = $gcm_result->result();
-
+echo $gcm_result->num_rows();
           if($gcm_result->num_rows()>0)
           {
           }else{
