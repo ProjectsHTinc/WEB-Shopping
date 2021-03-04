@@ -127,16 +127,15 @@ class Mobileapimodel extends CI_Model {
 		  $insert_sql = "INSERT INTO login_history (customer_id,login_portal,created_at) VALUES ('".$cust_id. "','".$login_portal. "',now())";
           $insert_result = $this->db->query($insert_sql);
 		  
-          $gcmQuery = "SELECT * FROM cus_notification_master WHERE mob_key = '$mob_key' LIMIT 1";
+          $gcmQuery = "SELECT * FROM cus_notification_master WHERE mob_key like '%" .$mob_key. "%' LIMIT 1";
           $gcm_result = $this->db->query($gcmQuery);
-          //$gcm_ress = $gcm_result->result();
-echo $gcm_result->num_rows();
-          if($gcm_result->num_rows()>0)
+          $gcm_ress = $gcm_result->result();
+
+          if($gcm_result->num_rows()==0)
           {
-          }else{
-			  $sQuery = "INSERT INTO cus_notification_master (cus_id,mob_key,mobile_type,created_at ) VALUES ('". $cust_id . "','". $mob_key . "','". $mobile_type . "',now())";
-			  $update_gcm = $this->db->query($sQuery);
-		  }
+				$sQuery = "INSERT INTO cus_notification_master (cus_id,mob_key,mobile_type,created_at ) VALUES ('". $cust_id . "','". $mob_key . "','". $mobile_type . "',now())";
+				$update_gcm = $this->db->query($sQuery);
+          }
 
 			  $response = array("status" => "success", "msg" => "Login Successfully", "userData" => $userData);
 			  return $response;
@@ -233,16 +232,15 @@ echo $gcm_result->num_rows();
 		  $insert_sql = "INSERT INTO login_history (customer_id,login_portal,created_at) VALUES ('".$cust_id. "','".$login_portal. "',now())";
           $insert_result = $this->db->query($insert_sql);
 		  
-          $gcmQuery = "SELECT * FROM cus_notification_master WHERE mob_key = '$mob_key' LIMIT 1";
+          $gcmQuery = "SELECT * FROM cus_notification_master WHERE mob_key like '%" .$mob_key. "%' LIMIT 1";
           $gcm_result = $this->db->query($gcmQuery);
-          //$gcm_ress = $gcm_result->result();
+          $gcm_ress = $gcm_result->result();
 
-          if($gcm_result->num_rows()>0)
+          if($gcm_result->num_rows()==0)
           {
-          }else{
-			  $sQuery = "INSERT INTO cus_notification_master (cus_id,mob_key,mobile_type,created_at ) VALUES ('". $cust_id . "','". $mob_key . "','". $mobile_type . "',now())";
-			  $update_gcm = $this->db->query($sQuery);
-		  }
+            $sQuery = "INSERT INTO cus_notification_master (cus_id,mob_key,mobile_type,created_at ) VALUES ('". $cust_id . "','". $mob_key . "','". $mobile_type . "',now())";
+            $update_gcm = $this->db->query($sQuery);
+          }
 
               $response = array("status" => "success", "msg" => "Login Successfully", "userData" => $userData);
               return $response;
@@ -322,7 +320,7 @@ echo $gcm_result->num_rows();
 					$insert_sql = "INSERT INTO login_history (customer_id,login_portal,created_at) VALUES ('".$id. "','".$login_portal. "',now())";
 					$insert_result = $this->db->query($insert_sql);
 					
-                    $gcmQuery = "SELECT * FROM cus_notification_master WHERE mob_key = '$mob_key' LIMIT 1";
+                    $gcmQuery = "SELECT * FROM cus_notification_master WHERE mob_key like '%" .$mob_key. "%' LIMIT 1";
                     $gcm_result = $this->db->query($gcmQuery);
                     $gcm_ress = $gcm_result->result();
 
