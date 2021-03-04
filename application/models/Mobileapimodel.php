@@ -130,7 +130,7 @@ class Mobileapimodel extends CI_Model {
           $gcmQuery = "SELECT * FROM cus_notification_master WHERE mob_key like '%" .$mob_key. "%' LIMIT 1";
           $gcm_result = $this->db->query($gcmQuery);
           $gcm_ress = $gcm_result->result();
-
+echo $gcm_result->num_rows();
           if($gcm_result->num_rows()==0)
           {
 				$sQuery = "INSERT INTO cus_notification_master (cus_id,mob_key,mobile_type,created_at ) VALUES ('". $cust_id . "','". $mob_key . "','". $mobile_type . "',now())";
