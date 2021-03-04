@@ -1111,7 +1111,7 @@ Class Homemodel extends CI_Model
 
 
 
-   function checkout_addressid($cust_id,$ocountry_id,$oname,$oaddress1,$oaddress2,$otown,$ostate,$ozip,$oemail,$ophone,$ophone1,$olandmark,$scheckout_mess,$address_id,$total_amt){
+   function checkout_addressid($cust_session_id,$ocountry_id,$oname,$oaddress1,$oaddress2,$otown,$ostate,$ozip,$oemail,$ophone,$ophone1,$olandmark,$scheckout_mess,$address_id,$total_amt){
 		$browser_sess_id  = $this->session->userdata('browser_sess_id');
 		
 			$update="UPDATE cus_address SET country_id ='$ocountry_id',state ='$ostate',city ='$otown',pincode='$ozip',house_no ='$oaddress1',street ='$oaddress2',landmark ='$olandmark',full_name ='$oname',mobile_number ='$ophone',email_address ='$oemail',alternative_mobile_number='$ophone1' WHERE id='$address_id'";
@@ -1129,18 +1129,18 @@ Class Homemodel extends CI_Model
 				$order_id = 1;
 			}
 		
-		$sql="SELECT A.*, B.country_name, C.address_type FROM cus_address A, country_master B, address_master C WHERE A.cus_id = '$cust_id' AND A.country_id = B.id AND A.address_type_id  = C.id AND A.id = '$address_id' AND A.status = 'Active'";
+		$sql="SELECT A.*, B.country_name, C.address_type FROM cus_address A, country_master B, address_master C WHERE A.cus_id = '$cust_session_id' AND A.country_id = B.id AND A.address_type_id  = C.id AND A.id = '$address_id' AND A.status = 'Active'";
 	  	$resu=$this->db->query($sql);
 	  	$address=$resu->result();
 	  	
 		$today = date("Ymd");
 		$rand = strtoupper(substr(uniqid(sha1(time())),0,4));
 		//$order_id = 'SHOP'.$today . $rand . $order_id;
-		$order_id = 'SHOP'.$today . $rand . $order_id.'-'.$cust_id;
+		$order_id = 'SHOP'.$today . $rand . $order_id.'-'.$cust_session_id;
 		$order_sess_id =  array("order_id"=>$order_id);
 		$this->session->set_userdata($order_sess_id);
 		
-		$inssql = "INSERT INTO purchase_order(order_id ,browser_sess_id ,cus_id ,purchase_date,cus_address_id,total_amount,paid_amount,status,cus_notes,created_at,created_by) VALUES('$order_id','$browser_sess_id','$cust_id',now(),'$address_id','$total_amt','$total_amt','Pending','$scheckout_mess',now(),'$cust_id')";
+		$inssql = "INSERT INTO purchase_order(order_id ,browser_sess_id ,cus_id ,purchase_date,cus_address_id,total_amount,paid_amount,status,cus_notes,created_at,created_by) VALUES('$order_id','$browser_sess_id','$cust_session_id',now(),'$address_id','$total_amt','$total_amt','Pending','$scheckout_mess',now(),'$cust_session_id')";
 		$insert = $this->db->query($inssql);
 		
 		$check_product_cart="SELECT * FROM product_cart WHERE order_id ='' AND cus_id='$cust_session_id'";
