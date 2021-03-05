@@ -1267,7 +1267,6 @@ class Mobileapimodel extends CI_Model {
         $result=$res->result();
         foreach($result as $rows_result){ }
         $check_quantity=$rows_result->stocks_left;
-
         if($prod_comb_id=='0'){
           $old_price=$rows_result->prod_actual_price;
           $offer_status=$rows_result->offer_status;
