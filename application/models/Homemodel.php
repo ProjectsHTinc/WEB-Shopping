@@ -1179,6 +1179,24 @@ Class Homemodel extends CI_Model
 			}
 
 			/*
+			$select_stock="SELECT * FROM product_cart WHERE cus_id='$user_id' AND status='Pending'";
+			$result_stock=$this->db->query($select_stock);
+			$res_stock=$result_stock->result();
+			foreach($res_stock as $rows_stock){
+			  $prd_qu=$rows_stock->quantity;
+			  $prd_id=$rows_stock->product_id;
+			  $prd_com_id=$rows_stock->product_combined_id;
+			  
+			  if($prd_com_id=='1'){
+				$update_comb_stoc="UPDATE product_combined SET stocks_left=stocks_left-'$prd_qu' WHERE id='$prd_com_id' AND product_id='$prd_id'";
+				$resu_stock=$this->db->query($update_comb_stoc);
+			  } else {
+				$update_stoc="UPDATE products SET stocks_left=stocks_left-'$prd_qu' WHERE id='$prd_id'";
+				$resu_stock=$this->db->query($update_stoc);
+			  }
+			} 
+			
+			
 			$subject = "Order Confirmation - Your Order with LittleAmore [".$order_id."] has been successfully placed!";
 			$htmlContent = "Hi ".$nname.", Order successfully placed.<br><br>Your order will be delivered with in One Week.<br>We are pleased to confirm your order no ".$order_id.".<br><br>Thank you for shopping with LittleAMore!";
 			$this->sendMail($nemail,$subject,$htmlContent);
@@ -1251,6 +1269,24 @@ Class Homemodel extends CI_Model
 		}
 		
 	/*	
+		$select_stock="SELECT * FROM product_cart WHERE cus_id='$user_id' AND status='Pending'";
+		$result_stock=$this->db->query($select_stock);
+		$res_stock=$result_stock->result();
+		foreach($res_stock as $rows_stock){
+		  $prd_qu=$rows_stock->quantity;
+		  $prd_id=$rows_stock->product_id;
+		  $prd_com_id=$rows_stock->product_combined_id;
+		  
+		  if($prd_com_id=='1'){
+			$update_comb_stoc="UPDATE product_combined SET stocks_left=stocks_left-'$prd_qu' WHERE id='$prd_com_id' AND product_id='$prd_id'";
+			$resu_stock=$this->db->query($update_comb_stoc);
+		  } else {
+			$update_stoc="UPDATE products SET stocks_left=stocks_left-'$prd_qu' WHERE id='$prd_id'";
+			$resu_stock=$this->db->query($update_stoc);
+		  }
+		} 
+			
+			
 		$subject = "Order Confirmation - Your Order with LittleAmore [".$order_id."] has been successfully placed!";
 		$htmlContent = "Hi ".$oname.", Order successfully placed.<br><br>Your order will be delivered with in One Week.<br>We are pleased to confirm your order no ".$order_id.".<br><br>Thank you for shopping with LittleAMore!";
 		$this->sendMail($oemail,$subject,$htmlContent);
