@@ -1433,21 +1433,40 @@ class Mobileapimodel extends CI_Model {
       $select="SELECT * FROM product_cart WHERE id='$cart_id'";
       $res_cart=$this->db->query($select);
       $result_cart=$res_cart->result();
-      foreach($result_cart  as $rows_cart){}
-      $prod_id=$rows_cart->product_id;
-      $current_quantity=$rows_cart->quantity;
-	  
-      $check="SELECT * FROM products WHERE id='$prod_id'";
-      $res=$this->db->query($check);
-      $result=$res->result();
-      foreach($result as $rows_result){ 
-		  $check_quantity=$rows_result->stocks_left;
-		  $prod_actual_price=$rows_result->prod_actual_price;
+      foreach($result_cart  as $rows_cart){
+		  $prod_id=$rows_cart->product_id;
+		  $current_quantity=$rows_cart->quantity;
+		  $product_combined_id=$rows_cart->product_combined_id;
+		  
 	  }
-      $update_quantity=$current_quantity+$quantity;
-      
+	  
+	  if ($product_combined_id == 0){
+		  $check="SELECT * FROM products WHERE id='$prod_id'";
+		  $res=$this->db->query($check);
+		  $result=$res->result();
+		  foreach($result as $rows_result){ 
+			  $check_quantity=$rows_result->stocks_left;
+			  $prod_actual_price=$rows_result->prod_actual_price;
+		  }
+		  $update_quantity=$current_quantity+$quantity;
+		  $total_amount = ($update_quantity * $prod_actual_price);
+	  }else {
+		  
+		  $check="SELECT * FROM product_combined WHERE id='$product_combined_id'";
+		  $res=$this->db->query($check);
+		  $result=$res->result();
+		  foreach($result as $rows_result){ 
+			  $check_quantity=$rows_result->stocks_left;
+			  $prod_actual_price=$rows_result->prod_actual_price;
+		  }
+		  $update_quantity = $current_quantity+$quantity;
+		  $total_amount = ($update_quantity * $prod_actual_price);
+	  }
+	  
+	  
+	  
       if($update_quantity < $check_quantity){
-        $update_cart="UPDATE product_cart SET quantity='$update_quantity' WHERE id='$cart_id' AND cus_id='$user_id'";
+        $update_cart="UPDATE product_cart SET quantity='$update_quantity',total_amount = '$total_amount' WHERE id='$cart_id' AND cus_id='$user_id'";
         $res_cart=$this->db->query($update_cart);
         if($res_cart){
           $data = array("status" => "success","msg"=>"Product Quantity Updated");
@@ -1490,7 +1509,7 @@ class Mobileapimodel extends CI_Model {
 		//$insert_order_id = $this->db->insert_id();
 
         //---Stocks left Update--//
-        $select_stock="SELECT * FROM product_cart WHERE cus_id='$user_id' AND status='Pending'";
+/*         $select_stock="SELECT * FROM product_cart WHERE cus_id='$user_id' AND status='Pending'";
         $result_stock=$this->db->query($select_stock);
         $res_stock=$result_stock->result();
         foreach($res_stock as $rows_stock){
@@ -1503,7 +1522,7 @@ class Mobileapimodel extends CI_Model {
             $update_comb_stoc="UPDATE product_combined SET stocks_left=stocks_left-'$prd_qu' WHERE id='$prd_com_id' AND product_id='$prd_id'";
             $resu_stock=$this->db->query($update_comb_stoc);
           }
-        }
+        } */
           //---Stocks left Update--//
 
          //---Update Cart to Success--//
