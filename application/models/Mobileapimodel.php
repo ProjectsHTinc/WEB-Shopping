@@ -1412,7 +1412,7 @@ class Mobileapimodel extends CI_Model {
             $result_cart=$res_cart->result();
             foreach($result_cart  as $rows_cart){ }
               $cart_total_amt=$rows_cart->cart_total;
-              $cart = array("status" => "error","msg"=>"Payment Total","cart_payment"=>$cart_total_amt);
+              $cart = array("status" => "success","msg"=>"Payment Total","cart_payment"=>$cart_total_amt);
           }else{
               $cart = array("status" => "error","msg"=>"No amount");
           }
