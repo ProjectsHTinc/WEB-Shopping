@@ -1278,12 +1278,12 @@ class Mobileapimodel extends CI_Model {
             $offer_pirce=$rows_result->prod_actual_price;
           }
         }else{
-         echo $select="SELECT * FROM product_combined WHERE product_id='$product_id' AND id='$prod_comb_id'";
+         $select="SELECT * FROM product_combined WHERE product_id='$product_id' AND id='$prod_comb_id'";
           $res=$this->db->query($select);
           $result_com=$res->result();
           foreach($result_com as $row_comb){ 
            $old_price_comb=$row_comb->prod_actual_price;
-           $offer_status=$row_comb->offer_status;
+           $offer_status=$rows_result->offer_status;
 		   $check_quantity=$row_comb->stocks_left;
 			}
           if($offer_status=='1'){
