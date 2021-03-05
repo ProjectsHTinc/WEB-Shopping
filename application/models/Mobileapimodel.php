@@ -1311,7 +1311,7 @@ class Mobileapimodel extends CI_Model {
                 $data = array("status" => "error","msg"=>"Something Went wrong");
             }
           }else{
-            $update="UPDATE product_cart SET product_id='$product_id',product_combined_id='$prod_comb_id',quantity='$quantity',price='$prod_actual_price',total_amount='$total_amount',status='Pending',updated_at=NOW(),updated_by='$user_id' WHERE cus_id='$user_id' AND product_id='$product_id' AND product_combined_id='$prod_comb_id' AND status='Pending'";
+            $update="UPDATE product_cart SET product_id='$product_id',product_combined_id='$prod_comb_id',quantity=quantity+$quantity,price='$prod_actual_price',total_amount = total_amount+$total_amount,status='Pending',updated_at=NOW(),updated_by='$user_id' WHERE cus_id='$user_id' AND product_id='$product_id' AND product_combined_id='$prod_comb_id' AND status='Pending'";
             $re_update=$this->db->query($update);
             if($re_update){
               $data = array("status" => "success","msg"=>"Product Update to cart Successfully");
