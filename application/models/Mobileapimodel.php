@@ -1448,8 +1448,8 @@ class Mobileapimodel extends CI_Model {
 			  $check_quantity=$rows_result->stocks_left;
 			  $prod_actual_price=$rows_result->prod_actual_price;
 		  }
-		  $update_quantity=$current_quantity+$quantity;
-		  $total_amount = ($update_quantity * $prod_actual_price);
+		  //$update_quantity=$current_quantity+$quantity;
+		  $total_amount = ($quantity * $prod_actual_price);
 	  }else {
 		  
 		  $check="SELECT * FROM product_combined WHERE id='$product_combined_id'";
@@ -1459,14 +1459,12 @@ class Mobileapimodel extends CI_Model {
 			  $check_quantity=$rows_result->stocks_left;
 			  $prod_actual_price=$rows_result->prod_actual_price;
 		  }
-		  $update_quantity = $current_quantity+$quantity;
-		  $total_amount = ($update_quantity * $prod_actual_price);
+		  //$update_quantity = $current_quantity+$quantity;
+		  $total_amount = ($quantity * $prod_actual_price);
 	  }
 	  
-	  
-	  
-      if($update_quantity < $check_quantity){
-        $update_cart="UPDATE product_cart SET quantity='$update_quantity',total_amount = '$total_amount' WHERE id='$cart_id' AND cus_id='$user_id'";
+      if($quantity < $check_quantity){
+        $update_cart="UPDATE product_cart SET quantity='$quantity',total_amount = '$total_amount' WHERE id='$cart_id' AND cus_id='$user_id'";
         $res_cart=$this->db->query($update_cart);
         if($res_cart){
           $data = array("status" => "success","msg"=>"Product Quantity Updated");
