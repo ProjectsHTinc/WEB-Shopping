@@ -1261,7 +1261,8 @@ class Mobileapimodel extends CI_Model {
 
 //#################### Product cart ####################//
     function product_cart($product_id,$prod_comb_id,$quantity,$user_id){
-        $check="SELECT * FROM products WHERE id='$product_id'";
+       
+	   $check="SELECT * FROM products WHERE id='$product_id'";
         $res=$this->db->query($check);
         $result=$res->result();
         foreach($result as $rows_result){ }
@@ -1298,7 +1299,7 @@ class Mobileapimodel extends CI_Model {
 
         if($quantity < $check_quantity){
           $total_amount=$prod_actual_price * $quantity;
-          $check_cart="SELECT * FROM product_cart WHERE product_id='$product_id' AND cus_id='$user_id' AND status='Pending'";
+          $check_cart="SELECT * FROM product_cart WHERE product_id='$product_id' AND product_combined_id = '$prod_comb_id' AND cus_id='$user_id' AND status='Pending'";
           $res_update=$this->db->query($check_cart);
           $res_update->num_rows();
           if($res_update->num_rows()==0){
@@ -1313,7 +1314,7 @@ class Mobileapimodel extends CI_Model {
             $update="UPDATE product_cart SET product_id='$product_id',product_combined_id='$prod_comb_id',quantity='$quantity',price='$prod_actual_price',total_amount='$total_amount',status='Pending',updated_at=NOW(),updated_by='$user_id' WHERE cus_id='$user_id' AND product_id='$product_id' AND product_combined_id='$prod_comb_id' AND status='Pending'";
             $re_update=$this->db->query($update);
             if($re_update){
-              $data = array("status" => "success","msg"=>"Product added to cart Successfully");
+              $data = array("status" => "success","msg"=>"Product Update to cart Successfully");
             }else{
                 $data = array("status" => "error","msg"=>"Something Went wrong");
             }
