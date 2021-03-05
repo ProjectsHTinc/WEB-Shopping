@@ -1267,10 +1267,12 @@ class Mobileapimodel extends CI_Model {
         $result=$res->result();
         foreach($result as $rows_result){ }
         $check_quantity=$rows_result->stocks_left;
+		
         if($prod_comb_id=='0'){
           $old_price=$rows_result->prod_actual_price;
           $offer_status=$rows_result->offer_status;
-          if($offer_status=='1'){
+          
+		  if($offer_status=='1'){
             $offer_percentage=$rows_result->offer_percentage;
             $discount_value = ($old_price / 100) * $offer_percentage;
             $offer_pirce = $old_price - $discount_value;
@@ -1283,17 +1285,19 @@ class Mobileapimodel extends CI_Model {
           $result_com=$res->result();
           foreach($result_com as $row_comb){ }
            $old_price_comb=$row_comb->prod_actual_price;
-           $offer_status=$rows_result->offer_status;
-		   $check_quantity=$rows_result->stocks_left;
+           $offer_status=$row_comb->offer_status;
+		   $check_quantity=$row_comb->stocks_left;
 
           if($offer_status=='1'){
-            $offer_percentage=$rows_result->offer_percentage;
+            $offer_percentage=$row_comb->offer_percentage;
             $discount_value = ($old_price_comb / 100) * $offer_percentage;
             $offer_pirce = $old_price_comb - $discount_value;
           }else{
-            $offer_pirce=$rows_result->prod_actual_price;
+            $offer_pirce=$row_comb->prod_actual_price;
           }
         }
+		
+		
          $prod_actual_price=round($offer_pirce);
 
 
