@@ -1341,7 +1341,7 @@ class Mobileapimodel extends CI_Model {
 	
 //############### View Cart #########################//
     function view_cart_items($user_id){
-      $Select_price="SELECT * FROM products WHERE status='Active'";
+      /* $Select_price="SELECT * FROM products WHERE status='Active'";
       $res_price=$this->db->query($Select_price);
       if($res_price->num_rows()>0){
         $result=$res_price->result();
@@ -1349,7 +1349,8 @@ class Mobileapimodel extends CI_Model {
           $offer_status=$rows_price->offer_status;
           $combined_status=$rows_price->combined_status;
           $id=$rows_price->id;
-          if($combined_status=='1'){
+          
+		  if($combined_status=='1'){
             $select_comb="SELECT * FROM product_combined WHERE product_id='$id' AND status='Active'";
             $res_comb=$this->db->query($select_comb);
             $result_comb=$res_comb->result();
@@ -1366,8 +1367,10 @@ class Mobileapimodel extends CI_Model {
             $update_cart_price="UPDATE product_cart SET price='$prod_actual_price',total_amount=quantity *'$prod_actual_price'  WHERE product_id='$id' AND status='Pending'";
             $res=$this->db->query($update_cart_price);
             }
-          }else{
-            $old_price_comb=$rows_price->prod_actual_price;
+         
+		 }else{
+    
+			$old_price_comb=$rows_price->prod_actual_price;
             if($offer_status=='1'){
               $offer_percentage=$rows_price->offer_percentage;
               $discount_value = ($old_price_comb / 100) * $offer_percentage;
@@ -1380,7 +1383,7 @@ class Mobileapimodel extends CI_Model {
             $res=$this->db->query($update_cart_price);
           }
         }
-      }
+      } */
 
 
       $select="SELECT p.product_name,p.stocks_left,comb.stocks_left AS com_stocks_left,p.product_cover_img,p.product_description,cm.category_name,IFNULL(am.attribute_value,' ') AS color_code,IFNULL(am.attribute_name,' ') AS color_name,IFNULL(ams.attribute_value,' ') AS size,pc.* FROM product_cart AS pc LEFT JOIN products AS p ON p.id=pc.product_id LEFT JOIN category_masters AS cm ON p.cat_id=cm.id LEFT JOIN product_combined AS comb ON comb.id=pc.product_combined_id LEFT JOIN attribute_masters AS am ON am.id=comb.mas_color_id LEFT JOIN attribute_masters AS ams ON ams.id=comb.mas_size_id WHERE pc.cus_id='$user_id' AND pc.status='Pending'";
