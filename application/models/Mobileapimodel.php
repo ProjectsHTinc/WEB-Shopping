@@ -1383,7 +1383,7 @@ class Mobileapimodel extends CI_Model {
       }
 
 
-      $select="SELECT p.product_name,p.stocks_left,p.product_cover_img,p.product_description,cm.category_name,IFNULL(am.attribute_value,' ') AS color_code,IFNULL(am.attribute_name,' ') AS color_name,IFNULL(ams.attribute_value,' ') AS size,pc.* FROM product_cart AS pc LEFT JOIN products AS p ON p.id=pc.product_id LEFT JOIN category_masters AS cm ON p.cat_id=cm.id LEFT JOIN product_combined AS comb ON comb.id=pc.product_combined_id LEFT JOIN attribute_masters AS am ON am.id=comb.mas_color_id LEFT JOIN attribute_masters AS ams ON ams.id=comb.mas_size_id WHERE pc.cus_id='$user_id' AND pc.status='Pending'";
+      $select="SELECT p.product_name,p.stocks_left,comb.stocks_left AS com_stocks_left,p.product_cover_img,p.product_description,cm.category_name,IFNULL(am.attribute_value,' ') AS color_code,IFNULL(am.attribute_name,' ') AS color_name,IFNULL(ams.attribute_value,' ') AS size,pc.* FROM product_cart AS pc LEFT JOIN products AS p ON p.id=pc.product_id LEFT JOIN category_masters AS cm ON p.cat_id=cm.id LEFT JOIN product_combined AS comb ON comb.id=pc.product_combined_id LEFT JOIN attribute_masters AS am ON am.id=comb.mas_color_id LEFT JOIN attribute_masters AS ams ON ams.id=comb.mas_size_id WHERE pc.cus_id='$user_id' AND pc.status='Pending'";
       $res=$this->db->query($select);
      if($res->num_rows()>0){
           $result=$res->result();
@@ -1433,13 +1433,16 @@ class Mobileapimodel extends CI_Model {
       foreach($result_cart  as $rows_cart){}
       $prod_id=$rows_cart->product_id;
       $current_quantity=$rows_cart->quantity;
+	  
       $check="SELECT * FROM products WHERE id='$prod_id'";
       $res=$this->db->query($check);
       $result=$res->result();
-      foreach($result as $rows_result){ }
+      foreach($result as $rows_result){ 
+		  $check_quantity=$rows_result->stocks_left;
+		  $prod_actual_price=$rows_result->prod_actual_price;
+	  }
       $update_quantity=$current_quantity+$quantity;
-      $check_quantity=$rows_result->stocks_left;
-      $prod_actual_price=$rows_result->prod_actual_price;
+      
       if($update_quantity < $check_quantity){
         $update_cart="UPDATE product_cart SET quantity='$update_quantity' WHERE id='$cart_id' AND cus_id='$user_id'";
         $res_cart=$this->db->query($update_cart);
