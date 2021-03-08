@@ -1715,6 +1715,7 @@ class Mobileapimodel extends CI_Model {
                   "mobile_number"=>$rows->mobile_number,
                   "email_address"=>$rows->email_address,
                   "alternative_mobile_number"=>$rows->alternative_mobile_number,
+				  "address_type"=>$rows->address_type_id
                 );
             }
               $data = array("status" => "success","msg"=>"Address found","address_list"=>$addrss_list);
