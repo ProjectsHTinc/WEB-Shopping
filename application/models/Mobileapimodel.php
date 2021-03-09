@@ -1788,7 +1788,7 @@ class Mobileapimodel extends CI_Model {
 		return $data;
 	}
 	
-	function address_delete($user_id,$address_id,){
+	function address_delete($user_id,$address_id){
 			
 			$del_address = "DELETE FROM cus_address WHERE id = '$address_id'";
 			$res=$this->db->query($del_address);
@@ -1796,7 +1796,7 @@ class Mobileapimodel extends CI_Model {
 			$check_user = "SELECT * FROM cus_address WHERE cus_id = '$user_id' LIMIT 1";
 			$res=$this->db->query($check_user);
 			if($res->num_rows()>0){
-				foreach($res->result() as $rows) { 
+				foreach($res->result() as $rows) {
 					$add_id = $rows->id;
 					$c_update = "UPDATE cus_address SET address_mode = '1',updated_at =now(), updated_by = '$user_id' WHERE id = '$add_id'";
 					$cu_update = $this->db->query($c_update);
