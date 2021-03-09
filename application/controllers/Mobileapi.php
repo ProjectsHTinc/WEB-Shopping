@@ -1201,8 +1201,7 @@ class Mobileapi extends CI_Controller {
 			$email_address=$this->input->post("email_address");
 			$alternative_mobile_number=$this->input->post("alternative_mobile_number");
 			$address_type=$this->input->post("address_type");
-			$address_mode=$this->input->post("address_mode");
-			$data['result']=$this->mobileapimodel->address_create($user_id,$country_id,$state,$city,$pincode,$house_no,$street,$landmark,$full_name,$mobile_number,$email_address,$alternative_mobile_number,$address_type,$address_mode);
+			$data['result']=$this->mobileapimodel->address_create($user_id,$country_id,$state,$city,$pincode,$house_no,$street,$landmark,$full_name,$mobile_number,$email_address,$alternative_mobile_number,$address_type);
 			$response = $data['result'];
 			//print_r($response);
 			echo json_encode($response);
@@ -1246,9 +1245,8 @@ class Mobileapi extends CI_Controller {
 			$email_address=$this->input->post("email_address");
 			$alternative_mobile_number=$this->input->post("alternative_mobile_number");
 			$address_type=$this->input->post("address_type");
-			$address_mode=$this->input->post("address_mode");
 			$status=$this->input->post("status");
-			$data['result']=$this->mobileapimodel->address_update($user_id,$address_id,$country_id,$state,$city,$pincode,$house_no,$street,$landmark,$full_name,$mobile_number,$email_address,$alternative_mobile_number,$address_type,$address_mode,$status);
+			$data['result']=$this->mobileapimodel->address_update($user_id,$address_id,$country_id,$state,$city,$pincode,$house_no,$street,$landmark,$full_name,$mobile_number,$email_address,$alternative_mobile_number,$address_type,$status);
 			$response = $data['result'];
 			//print_r($response);
 			echo json_encode($response);
@@ -1269,6 +1267,38 @@ class Mobileapi extends CI_Controller {
 			if($_POST == FALSE)
 			{
 				$res = array();
+				$res["opn"] = "Address Default Update";
+				$res["scode"] = 204;
+				$res["message"] = "Input error";
+
+				echo json_encode($res);
+				return;
+			}
+
+			$user_id=$this->input->post("user_id");
+			$address_id=$this->input->post("address_id");
+			
+			$data['result']=$this->mobileapimodel->address_set_default($user_id,$address_id);
+			$response = $data['result'];
+			//print_r($response);
+			echo json_encode($response);
+		}
+//-----------------------------------------------//
+
+//-----------------------------------------------//
+		public function address_delete()
+		{
+
+			$_POST = json_decode(file_get_contents("php://input"), TRUE);
+
+			if(!$this->checkMethod())
+			{
+				return FALSE;
+			}
+
+			if($_POST == FALSE)
+			{
+				$res = array();
 				$res["opn"] = "Address Update";
 				$res["scode"] = 204;
 				$res["message"] = "Input error";
@@ -1277,16 +1307,16 @@ class Mobileapi extends CI_Controller {
 				return;
 			}
 
+
+			$user_id=$this->input->post("user_id");
 			$address_id=$this->input->post("address_id");
-			$address_mode=$this->input->post("address_mode");
 			
-			$data['result']=$this->mobileapimodel->address_set_default($address_id,$address_mode);
+			$data['result']=$this->mobileapimodel->address_delete($user_id,$address_id);
 			$response = $data['result'];
 			//print_r($response);
 			echo json_encode($response);
 		}
 //-----------------------------------------------//
-
 
 //-----------------------------------------------//
 
@@ -1886,6 +1916,82 @@ class Mobileapi extends CI_Controller {
 		}
 //-----------------------------------------------//
 
+//-----------------------------------------------//
 
+		public function get_filter()
+		{
+
+		$_POST = json_decode(file_get_contents("php://input"), TRUE);
+
+			if(!$this->checkMethod())
+			{
+				return FALSE;
+			}
+
+			if($_POST == FALSE)
+			{
+				$res = array();
+				$res["opn"] = "Filter";
+				$res["scode"] = 204;
+				$res["message"] = "Input error";
+
+				echo json_encode($res);
+				return;
+			}
+			$user_id=$this->input->post("user_id");
+			$cat_id=$this->input->post("cat_id");
+			$sub_cat_id=$this->input->post("sub_cat_id");
+			
+			//$min_price_range=$this->input->post("min_price_range");
+			//$max_price_range=$this->input->post("max_price_range");
+			//$product_size_id=$this->input->post("product_size_id");
+			//$product_colour_id=$this->input->post("product_colour_id");
+
+			$data['result']=$this->mobileapimodel->get_filter($user_id,$cat_id,$sub_cat_id);
+			
+			$response = $data['result'];
+			//print_r($response);
+			echo json_encode($response);
+		}
+//-----------------------------------------------//
+
+
+//-----------------------------------------------//
+
+		public function filter_result()
+		{
+
+		$_POST = json_decode(file_get_contents("php://input"), TRUE);
+
+			if(!$this->checkMethod())
+			{
+				return FALSE;
+			}
+
+			if($_POST == FALSE)
+			{
+				$res = array();
+				$res["opn"] = "Filter";
+				$res["scode"] = 204;
+				$res["message"] = "Input error";
+
+				echo json_encode($res);
+				return;
+			}
+			$user_id=$this->input->post("user_id");
+			$cat_id=$this->input->post("cat_id");
+			$sub_cat_id=$this->input->post("sub_cat_id");
+			$min_price_range=$this->input->post("min_price_range");
+			$max_price_range=$this->input->post("max_price_range");
+			$product_size_id=$this->input->post("product_size_id");
+			$product_colour_id=$this->input->post("product_colour_id");
+
+			$data['result']=$this->mobileapimodel->filter_result($user_id,$cat_id,$sub_cat_id,$min_price_range,$max_price_range,$product_size_id,$product_colour_id);
+			
+			$response = $data['result'];
+			//print_r($response);
+			echo json_encode($response);
+		}
+//-----------------------------------------------//
 
 }

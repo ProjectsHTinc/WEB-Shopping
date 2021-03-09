@@ -224,7 +224,7 @@ Class Productmodel extends CI_Model
        if(empty($product_id)){
 
        }else{
-          $check_exist="SELECT * FROM product_combined WHERE  product_id='$product_id' AND mas_color_id='$mas_color' AND mas_size_id='$mas_size' AND id!='$id'";
+          $check_exist="SELECT * FROM product_combined WHERE product_id='$product_id' AND mas_color_id='$mas_color' AND mas_size_id='$mas_size' AND id!='$id'";
          $res_exist=$this->db->query($check_exist);
          if($res_exist->num_rows()>0){
            $data = array("status" => "already");
@@ -233,10 +233,22 @@ Class Productmodel extends CI_Model
            if($prod_default=='1'){
              $update_total_main="UPDATE product_combined SET prod_default='0' WHERE product_id='$product_id'";
              $result_stocks=$this->db->query($update_total_main);
-
            }
            $update="UPDATE product_combined SET mas_size_id='$mas_size',mas_color_id='$mas_color',prod_actual_price='$prod_actual_price',prod_mrp_price='$prod_mrp_price',stocks_left='$total_stocks',total_stocks='$total_stocks',status='$comb_status',prod_default='$prod_default',updated_at=NOW(),updated_by='$user_id' WHERE id='$id'";
            $res=$this->db->query($update);
+		   
+		   
+			$product_query = "SELECT MAX(prod_actual_price) AS actual_price, MAX(prod_mrp_price) AS mrp_price FROM product_combined WHERE product_id='$product_id'";
+			$res=$this->db->query($product_query);
+			if($res->num_rows()>0){
+				foreach ($res->result() as $rows)
+				{
+					$actual_price = $rows->actual_price;
+					$mrp_price = $rows->mrp_price;
+				}
+				$update="UPDATE products SET prod_actual_price='$actual_price',prod_mrp_price='$mrp_price' WHERE id='$product_id'";
+				$res=$this->db->query($update);
+			}		  
 
            //-----Increase product count ------//
 
@@ -277,13 +289,25 @@ Class Productmodel extends CI_Model
        }else{
 
          if($prod_default=='1'){
-           $update_total_main="UPDATE product_combined SET prod_default='0' WHERE product_id='$product_id'";
-           $result_stocks=$this->db->query($update_total_main);
-
+			$update_total_main="UPDATE product_combined SET prod_default='0' WHERE product_id='$product_id'";
+			$result_stocks=$this->db->query($update_total_main);
          }
          $insert="INSERT INTO product_combined (product_id,mas_size_id,mas_color_id,prod_mrp_price,prod_actual_price,stocks_left,total_stocks,status
          ,created_at,created_by,prod_default) VALUES ('$product_id','$mas_size','$mas_color','$prod_mrp_price','$prod_actual_price','$total_stocks','$total_stocks','$comb_status',NOW(),'$user_id','$prod_default')";
          $res=$this->db->query($insert);
+
+		$product_query = "SELECT MAX(prod_actual_price) AS actual_price, MAX(prod_mrp_price) AS mrp_price FROM product_combined WHERE product_id='$product_id'";
+		$res=$this->db->query($product_query);
+		if($res->num_rows()>0){
+			foreach ($res->result() as $rows)
+			{
+				$actual_price = $rows->actual_price;
+				$mrp_price = $rows->mrp_price;
+				
+			}
+			$update="UPDATE products SET prod_actual_price='$actual_price',prod_mrp_price='$mrp_price' WHERE id='$product_id'";
+			$res=$this->db->query($update);
+		}	
 
           //--SET Combined Product--//
           $update_total_main="UPDATE products SET combined_status='1' WHERE id='$product_id'";

@@ -1715,7 +1715,8 @@ class Mobileapimodel extends CI_Model {
                   "mobile_number"=>$rows->mobile_number,
                   "email_address"=>$rows->email_address,
                   "alternative_mobile_number"=>$rows->alternative_mobile_number,
-				  "address_type"=>$rows->address_type_id
+				  "address_type"=>$rows->address_type_id,
+				  "address_mode"=>$rows->address_mode
                 );
             }
               $data = array("status" => "success","msg"=>"Address found","address_list"=>$addrss_list);
@@ -1726,7 +1727,15 @@ class Mobileapimodel extends CI_Model {
       }
 	  
 	  
-      function address_create($user_id,$country_id,$state,$city,$pincode,$house_no,$street,$landmark,$full_name,$mobile_number,$email_address,$alternative_mobile_number,$address_type,$address_mode){
+      function address_create($user_id,$country_id,$state,$city,$pincode,$house_no,$street,$landmark,$full_name,$mobile_number,$email_address,$alternative_mobile_number,$address_type){
+
+		$check_address="SELECT * FROM cus_address WHERE cus_id = '$user_id'";
+		$res=$this->db->query($check_address);
+			if($res->num_rows()>0){
+				$address_mode = '0';
+			}else{
+				$address_mode = '1';
+			}
 
 			$insert="INSERT INTO cus_address (cus_id,country_id,state,city,pincode,house_no,street,landmark,full_name,mobile_number,email_address,alternative_mobile_number,address_type_id,address_mode,status,created_at,created_by)
 			VALUES('$user_id','$country_id','$state','$city','$pincode','$house_no','$street','$landmark','$full_name','$mobile_number','$email_address','$alternative_mobile_number','$address_type','$address_mode','Active','$user_id',NOW())";
@@ -1741,9 +1750,9 @@ class Mobileapimodel extends CI_Model {
 			return $data;
       }
 	  
-	  function address_update($user_id,$address_id,$country_id,$state,$city,$pincode,$house_no,$street,$landmark,$full_name,$mobile_number,$email_address,$alternative_mobile_number,$address_type,$address_mode,$status){
+	  function address_update($user_id,$address_id,$country_id,$state,$city,$pincode,$house_no,$street,$landmark,$full_name,$mobile_number,$email_address,$alternative_mobile_number,$address_type,$status){
 		  
-			$update_address = "UPDATE cus_address SET cus_id='$user_id',country_id='$country_id',state='$state',city='$city',pincode='$pincode',house_no='$house_no',street='$street',landmark='$landmark',full_name='$full_name',mobile_number='$mobile_number',email_address='$email_address', alternative_mobile_number='$alternative_mobile_number',address_type_id='$address_type',address_mode='$address_mode',status='$status' WHERE id = '$address_id'";
+			$update_address = "UPDATE cus_address SET cus_id='$user_id',country_id='$country_id',state='$state',city='$city',pincode='$pincode',house_no='$house_no',street='$street',landmark='$landmark',full_name='$full_name',mobile_number='$mobile_number',email_address='$email_address', alternative_mobile_number='$alternative_mobile_number',address_type_id='$address_type',status='$status' WHERE id = '$address_id'";
 			$update_address = $this->db->query($update_address);
 
 			if($update_address){
@@ -1754,19 +1763,49 @@ class Mobileapimodel extends CI_Model {
 		return $data;
 	}
 	  
-	function address_set_default($address_id,$address_mode){
+	function address_set_default($user_id,$address_id){
 		  
-			$update_address = "UPDATE cus_address SET address_mode='$address_mode' WHERE id = '$address_id'";
-			$update_address = $this->db->query($update_address);
+			$check_user = "SELECT * FROM cus_address WHERE cus_id = '$user_id'";
+			$res=$this->db->query($check_user);
 
-			if($update_address){
-			 $data = array("status" => "success","msg"=>"Address Update");
+			if($res->num_rows()>0){
+				foreach($res->result() as $rows) { 
+					$add_id = $rows->id;
+					
+					$c_update = "UPDATE cus_address SET address_mode = '0',updated_at =now(), updated_by = '$user_id' WHERE id  ='$add_id'";
+					$cu_update = $this->db->query($c_update);
+				}
+			}
+			
+			$customer_update = "UPDATE cus_address SET address_mode = '1',updated_at =now(), updated_by = '$user_id' WHERE id = '$address_id' ";
+			$cust_update = $this->db->query($customer_update);
+
+			if($cust_update){
+			 $data = array("status" => "success","msg"=>"Address Default Update");
 			}else{
 			  $data = array("status" => "error","msg"=>"Something Went Wrong");
 			}
 		return $data;
 	}
 	
+	function address_delete($user_id,$address_id,){
+			
+			$del_address = "DELETE FROM cus_address WHERE id = '$address_id'";
+			$res=$this->db->query($del_address);
+			
+			$check_user = "SELECT * FROM cus_address WHERE cus_id = '$user_id' LIMIT 1";
+			$res=$this->db->query($check_user);
+			if($res->num_rows()>0){
+				foreach($res->result() as $rows) { 
+					$add_id = $rows->id;
+					$c_update = "UPDATE cus_address SET address_mode = '1',updated_at =now(), updated_by = '$user_id' WHERE id = '$add_id'";
+					$cu_update = $this->db->query($c_update);
+				}
+			}
+
+			$data=array('status'=>'success');
+			return $data;
+   }
 	
 	//################ Use Wallet ########################//
 
@@ -2277,5 +2316,189 @@ LEFT JOIN products AS p ON p.id=pc.product_id LEFT JOIN product_combined AS comb
 		$data = array("status" => "success","msg"=>"Return request added");
         return $data;
       }
+	  
+	  
+	  //################ Get Filter Records ########################//
+      function get_filter($user_id,$cat_id,$sub_cat_id){
+
+		$select="SELECT * FROM category_masters WHERE parent_id='$cat_id'  AND status='Active'";
+		$res=$this->db->query($select);
+		 if($res->num_rows()>0){
+		   $sub_cat_list=$res->result();
+		 } else {
+			 $sub_cat_list = "0";
+		 }
+		 
+
+		$select="SELECT * FROM products WHERE cat_id='$cat_id' AND status='Active'";
+		$res=$this->db->query($select);
+		if($res->num_rows()>0){
+				
+			foreach ($res->result() as $rows)
+			{
+				  $combined_status = $rows->combined_status;
+			}
+			
+			if ($combined_status == '0'){
+				$select = "SELECT MAX(prod_actual_price) AS max_amount FROM products WHERE cat_id = '$cat_id' GROUP BY cat_id";
+			}else {
+				$select = "SELECT
+					MAX(pc.prod_actual_price) AS max_amount
+				FROM
+					 products AS prod
+				LEFT JOIN product_combined AS pc
+				ON
+					pc.product_id = prod.id
+				LEFT JOIN attribute_masters AS ams
+				ON
+					ams.id = pc.mas_size_id
+				WHERE prod.cat_id = '$cat_id' AND prod.sub_cat_id = '$sub_cat_id' ";
+				
+			}
+		}
+
+		$res=$this->db->query($select);
+		 if($res->num_rows()>0){
+		   $max_price_amount =$res->result();
+		 } else {
+			 $max_price_amount = "0";
+		 }
+		 
+		$select = "SELECT
+					prod.cat_id,
+					prod.sub_cat_id, 
+					pc.mas_size_id,
+					ams.attribute_value AS size
+				FROM
+					 products AS prod
+				LEFT JOIN product_combined AS pc
+				ON
+					pc.product_id = prod.id
+				LEFT JOIN attribute_masters AS ams
+				ON
+					ams.id = pc.mas_size_id
+				WHERE prod.cat_id = '$cat_id' AND prod.sub_cat_id = '$sub_cat_id' GROUP BY pc.mas_size_id";
+		$res=$this->db->query($select);
+		 if($res->num_rows()>0){
+		   $size_details =$res->result();
+		 } else {
+			 $size_details = "0";
+		 }
+		 
+		 $select = "SELECT
+						prod.cat_id,
+						prod.sub_cat_id, 
+						pc.mas_color_id,
+						am.attribute_value,
+						am.attribute_name
+					FROM
+						 products AS prod
+					LEFT JOIN product_combined AS pc
+					ON
+						pc.product_id = prod.id
+					LEFT JOIN attribute_masters AS am
+					ON
+						am.id = pc.mas_color_id
+					WHERE prod.cat_id = '$cat_id' AND prod.sub_cat_id = '$sub_cat_id' GROUP BY pc.mas_color_id";
+		$res=$this->db->query($select);
+		 if($res->num_rows()>0){
+		   $colour_details =$res->result();
+		 } else {
+			 $colour_details = "0";
+		 }
+
+		$data = array("status" => "success","msg"=>"Filter Details","sub_category_list"=>$sub_cat_list, "max_price_amount"=>$max_price_amount,"size_list"=>$size_details, "colour_list"=>$colour_details);
+
+        return $data;
+      }
+	  
+	  
+	   //################ Filter Result ########################//
+      function filter_result($user_id,$cat_id,$sub_cat_id,$min_price_range,$max_price_range,$product_size_id,$product_colour_id){
+
+
+	if ($sub_cat_id == ''){
+		$select="SELECT p.*,IFNULL(cw.customer_id,'0') AS wishlisted FROM products AS p LEFT JOIN  cus_wishlist AS cw ON cw.product_id=p.id AND cw.customer_id='$user_id' WHERE cat_id='$cat_id' AND status='Active' AND prod_actual_price BETWEEN '$min_price_range' AND '$max_price_range'";
+	} else{
+		$select="SELECT p.*,IFNULL(cw.customer_id,'0') AS wishlisted FROM products AS p LEFT JOIN  cus_wishlist AS cw ON cw.product_id=p.id AND cw.customer_id='$user_id' WHERE cat_id='$cat_id' AND sub_cat_id='$sub_cat_id' AND status='Active' AND prod_actual_price BETWEEN '$min_price_range' AND '$max_price_range'";
+	}
+	$res=$this->db->query($select);
+     if($res->num_rows()>0){
+		$total_products = $res->num_rows();
+        $result=$res->result();
+        foreach($result  as $rows){
+			$prod_size_chart = $rows->prod_size_chart;
+			$product_id = $rows->id;
+			
+			if ($prod_size_chart!=''){
+				$product_size_url = base_url().'assets/products/charts/'.$prod_size_chart;
+			}else {
+				$product_size_url = "";
+			}
+			
+			$select_rev = "SELECT COUNT(product_id) AS review_count,IFNULL(ROUND(AVG(rating)),'0') AS average FROM product_review AS pr WHERE product_id='$product_id'";
+			$res_rev=$this->db->query($select_rev);
+				if($res_rev->num_rows()>0){
+					$result_rev=$res_rev->result();
+					foreach($result_rev as $rows_rev){
+						$review_count = $rows_rev->review_count;
+						$review_average = $rows_rev->average;
+					}
+				}
+						
+            $product_list[]=array(
+              "id"=>$rows->id,
+              "product_name"=>$rows->product_name,
+              "sku_code"=>$rows->sku_code,
+              "product_cover_img"=>base_url().'assets/products/'.$rows->product_cover_img,
+              "prod_size_chart"=>$prod_size_chart,
+              "product_description"=>$rows->product_description,
+              "offer_status"=>$rows->offer_status,
+              "specification_status"=>$rows->specification_status,
+              "combined_status"=>$rows->combined_status,
+              "prod_actual_price"=>$rows->prod_actual_price,
+              "prod_mrp_price"=>$rows->prod_mrp_price,
+              "offer_percentage"=>$rows->offer_percentage,
+              "delivery_fee_status"=>$rows->delivery_fee_status,
+              "prod_return_policy"=>$rows->prod_return_policy,
+              "prod_cod"=>$rows->prod_cod,
+              "product_meta_title"=>$rows->product_meta_title,
+              "product_meta_desc"=>$rows->product_meta_desc,
+              "product_meta_keywords"=>$rows->product_meta_keywords,
+              "stocks_left"=>$rows->stocks_left,
+			  "review_average"=>$review_average,
+              "wishlisted"=>$rows->wishlisted
+            );
+        }
+      $data = array("status" => "success","msg"=>"Products found","total_product"=>$total_products,"product_list"=>$product_list);
+     }else{
+        $data = array("status" => "error","msg"=>"No Products found");
+     }
+      return $data;
+	  
+	  
+		if ($sub_cat_id == '0'){
+				  $product_query = "SELECT * FROM products WHERE cat_id='$cat_id' AND status='Active' AND prod_actual_price BETWEEN '$min_price_range' AND '$max_price_range'";
+				 
+		} else {
+				$product_query = "SELECT * FROM products WHERE cat_id='$cat_id' AND sub_cat_id = '$sub_cat_id' AND status='Active' AND prod_actual_price BETWEEN '$min_price_range' AND '$max_price_range'";
+		}
+		$res=$this->db->query($product_query);
+		if($res->num_rows()>0){
+			foreach ($res->result() as $rows)
+			{
+				 $product_id = $rows->id;
+				 $combined_status = $rows->combined_status;
+				
+				if ($combined_status !='0')
+				{
+					$price_query = "SELECT * FROM product_combined WHERE product_id = '$product_id' AND status='Active' AND prod_actual_price BETWEEN '$min_price_range' AND '$max_price_range' GROUP BY product_id";
+				}
+			}
+			
+			//$data = array("status" => "success","msg"=>"Filter Details","sub_category_list"=>$sub_cat_list, "max_price_amount"=>$max_price_amount,"size_list"=>$size_details, "colour_list"=>$colour_details);
+			return $data;
+		}
+	  }
 }
 ?>
