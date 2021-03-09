@@ -1538,6 +1538,58 @@ class Mobileapimodel extends CI_Model {
 //################ Order Details ########################//
 
       function order_details($user_id,$order_id){
+		$select="SELECT
+					p.product_name,
+					p.stocks_left,
+					comb.stocks_left AS com_stocks_left,
+					p.product_cover_img,
+					p.product_description,
+					cm.category_name,
+					IFNULL(am.attribute_value, ' ') AS color_code,
+					IFNULL(am.attribute_name, ' ') AS color_name,
+					IFNULL(ams.attribute_value, ' ') AS size,
+					pc.*
+				FROM
+					product_cart AS pc
+				LEFT JOIN products AS p
+				ON
+					p.id = pc.product_id
+				LEFT JOIN category_masters AS cm
+				ON
+					p.cat_id = cm.id
+				LEFT JOIN product_combined AS comb
+				ON
+					comb.id = pc.product_combined_id
+				LEFT JOIN attribute_masters AS am
+				ON
+					am.id = comb.mas_color_id
+				LEFT JOIN attribute_masters AS ams
+				ON
+					ams.id = comb.mas_size_id
+				WHERE
+					pc.order_id = '$order_id' AND pc.cus_id = '$user_id'";
+      $res=$this->db->query($select);
+     if($res->num_rows()>0){
+          $result=$res->result();
+          foreach($result  as $rows){
+              $cart_items[]=array(
+                "id"=>$rows->id,
+                "product_name"=>$rows->product_name,
+                "product_id"=>$rows->product_id,
+                "category_name"=>$rows->category_name,
+                "color_code"=>$rows->color_code,
+                "color_name"=>$rows->color_name,
+                "stocks_left"=>$rows->stocks_left,
+                "size"=>$rows->size,
+                "product_cover_img"=>base_url().'assets/products/'.$rows->product_cover_img,
+                "product_description"=>$rows->product_description,
+                "quantity"=>$rows->quantity,
+                "price"=>$rows->price,
+                "total_amount"=>$rows->total_amount,
+                "status"=>$rows->status,
+              );
+          }
+		  
         $check_order = "SELECT
 							po.id as purchse_order_id,
 							po.*,
@@ -1553,10 +1605,9 @@ class Mobileapimodel extends CI_Model {
 						WHERE
 							po.order_id = '$order_id'";
         $res=$this->db->query($check_order);
-
         if($res->num_rows()>0){
           $result=$res->result();
-		  $data = array("status" => "success","msg"=>"Order Details","order_details"=>$result);
+		  $data = array("status" => "success","msg"=>"Order Details","cart_items"=>$cart_items,"order_details"=>$result);
         } else {
            $data = array("status" => "error","msg"=>"Order Error Error");
         }
