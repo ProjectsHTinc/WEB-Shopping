@@ -125,6 +125,9 @@
                         <li>
                             <a href="<?php echo base_url(); ?>admin/offers">Offer Products</a>
                         </li>
+						 <li>
+                            <a href="<?php echo base_url(); ?>admin/promo">Promo Code Offers</a>
+                        </li>
 
                     </ul>
                 </li>

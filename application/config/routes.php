@@ -141,3 +141,8 @@ $route['admin/edit_offer/(:any)'] = 'offermaster/edit_offer/$id';
 
 $route['admin/customers'] = 'customerprofile/index';
 $route['admin/customer_details/(:any)'] = 'customerprofile/customer_details/$id';
+
+//------------Promos----------------//
+
+$route['admin/promo'] = 'promomaster/index';
+$route['admin/edit_promo/(:any)'] = 'promomaster/edit_promo/$id';
