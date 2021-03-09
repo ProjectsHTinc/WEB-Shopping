@@ -756,7 +756,7 @@ class Mobileapimodel extends CI_Model {
 
   function product_list($cat_id,$sub_cat_id,$cus_id){
    
-	if ($sub_cat_id == ''){
+	if ($sub_cat_id == '0'){
 		$select="SELECT p.*,IFNULL(cw.customer_id,'0') AS wishlisted FROM products AS p LEFT JOIN  cus_wishlist AS cw ON cw.product_id=p.id AND cw.customer_id='$cus_id' WHERE cat_id='$cat_id' AND status='Active'";
 	} else{
 		$select="SELECT p.*,IFNULL(cw.customer_id,'0') AS wishlisted FROM products AS p LEFT JOIN  cus_wishlist AS cw ON cw.product_id=p.id AND cw.customer_id='$cus_id' WHERE cat_id='$cat_id' AND sub_cat_id='$sub_cat_id' AND status='Active'";
@@ -1142,7 +1142,7 @@ class Mobileapimodel extends CI_Model {
 
   function related_products($cat_id,$sub_cat_id,$product_id,$cus_id){
    
-	if ($sub_cat_id == ''){
+	if ($sub_cat_id == '0'){
 		$select="SELECT p.*,IFNULL(cw.customer_id,'0') AS wishlisted FROM products AS p LEFT JOIN  cus_wishlist AS cw ON cw.product_id=p.id AND cw.customer_id='$cus_id' WHERE cat_id='$cat_id' AND p.id!='$product_id' AND status='Active'";
   } else{
 		$select="SELECT p.*,IFNULL(cw.customer_id,'0') AS wishlisted FROM products AS p LEFT JOIN  cus_wishlist AS cw ON cw.product_id=p.id AND cw.customer_id='$cus_id' WHERE cat_id='$cat_id' AND sub_cat_id='$sub_cat_id' AND p.id!='$product_id' AND status='Active'";
@@ -2414,90 +2414,77 @@ LEFT JOIN products AS p ON p.id=pc.product_id LEFT JOIN product_combined AS comb
 	  
 	  
 //################ Filter Result ########################//
-      function filter_result($user_id,$cat_id,$sub_cat_id,$min_price_range,$max_price_range,$product_size_id,$product_colour_id){
+    function filter_result($user_id,$cat_id,$sub_cat_id,$min_price_range,$max_price_range,$product_size_id,$product_colour_id){
 
+		if ($sub_cat_id == '0'){
+			$select_query = "SELECT products.*, IFNULL(cus_wishlist.customer_id, '0') AS wishlisted FROM products LEFT JOIN product_combined ON products.id = product_combined.product_id LEFT JOIN cus_wishlist ON cus_wishlist.product_id = products.id AND cus_wishlist.customer_id ='$user_id' WHERE products.cat_id = '$cat_id' AND products.prod_actual_price BETWEEN '$min_price_range' AND '$max_price_range'";
+		} else{
+			$select_query = "SELECT products.*, IFNULL(cus_wishlist.customer_id, '0') AS wishlisted FROM products LEFT JOIN product_combined ON products.id = product_combined.product_id LEFT JOIN cus_wishlist ON cus_wishlist.product_id = products.id AND cus_wishlist.customer_id ='$user_id' WHERE products.cat_id = '$cat_id' AND products.sub_cat_id='$sub_cat_id' AND products.prod_actual_price BETWEEN '$min_price_range' AND '$max_price_range'";
+		}
+		if ($product_size_id !=0){
+			$select_query = $select_query." AND product_combined.mas_size_id IN ($product_size_id)";
+		}
+		
+		if ($product_colour_id !=0){
+			$select_query = $select_query." AND product_combined.mas_color_id IN ($product_colour_id)";
+		} 
+		$select_query = $select_query." GROUP BY products.id";
+		
+		$res=$this->db->query($select_query);
+		 if($res->num_rows()>0){
+			$total_products = $res->num_rows();
+			$result=$res->result();
+			foreach($result  as $rows){
+				$product_id = $rows->id;
+				$prod_size_chart = $rows->prod_size_chart;
+				$combined_status = $rows->combined_status;
+				
+				if ($prod_size_chart!=''){
+					$product_size_url = base_url().'assets/products/charts/'.$prod_size_chart;
+				}else {
+					$product_size_url = "";
+				}
+				
+				$select_rev = "SELECT COUNT(product_id) AS review_count,IFNULL(ROUND(AVG(rating)),'0') AS average FROM product_review AS pr WHERE product_id='$product_id'";
+				$res_rev=$this->db->query($select_rev);
+					if($res_rev->num_rows()>0){
+						$result_rev=$res_rev->result();
+						foreach($result_rev as $rows_rev){
+							$review_count = $rows_rev->review_count;
+							$review_average = $rows_rev->average;
+						}
+					}
 
-	if ($sub_cat_id == ''){
-		$select="SELECT p.*,IFNULL(cw.customer_id,'0') AS wishlisted FROM products AS p LEFT JOIN  cus_wishlist AS cw ON cw.product_id=p.id AND cw.customer_id='$user_id' WHERE cat_id='$cat_id' AND status='Active' AND prod_actual_price BETWEEN '$min_price_range' AND '$max_price_range'";
-	} else{
-		$select="SELECT p.*,IFNULL(cw.customer_id,'0') AS wishlisted FROM products AS p LEFT JOIN  cus_wishlist AS cw ON cw.product_id=p.id AND cw.customer_id='$user_id' WHERE cat_id='$cat_id' AND sub_cat_id='$sub_cat_id' AND status='Active' AND prod_actual_price BETWEEN '$min_price_range' AND '$max_price_range'";
-	}
-	$res=$this->db->query($select);
-     if($res->num_rows()>0){
-		$total_products = $res->num_rows();
-        $result=$res->result();
-        foreach($result  as $rows){
-			$prod_size_chart = $rows->prod_size_chart;
-			$product_id = $rows->id;
-			
-			if ($prod_size_chart!=''){
-				$product_size_url = base_url().'assets/products/charts/'.$prod_size_chart;
-			}else {
-				$product_size_url = "";
+				$product_list[]=array(
+				  "id"=>$rows->id,
+				  "product_name"=>$rows->product_name,
+				  "sku_code"=>$rows->sku_code,
+				  "product_cover_img"=>base_url().'assets/products/'.$rows->product_cover_img,
+				  "prod_size_chart"=>$prod_size_chart,
+				  "product_description"=>$rows->product_description,
+				  "offer_status"=>$rows->offer_status,
+				  "specification_status"=>$rows->specification_status,
+				  "combined_status"=>$rows->combined_status,
+				  "prod_actual_price"=>$rows->prod_actual_price,
+				  "prod_mrp_price"=>$rows->prod_mrp_price,
+				  "offer_percentage"=>$rows->offer_percentage,
+				  "delivery_fee_status"=>$rows->delivery_fee_status,
+				  "prod_return_policy"=>$rows->prod_return_policy,
+				  "prod_cod"=>$rows->prod_cod,
+				  "product_meta_title"=>$rows->product_meta_title,
+				  "product_meta_desc"=>$rows->product_meta_desc,
+				  "product_meta_keywords"=>$rows->product_meta_keywords,
+				  "stocks_left"=>$rows->stocks_left,
+				  "review_average"=>$review_average,
+				  "wishlisted"=>$rows->wishlisted
+				);
 			}
 			
-			$select_rev = "SELECT COUNT(product_id) AS review_count,IFNULL(ROUND(AVG(rating)),'0') AS average FROM product_review AS pr WHERE product_id='$product_id'";
-			$res_rev=$this->db->query($select_rev);
-				if($res_rev->num_rows()>0){
-					$result_rev=$res_rev->result();
-					foreach($result_rev as $rows_rev){
-						$review_count = $rows_rev->review_count;
-						$review_average = $rows_rev->average;
-					}
-				}
-						
-            $product_list[]=array(
-              "id"=>$rows->id,
-              "product_name"=>$rows->product_name,
-              "sku_code"=>$rows->sku_code,
-              "product_cover_img"=>base_url().'assets/products/'.$rows->product_cover_img,
-              "prod_size_chart"=>$prod_size_chart,
-              "product_description"=>$rows->product_description,
-              "offer_status"=>$rows->offer_status,
-              "specification_status"=>$rows->specification_status,
-              "combined_status"=>$rows->combined_status,
-              "prod_actual_price"=>$rows->prod_actual_price,
-              "prod_mrp_price"=>$rows->prod_mrp_price,
-              "offer_percentage"=>$rows->offer_percentage,
-              "delivery_fee_status"=>$rows->delivery_fee_status,
-              "prod_return_policy"=>$rows->prod_return_policy,
-              "prod_cod"=>$rows->prod_cod,
-              "product_meta_title"=>$rows->product_meta_title,
-              "product_meta_desc"=>$rows->product_meta_desc,
-              "product_meta_keywords"=>$rows->product_meta_keywords,
-              "stocks_left"=>$rows->stocks_left,
-			  "review_average"=>$review_average,
-              "wishlisted"=>$rows->wishlisted
-            );
-        }
-      $data = array("status" => "success","msg"=>"Products found","total_product"=>$total_products,"product_list"=>$product_list);
-     }else{
-        $data = array("status" => "error","msg"=>"No Products found");
-     }
-      return $data;
-	  
-	  
-		/* if ($sub_cat_id == '0'){
-				  $product_query = "SELECT * FROM products WHERE cat_id='$cat_id' AND status='Active' AND prod_actual_price BETWEEN '$min_price_range' AND '$max_price_range'";
-				 
-		} else {
-				$product_query = "SELECT * FROM products WHERE cat_id='$cat_id' AND sub_cat_id = '$sub_cat_id' AND status='Active' AND prod_actual_price BETWEEN '$min_price_range' AND '$max_price_range'";
-		}
-		$res=$this->db->query($product_query);
-		if($res->num_rows()>0){
-			foreach ($res->result() as $rows)
-			{
-				 $product_id = $rows->id;
-				 $combined_status = $rows->combined_status;
-				
-				if ($combined_status !='0')
-				{
-					$price_query = "SELECT * FROM product_combined WHERE product_id = '$product_id' AND status='Active' AND prod_actual_price BETWEEN '$min_price_range' AND '$max_price_range' GROUP BY product_id";
-				}
-			} 
-			
-			$data = array("status" => "success","msg"=>"Filter Details","sub_category_list"=>$sub_cat_list, "max_price_amount"=>$max_price_amount,"size_list"=>$size_details, "colour_list"=>$colour_details);
-			return $data;*/
+			$data = array("status" => "success","msg"=>"Products found","total_product"=>$total_products,"product_list"=>$product_list);
+		 }else{
+			$data = array("status" => "error","msg"=>"No Products found");
+		 }
+		  return $data;
 	  }
 }
 ?>
