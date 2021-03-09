@@ -2413,7 +2413,7 @@ LEFT JOIN products AS p ON p.id=pc.product_id LEFT JOIN product_combined AS comb
       }
 	  
 	  
-	   //################ Filter Result ########################//
+//################ Filter Result ########################//
       function filter_result($user_id,$cat_id,$sub_cat_id,$min_price_range,$max_price_range,$product_size_id,$product_colour_id){
 
 
@@ -2477,7 +2477,7 @@ LEFT JOIN products AS p ON p.id=pc.product_id LEFT JOIN product_combined AS comb
       return $data;
 	  
 	  
-		if ($sub_cat_id == '0'){
+		/* if ($sub_cat_id == '0'){
 				  $product_query = "SELECT * FROM products WHERE cat_id='$cat_id' AND status='Active' AND prod_actual_price BETWEEN '$min_price_range' AND '$max_price_range'";
 				 
 		} else {
@@ -2494,11 +2494,10 @@ LEFT JOIN products AS p ON p.id=pc.product_id LEFT JOIN product_combined AS comb
 				{
 					$price_query = "SELECT * FROM product_combined WHERE product_id = '$product_id' AND status='Active' AND prod_actual_price BETWEEN '$min_price_range' AND '$max_price_range' GROUP BY product_id";
 				}
-			}
+			} 
 			
-			//$data = array("status" => "success","msg"=>"Filter Details","sub_category_list"=>$sub_cat_list, "max_price_amount"=>$max_price_amount,"size_list"=>$size_details, "colour_list"=>$colour_details);
-			return $data;
-		}
+			$data = array("status" => "success","msg"=>"Filter Details","sub_category_list"=>$sub_cat_list, "max_price_amount"=>$max_price_amount,"size_list"=>$size_details, "colour_list"=>$colour_details);
+			return $data;*/
 	  }
 }
 ?>
