@@ -42,7 +42,7 @@ th{
 			</button>
 		</div>
 
-<?php foreach($res_cart as $rows_details){} ?>
+<?php foreach($res_cart as $rows_details){}  ?>
 		<div class="row">
 
 								<div class="col-md-12" id="invoice">
@@ -63,14 +63,19 @@ th{
 														<span class="txt-dark head-font inline-block capitalize-font mb-5">Billed from:</span>
 														<address class="mb-15">
 															<span class="address-head mb-5">Lila more.</span>
-														Coimbatore <br>
-														India <br>
+															Coimbatore <br>
+															India <br>
 															<abbr title="Phone">P:</abbr>1234567
 														</address>
 														<address>
 															<span class="txt-dark head-font capitalize-font mb-5">Order date:</span><br>
-															<?php echo  date("d-M-y"); ?><br><br>
+															<?php echo date('d-m-Y',strtotime($rows_details->purchase_date)); ?><br><br>
 														</address>
+														<address>
+															<span class="txt-dark head-font capitalize-font mb-5">Payment Mode:</span><br>
+															<?php echo $rows_details->payment_status; ?><br><br>
+														</address>
+														
 													</div>
 													<div class="col-xs-6 text-right">
 														<span class="txt-dark head-font inline-block capitalize-font mb-5">Delivery Address:</span>
@@ -112,23 +117,40 @@ th{
 															<tbody>
 																	<?php $i=1; foreach($res_cart as $rows){ ?>
 																<tr>
-																	<td><?php echo $rows->product_name; ?>
-																	<?php if(empty($rows->attribute_name)){}else{ ?>
-																			(<?php echo $rows->attribute_name.'-'.$rows->size; ?>)
-																	<?php	} ?></td>
+																	<td><?php echo $rows->product_name; ?> <?php if(empty($rows->attribute_name)){}else{ ?> (<?php echo $rows->attribute_name.'-'.$rows->size; ?>)<?php	} ?></td>
 																	<td><?php echo $rows->price; ?></td>
 																	<td><?php echo $rows->quantity; ?></td>
-																	<td class="sum"><?php echo $rows->total_amount; ?></td>
+																	<td><?php echo $rows->total_amount; ?></td>
 																</tr>
-															<?php	 $i++; }  ?>
-
-
-
+																<?php $i++; }  ?>
+																
 																<tr class="txt-dark">
 																	<td></td>
 																	<td></td>
 																	<td>Total</td>
-																	<td class="result"></td>
+																	<td><?php echo $rows_details->pur_total_amount; ?></td>
+																</tr>
+																<?php if ($rows_details->promo_amount != '0.00'){ ?>
+																<tr class="txt-dark">
+																	<td></td>
+																	<td></td>
+																	<td>Promo</td>
+																	<td><?php echo $rows_details->promo_amount; ?></td>
+																</tr>
+																<?php } ?>
+																<?php if ($rows_details->wallet_amount != '0.00'){ ?>
+																<tr class="txt-dark">
+																	<td></td>
+																	<td></td>
+																	<td>Wallet</td>
+																	<td><?php echo $rows_details->wallet_amount; ?></td>
+																</tr>
+																<?php } ?>
+																<tr class="txt-dark">
+																	<td></td>
+																	<td></td>
+																	<td>Paid Amount</td>
+																	<td><?php echo $rows_details->paid_amount; ?></td>
 																</tr>
 															</tbody>
 														</table>

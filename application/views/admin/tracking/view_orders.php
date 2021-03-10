@@ -43,8 +43,9 @@
 													<th>Order id </th>
 													<th>Purchase date </th>
 													<th>Customer name </th>
-													<th>Amount</th>
-													<th>Payment Status</th>
+													<th>Total</th>
+													<th>Paid</th>
+													<th>Order Status</th>
 													<th>Action</th>
 												</tr>
 											</thead>
@@ -56,9 +57,10 @@
 												<tr>
 													<td><?php echo $i; ?></td>
 													<td><?php echo $rows->order_id; ?></td>
-													<td><?php echo $rows->purchase_date; ?></td>
+													<td><?php echo date('d-m-Y',strtotime($rows->purchase_date)); ?> </td>
 													<td><?php echo $rows->name; ?></td>
-														<td><?php echo $rows->total_amount; ?></td>
+													<td><?php echo $rows->total_amount; ?></td>
+													<td><?php echo $rows->paid_amount; ?></td>
 													<td><?php if($rows->status=='Success'){ ?>
 														<button class="label label-success font-weight-100">Success</button>
 												<?php	}else if($rows->status=='Processing'){ ?>
@@ -74,7 +76,7 @@
 												<?php	} ?>
 											</td>
 													<td>
-														<a href="<?php echo base_url(); ?>admin/check_orders/<?php  echo base64_encode($rows->order_id); ?>" data-toggle="tooltip" title="view items & Invoice" ><i class="ti-align-justify"></i></a> &nbsp;&nbsp;
+														<a href="<?php echo base_url(); ?>admin/invoice/<?php  echo base64_encode($rows->order_id); ?>" data-toggle="tooltip" title="view items & Invoice" ><i class="ti-align-justify"></i></a> &nbsp;&nbsp;
 														<a data-toggle="modal" data-target="#exampleModal" data-id="<?php echo $rows->order_id; ?>" data-order-status="<?php echo $rows->status; ?>" title="Update status"  style="cursor:pointer;"><i class="fa fa-edit"></i></a>
 
 												</td>
@@ -94,46 +96,46 @@
 			<!-- /Row -->
 
 			<div class="modal fade open-AddBookDialog" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
-											<div class="modal-dialog" role="document">
-												<div class="modal-content">
-													<div class="modal-header">
-														<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-														<h5 class="modal-title" id="exampleModalLabel1">Update status</h5>
-													</div>
-														<form action="#" method="post" id="order_form" name="order_form" enctype="multipart/form-data">
-													<div class="modal-body">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								<h5 class="modal-title" id="exampleModalLabel1">Update status</h5>
+							</div>
+								<form action="#" method="post" id="order_form" name="order_form" enctype="multipart/form-data">
+							<div class="modal-body">
 
-															<div class="form-group">
-																<label for="message-text" class="control-label mb-10">Current status</label>
-																<input type="text" class="form-control" id="current_order_status" name="current_order_status" value="" readonly>
-															</div>
-															<div class="form-group">
-																<label for="recipient-name" class="control-label mb-10">Change status</label>
-																<select class="form-control" id="order_status" name="order_status" >
-																	<option value="">Select Status</option>
-																	<option value="Processing">Processing</option>
-																	<option value="Shipped">Shipped</option>
-																	<option value="Out for Delivery">Out for Delivery</option>
-																	<option value="Delivered">Delivered</option>
-																</select>
-																	<script> </script>
-																<input type="hidden" id="order_id" name="order_id" value="">
+									<div class="form-group">
+										<label for="message-text" class="control-label mb-10">Current status</label>
+										<input type="text" class="form-control" id="current_order_status" name="current_order_status" value="" readonly>
+									</div>
+									<div class="form-group">
+										<label for="recipient-name" class="control-label mb-10">Change status</label>
+										<select class="form-control" id="order_status" name="order_status" >
+											<option value="">Select Status</option>
+											<option value="Processing">Processing</option>
+											<option value="Shipped">Shipped</option>
+											<option value="Out for Delivery">Out for Delivery</option>
+											<option value="Delivered">Delivered</option>
+										</select>
+											<script> </script>
+										<input type="hidden" id="order_id" name="order_id" value="">
 
-															</div>
-															<div class="form-group">
-																<label for="message-text" class="control-label mb-10">This message will sent to Customer:</label>
-																<textarea class="form-control" id="msg_to_customer" rows="6" name="msg_to_customer"></textarea>
-															</div>
+									</div>
+									<div class="form-group">
+										<label for="message-text" class="control-label mb-10">This message will sent to Customer:</label>
+										<textarea class="form-control" id="msg_to_customer" rows="6" name="msg_to_customer"></textarea>
+									</div>
 
-													</div>
-													<div class="modal-footer">
+							</div>
+							<div class="modal-footer">
 
-														<button type="submit" class="btn btn-success">Update Status</button>
-													</div>
-														</form>
-												</div>
-											</div>
-										</div>
+								<button type="submit" class="btn btn-success">Update Status</button>
+							</div>
+								</form>
+						</div>
+					</div>
+				</div>
 
 
 

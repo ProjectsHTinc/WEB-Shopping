@@ -101,14 +101,14 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="javascript:void(0);" data-toggle="collapse" data-target="#ui_tr"><i class="icon-vector mr-10"></i>Tracking <span class="pull-right"><i class="fa fa-fw fa-angle-down"></i></span></a>
+                    <a href="javascript:void(0);" data-toggle="collapse" data-target="#ui_tr"><i class="icon-vector mr-10"></i>Orders <span class="pull-right"><i class="fa fa-fw fa-angle-down"></i></span></a>
                     <ul id="ui_tr" class="collapse collapse-level-1">
                         <li>
                             <a href="<?php echo base_url(); ?>admin/tracking">View orders</a>
                         </li>
 
                         <li>
-                            <a href="<?php echo base_url(); ?>admin/list_of_orders">List of orders</a>
+                            <a href="<?php echo base_url(); ?>admin/list_of_orders">View all orders</a>
                         </li>
 
                     </ul>

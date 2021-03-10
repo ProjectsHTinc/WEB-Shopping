@@ -42,7 +42,8 @@
 													<th>Order id </th>
 													<th>Purchase date </th>
 													<th>Customer name </th>
-													<th>Amount</th>
+													<th>Total</th>
+													<th>Paid</th>
 													<th>Payment Status</th>
 													<th>View</th>
 												</tr>
@@ -50,15 +51,17 @@
 
 											<tbody>
 
-												<?php $i=1; foreach($res_orders as $rows){ ?>
-
+												<?php $i=1; foreach($res_orders as $rows){ 
+														$order_status = $rows->status;
+												?>
 												<tr>
 													<td><?php echo $i; ?></td>
 													<td><?php echo $rows->order_id; ?></td>
 													<td><?php echo $rows->purchase_date; ?></td>
 													<td><?php echo $rows->name; ?></td>
-														<td><?php echo $rows->total_amount; ?></td>
-														<td><?php if($rows->status=='Success'){ ?>
+													<td><?php echo $rows->total_amount; ?></td>
+													<td><?php echo $rows->paid_amount; ?></td>
+													<td><?php if($rows->status=='Success'){ ?>
 															<button class="label label-success font-weight-100">Success</button>
 													<?php	}else if($rows->status=='Processing'){ ?>
 													<button class="label label-warning font-weight-100">Processing</button>
@@ -66,14 +69,18 @@
 														<button class="label label-primary font-weight-100">Shipped</button>
 													<?php	}else if($rows->status=='Out for Delivery'){ ?>
 														<button class="label label-info font-weight-100">Out for Delivery</button>
-													<?php	}else if($rows->status=='Out for Delivery'){ ?>
-														<button class="label label-danger font-weight-100">Payment Error</button>
+													<?php	}else if($rows->status=='Delivered'){ ?>
+														<button class="label label-danger font-weight-100">Delivered</button>
 													<?php	}else{ ?>
 														<button class="label label-default font-weight-100"><?php echo $rows->status; ?></button>
 													<?php	} ?>
 												</td>
-													<td><a href="<?php echo base_url(); ?>admin/check_orders/<?php  echo base64_encode($rows->order_id); ?>" data-toggle="tooltip" title="view items" ><i class="ti-align-justify"></i></a>
-
+													<td>
+													<?php if ($order_status == 'Pending') { ?>
+														<a href="<?php echo base_url(); ?>admin/check_orders/<?php  echo base64_encode($rows->order_id); ?>" data-toggle="tooltip" title="view items" ><i class="ti-align-justify"></i></a>
+													<?php } else { ?>
+														<a href="<?php echo base_url(); ?>admin/invoice/<?php  echo base64_encode($rows->order_id); ?>" data-toggle="tooltip" title="view items & Invoice" ><i class="ti-align-justify"></i></a>
+													<?php } ?>
 												</td>
 												</tr>
 						<?php	 $i++; }  ?>

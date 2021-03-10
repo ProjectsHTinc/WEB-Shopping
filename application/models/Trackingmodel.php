@@ -52,14 +52,48 @@ function get_success_orders_graph(){
    }
 
    function check_orders($order_id){
-     $id=base64_decode($order_id);
-// $select="SELECT p.product_name,am.attribute_value,am.attribute_name,ams.attribute_value AS size,pc.*,comb.id FROM product_cart AS pc
-// LEFT JOIN products AS p ON p.id=pc.product_id LEFT JOIN product_combined AS comb ON comb.id=pc.product_combined_id LEFT JOIN attribute_masters AS am ON am.id=comb.mas_color_id
-// LEFT JOIN attribute_masters AS ams ON ams.id=comb.mas_size_id WHERE pc.order_id='$id'";
-$select="SELECT ca.*,pur.cus_address_id,c.*,p.product_name,am.attribute_value,am.attribute_name,ams.attribute_value AS size,pc.*,comb.id FROM product_cart AS pc
-LEFT JOIN products AS p ON p.id=pc.product_id LEFT JOIN product_combined AS comb ON comb.id=pc.product_combined_id LEFT JOIN attribute_masters AS am ON am.id=comb.mas_color_id
-LEFT JOIN attribute_masters AS ams ON ams.id=comb.mas_size_id LEFT JOIN purchase_order AS pur ON pur.order_id=pc.order_id LEFT JOIN customers AS c ON pur.cus_id=c.id
-LEFT JOIN cus_address AS ca ON ca.id=pur.cus_address_id WHERE pc.order_id='$id'";
+    $id=base64_decode($order_id);
+	$select="SELECT
+				ca.*,
+				c.*,
+				pc.*,
+				pur.cus_address_id,
+				pur.purchase_date,
+				pur.promo_amount,
+				pur.wallet_amount,
+				pur.total_amount AS pur_total_amount,
+				pur.paid_amount,
+				pur.payment_status,
+				p.product_name,
+				am.attribute_value,
+				am.attribute_name,
+				ams.attribute_value AS size,
+				comb.id
+			FROM
+				product_cart AS pc
+			LEFT JOIN products AS p
+			ON
+				p.id = pc.product_id
+			LEFT JOIN product_combined AS comb
+			ON
+				comb.id = pc.product_combined_id
+			LEFT JOIN attribute_masters AS am
+			ON
+				am.id = comb.mas_color_id
+			LEFT JOIN attribute_masters AS ams
+			ON
+				ams.id = comb.mas_size_id
+			LEFT JOIN purchase_order AS pur
+			ON
+				pur.order_id = pc.order_id
+			LEFT JOIN customers AS c
+			ON
+				pur.cus_id = c.id
+			LEFT JOIN cus_address AS ca
+			ON
+				ca.id = pur.cus_address_id
+			WHERE
+				pur.order_id = '$id'";
      $res=$this->db->query($select);
 	 return $res->result();
    }
@@ -81,8 +115,8 @@ LEFT JOIN cus_address AS ca ON ca.id=pur.cus_address_id WHERE pc.order_id='$id'"
      $email= $rows_val->email_address;
      $textmessage=''.$msg_to_customer.' Track Your order '.$order_id.' ';
      $notes =utf8_encode($textmessage);
-     $this->mailmodel->send_mail($email,$notes);
-     $this->smsmodel->send_sms($phone,$notes);
+     //$this->mailmodel->send_mail($email,$notes);
+    // $this->smsmodel->send_sms($phone,$notes);
      $insert="INSERT order_history (order_id,sent_msg,old_status,status,updated_at,updated_by) VALUES('$order_id','$msg_to_customer','$current_order_status','$order_status',NOW(),'$user_id')";
      $res_ins=$this->db->query($insert);
      if($res_ins){
