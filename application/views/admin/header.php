@@ -106,10 +106,13 @@
                         <li>
                             <a href="<?php echo base_url(); ?>admin/tracking">View orders</a>
                         </li>
-
                         <li>
                             <a href="<?php echo base_url(); ?>admin/list_of_orders">View all orders</a>
                         </li>
+						<li>
+                            <a href="<?php echo base_url(); ?>admin/return_request">Return request</a>
+                        </li>
+
 
                     </ul>
                 </li>

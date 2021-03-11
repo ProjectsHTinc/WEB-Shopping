@@ -57,7 +57,7 @@
 												<tr>
 													<td><?php echo $i; ?></td>
 													<td><?php echo $rows->order_id; ?></td>
-													<td><?php echo $rows->purchase_date; ?></td>
+													<td><?php echo date('d-m-Y',strtotime($rows->purchase_date)); ?> </td>
 													<td><?php echo $rows->name; ?></td>
 													<td><?php echo $rows->total_amount; ?></td>
 													<td><?php echo $rows->paid_amount; ?></td>

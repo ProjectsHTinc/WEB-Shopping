@@ -25,8 +25,6 @@ class Customerprofile extends CI_Controller {
 		}
 	}
 
-
-
 	public function change_status()
 	{
 		$data=$this->session->userdata();
@@ -43,17 +41,13 @@ class Customerprofile extends CI_Controller {
 
 	}
 
-
-
-
-
 	public function customer_details()
 	{
 		$data=$this->session->userdata();
 		$user_id=$this->session->userdata('id');
 		$user_role=$this->session->userdata('role_type_id');
 			if($user_role=='1' || $user_role=='2'){
-				 $cus_id=$this->uri->segment(3);
+				$cus_id=$this->uri->segment(3);
 				$data['res_profile']=$this->customerprofilemodel->get_customer_details($cus_id);
 				$data['res_address']=$this->customerprofilemodel->get_customer_address_details($cus_id);
 				$this->load->view('admin/header',$data);
@@ -65,7 +59,21 @@ class Customerprofile extends CI_Controller {
 	}
 
 
-
+	public function customer_wallet_history()
+	{
+		$data=$this->session->userdata();
+		$user_id=$this->session->userdata('id');
+		$user_role=$this->session->userdata('role_type_id');
+			if($user_role=='1' || $user_role=='2'){
+				$cus_id=$this->uri->segment(3);
+				$data['res_wallet']=$this->customerprofilemodel->get_customer_wallet_history($cus_id);
+				$this->load->view('admin/header',$data);
+				$this->load->view('admin/customer/customer_wallet_history',$data);
+				$this->load->view('admin/footer');
+		}else{
+			$this->load->view('admin/login');
+		}
+	}
 
 
 

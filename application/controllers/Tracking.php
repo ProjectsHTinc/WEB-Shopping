@@ -99,15 +99,20 @@ class Tracking extends CI_Controller {
 			redirect('/');
 		}
 	}
-
-
-
-
-
-
-
-
-
-
-
+	
+	public function return_request()
+	{
+		$data=$this->session->userdata();
+		$user_id=$this->session->userdata('id');
+		$user_role=$this->session->userdata('role_type_id');
+			if($user_role=='1' || $user_role=='2'){
+				$data['res_request']=$this->trackingmodel->return_request();
+				$this->load->view('admin/header',$data);
+				$this->load->view('admin/tracking/return_request',$data);
+				$this->load->view('admin/footer');
+		}else{
+			$this->load->view('admin/login');
+		}
+	}
+	
 }

@@ -31,28 +31,35 @@
 											<table class="table display responsive product-overview mb-30" id="myTable">
 												<thead>
 													<tr>
-															<th style="width:100px;">S.no</th>
+														<th style="width:100px;">S.no</th>
 														<th style="width:100px;">Name</th>
 														<th>Mobile</th>
 														<th>Email</th>
+														<th>Wallet</th>
+														<th>Used Wallet</th>
 														<th>Status</th>
 														<th>Actions</th>
 													</tr>
 												</thead>
 												<tbody>
-													<?php  $i=1; foreach($res as $row_cus){   ?>
+													<?php  $i=1; foreach($res as $row_cus){   
+														$amt_in_wallet = $row_cus->amt_in_wallet;
+														$total_amt_used = $row_cus->total_amt_used;
+													?>
 													<tr>
-															<td><?php echo $i; ?></td>
+														<td><?php echo $i; ?></td>
 														<td><?php echo $row_cus->name; ?></td>
 														<td><?php echo $row_cus->phone_number; ?></td>
 														<td><?php echo $row_cus->email; ?></td>
-														<td><?php if($row_cus->status=='Active'){ ?><span class="text-green">Active</span><?php }else{ ?><span class="text-red">Inactive</span><?php } ?></td>
+														<td><?php if ($amt_in_wallet != '') { echo $amt_in_wallet; } ?></td>
+														<td><a href="<?php echo base_url(); ?>admin/customer_wallet_history/<?php echo base64_encode($row_cus->id*9876); ?>" class="text-inverse p-r-10" data-toggle="tooltip" title="Wallet History" ><?php if ($total_amt_used != '') { echo $total_amt_used; } ?></a></td>
+														<td><?php if($row_cus->cus_status == 'Active'){ ?><span class="text-green">Active</span><?php }else{ ?><span class="text-red">Inactive</span><?php } ?></td>
 														<td>
 									<a href="<?php echo base_url(); ?>admin/customer_details/<?php echo base64_encode($row_cus->id*9876); ?>" class="text-inverse p-r-10" data-toggle="tooltip" title="View Customer details" ><i class="icon-list"></i></a>
 									<!-- <a href="javascript:void(0)" class="text-inverse" title="View product" data-toggle="tooltip"><i class="fa fa-navicon"></i></a> -->
 								</td>
 													</tr>
-												<?php } ?>
+												<?php $i = $i+1; } ?>
 
 
 

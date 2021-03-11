@@ -12,7 +12,16 @@ Class Customerprofilemodel extends CI_Model
 
 
    function get_all_customer(){
-     $select="SELECT * FROM customers";
+     //$select="SELECT * FROM customers";
+	 $select="SELECT
+				c.*,
+				cw.*,
+				c.status AS cus_status
+			FROM
+				customers AS c
+			LEFT JOIN customer_wallet AS cw
+			ON
+				c.id = cw.customer_id";
      $res=$this->db->query($select);
       return $res->result();
    }
@@ -51,6 +60,13 @@ Class Customerprofilemodel extends CI_Model
   function get_count_of_active_customer(){
     $select="SELECT COUNT(*) AS count_cust FROM customers WHERE STATUS='Active'";
    $res=$this->db->query($select);
+   return $res->result();
+  }
+
+  function get_customer_wallet_history($user_id){
+		$id=base64_decode($user_id)/9876;
+		$select="SELECT * FROM customer_wallet_history WHERE customer_id ='$id'";
+		$res=$this->db->query($select);
    return $res->result();
   }
 

@@ -115,8 +115,8 @@ function get_success_orders_graph(){
      $email= $rows_val->email_address;
      $textmessage=''.$msg_to_customer.' Track Your order '.$order_id.' ';
      $notes =utf8_encode($textmessage);
-     //$this->mailmodel->send_mail($email,$notes);
-    // $this->smsmodel->send_sms($phone,$notes);
+     $this->mailmodel->send_mail($email,$notes);
+     $this->smsmodel->send_sms($phone,$notes);
      $insert="INSERT order_history (order_id,sent_msg,old_status,status,updated_at,updated_by) VALUES('$order_id','$msg_to_customer','$current_order_status','$order_status',NOW(),'$user_id')";
      $res_ins=$this->db->query($insert);
      if($res_ins){
@@ -124,6 +124,34 @@ function get_success_orders_graph(){
      }else{
         echo "Something Went wrong";
      }
+   }
+   
+     function return_request(){
+		 $select="SELECT
+					rt.id,
+					c.name,
+					po.order_id,
+					po.purchase_date,
+					po.total_amount,
+					po.paid_amount,
+					po.status,
+					rm.question,
+					rt.answer_text
+				FROM
+					return_item_feedback AS rt
+				LEFT JOIN customers AS c
+				ON
+					rt.customer_id = c.id
+				LEFT JOIN purchase_order AS po
+				ON
+					rt.purchase_order_id = po.id
+				LEFT JOIN return_reason_master AS rm
+				ON
+					rt.question_id = rm.id
+				ORDER BY
+					rt.id";
+		 $res=$this->db->query($select);
+		 return $res->result();
    }
    
 }

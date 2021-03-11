@@ -116,6 +116,7 @@ $route['admin/tracking'] = 'tracking/index';
 $route['admin/check_orders/(:any)'] = 'tracking/check_orders/$id';
 $route['admin/invoice/(:any)'] = 'tracking/print_order/$id';
 $route['admin/list_of_orders'] = 'tracking/list_of_orders/$id';
+$route['admin/return_request'] = 'tracking/return_request';
 
 //------- sales modules------------//
 $route['admin/sales'] = 'salesmaster/index';
@@ -141,7 +142,7 @@ $route['admin/edit_offer/(:any)'] = 'offermaster/edit_offer/$id';
 
 $route['admin/customers'] = 'customerprofile/index';
 $route['admin/customer_details/(:any)'] = 'customerprofile/customer_details/$id';
-
+$route['admin/customer_wallet_history/(:any)'] = 'customerprofile/customer_wallet_history/$id';
 //------------Promos----------------//
 
 $route['admin/promo'] = 'promomaster/index';

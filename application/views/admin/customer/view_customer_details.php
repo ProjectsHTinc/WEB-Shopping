@@ -29,7 +29,7 @@
 										<div class="row">
 											<div class="col-md-12">
 												<div class="form-wrap">
-													<?php foreach($res_profile as $rows_profile){} ?>
+													<?php foreach($res_profile as $rows_profile){ $newsletter_status = $rows_profile->newsletter_status; } ?>
 													<form class="form-horizontal" role="form">
 														<div class="form-body">
 															
@@ -89,7 +89,7 @@
 																	<div class="form-group">
 																		<label class="control-label col-md-3">Newsletter:</label>
 																		<div class="col-md-9">
-																			<p class="form-control-static">  <?php echo $rows_profile->newsletter_status; ?> </p>
+																			<p class="form-control-static"> <?php if ($newsletter_status == '1') { echo 'Y' ; } else { echo 'N'; } ?> </p>
 																		</div>
 																	</div>
 																</div>
