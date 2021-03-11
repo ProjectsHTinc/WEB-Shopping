@@ -1710,7 +1710,7 @@ class Mobileapi extends CI_Controller {
 	  	$_POST = json_decode(file_get_contents("php://input"), TRUE);
 
 		//$user_id = $this->uri->segment(3);
-		echo $user_id = $this->uri->segment(4);
+		echo $user_id = $this->uri->segment(3);
 		echo $profile = $_FILES["user_pic"]["name"];
 		$temp = pathinfo($profile, PATHINFO_EXTENSION);
 		$userFileName = round(microtime(true)) . '.' . $temp;
