@@ -63,9 +63,9 @@ Class Customerprofilemodel extends CI_Model
    return $res->result();
   }
 
-  function get_customer_wallet_history($user_id){
-		$id=base64_decode($user_id)/9876;
-		$select="SELECT * FROM customer_wallet_history WHERE customer_id ='$id'";
+  function get_customer_wallet_history($cus_id){
+		$id=base64_decode($cus_id)/9876;
+		echo $select="SELECT * FROM customer_wallet_history WHERE customer_id ='$id'";
 		$res=$this->db->query($select);
    return $res->result();
   }
