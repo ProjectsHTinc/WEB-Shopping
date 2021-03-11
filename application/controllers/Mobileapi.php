@@ -1707,7 +1707,7 @@ class Mobileapi extends CI_Controller {
 
     public function update_profilepic()
 	{
-	  	//$_POST = json_decode(file_get_contents("php://input"), TRUE);
+	  	$_POST = json_decode(file_get_contents("php://input"), TRUE);
 
 		//$user_id = $this->uri->segment(3);
 		echo $user_id = $this->uri->segment(4);
