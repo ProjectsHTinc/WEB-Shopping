@@ -1717,7 +1717,7 @@ class Mobileapi extends CI_Controller {
 		$profilepic = $uploadPicdir.$userFileName;
 		move_uploaded_file($_FILES['user_pic']['tmp_name'], $profilepic);
 
-		$data['result']=$this->apiandroidmodel->update_profilepic($user_id,$userFileName);
+		$data['result']=$this->mobileapimodel->update_profilepic($user_id,$userFileName);
 		$response = $data['result'];
 		echo json_encode($response);
 	}
