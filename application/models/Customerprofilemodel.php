@@ -15,7 +15,8 @@ Class Customerprofilemodel extends CI_Model
      //$select="SELECT * FROM customers";
 	 $select="SELECT
 				c.*,
-				cw.*,
+				cw.amt_in_wallet,
+				cw.total_amt_used,
 				c.status AS cus_status
 			FROM
 				customers AS c
