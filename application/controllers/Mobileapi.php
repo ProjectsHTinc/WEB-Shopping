@@ -1707,16 +1707,18 @@ class Mobileapi extends CI_Controller {
 
     public function update_profilepic()
 	{
-	  	$_POST = json_decode(file_get_contents("php://input"), TRUE);
+	  	//$_POST = json_decode(file_get_contents("php://input"), TRUE);
 
-		$user_id = $this->uri->segment(3);
-		$profile = $_FILES["user_pic"]["name"];
+		//$user_id = $this->uri->segment(3);
+		$user_id = $this->uri->segment(4);
+		echo $profile = $_FILES["user_pic"]["name"];
 		$temp = pathinfo($profile, PATHINFO_EXTENSION);
 		$userFileName = round(microtime(true)) . '.' . $temp;
 		$uploadPicdir = 'assets/front/profile/';
 		$profilepic = $uploadPicdir.$userFileName;
 		move_uploaded_file($_FILES['user_pic']['tmp_name'], $profilepic);
 
+exit;
 		$data['result']=$this->apiandroidmodel->update_profilepic($user_id,$userFileName);
 		$response = $data['result'];
 		echo json_encode($response);
