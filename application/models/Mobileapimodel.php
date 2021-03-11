@@ -1107,7 +1107,7 @@ class Mobileapimodel extends CI_Model {
        if($res->num_rows()==0){
         $data = array("status" => "error","msg"=>"No records found");
        }else{
-		$wishlist_count = $res->num_rows()
+		$wishlist_count = $res->num_rows();
         $result=$res->result();
         foreach($result  as $rows){
             $product_list[]=array(
