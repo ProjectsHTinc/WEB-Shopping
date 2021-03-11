@@ -1107,7 +1107,7 @@ class Mobileapimodel extends CI_Model {
        if($res->num_rows()==0){
         $data = array("status" => "error","msg"=>"No records found");
        }else{
-
+		$wishlist_count = $res->num_rows()
         $result=$res->result();
         foreach($result  as $rows){
             $product_list[]=array(
@@ -1131,7 +1131,7 @@ class Mobileapimodel extends CI_Model {
               "stocks_left"=>$rows->stocks_left,
             );
         }
-      $data = array("status" => "success","msg"=>"wishlist found","product_list"=>$product_list);
+      $data = array("status" => "success","msg"=>"wishlist found","wishlist_count"=>$wishlist_count,"product_list"=>$product_list);
        }
         return $data;
     }

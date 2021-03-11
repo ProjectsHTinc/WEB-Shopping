@@ -4,8 +4,8 @@ Class Offermodel extends CI_Model
 
   public function __construct()
   {
-      parent::__construct();
-
+		parent::__construct();
+		$this->load->model('notificationmodel');
   }
 
 
@@ -31,6 +31,9 @@ Class Offermodel extends CI_Model
 
        $insert_query_history="INSERT INTO product_offer_history (product_id,offer_prod_id,offer_name,offer_price,offer_percentage,status,created_at,created_by) VALUES('$prod_id','$insert_id','$offer_name','$offer_price','$offer_percentage','$offer_status',NOW(),'$user_id')";
        $res=$this->db->query($insert_query_history);
+	   
+	   //$this->notificationmodel->send_notification($message,$gcm_key,$mobile_type,$user_type);
+		
        if($res){
                 $data = array("status" => "success");
                 return $data;

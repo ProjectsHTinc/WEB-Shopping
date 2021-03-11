@@ -26,7 +26,6 @@
 								<div class="panel-wrapper collapse in">
 									<div class="panel-body">
 
-
 										<div class="row">
 											<div class="col-sm-12 col-xs-12">
 												<div class="form-wrap">
@@ -100,26 +99,25 @@
 																
 																
 															<div class="row">
-
 																<div class="col-md-6">
 																	<div class="form-group">
 																		<label class="control-label mb-10">Status</label>
 																		<select class="form-control" data-placeholder="Choose a Status" tabindex="1" name="offer_status" id="offer_status">
 																			<option value="Active">Active</option>
 																			<option value="Inactive">Inactive</option>
-
 																		</select>
 																	</div>
 																</div>
 																<div class="col-md-6">
-																	
+																	<label class="control-label mb-10">&nbsp;</label><br>
+																	<input type="checkbox" id="notiication" name="notiication" value="Y" >&nbsp;&nbsp;Send Notification
 																</div>
 															</div>
-
+															
 														</div>
+														
 														<div class="form-actions mt-10">
 															<button type="submit" class="btn btn-success  mr-10" id="upload">Create</button>
-
 														</div>
 													</form>
 												</div>
