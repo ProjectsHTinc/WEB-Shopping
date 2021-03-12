@@ -14,7 +14,7 @@ Class Offermodel extends CI_Model
     if(empty($prod_id)){
 
     }else{
-      $select="SELECT * FROM product_offer WHERE product_id='$prod_id'";
+      echo $select="SELECT * FROM product_offer WHERE product_id='$prod_id'";
       $res=$this->db->query($select);
      if($res->num_rows()>0){
        $data = array("status" => "already");
@@ -29,7 +29,7 @@ Class Offermodel extends CI_Model
        $res=$this->db->query($insert_query);
        $insert_id = $this->db->insert_id();
 
-	    echo $select="SELECT * FROM product_offer WHERE product_id='$insert_id'";
+	    echo $select="SELECT * FROM product_offer WHERE product_id='$prod_id'";
 		$res=$this->db->query($select);
 		if($res->num_rows()>0){
 				foreach ($res->result() as $rows)
