@@ -1176,6 +1176,9 @@ Class Homemodel extends CI_Model
 						$mob_key = $rows->mob_key;
 						$mobile_type = $rows->mobile_type;
 					}
+				}else {
+					$mob_key = "";
+					$mobile_type = "";
 				}
 			}
 
@@ -1269,6 +1272,9 @@ Class Homemodel extends CI_Model
 					$mob_key = $rows->mob_key;
 					$mobile_type = $rows->mobile_type;
 				}
+			}else {
+					$mob_key = "";
+					$mobile_type = "";
 			}
 		}
 		
