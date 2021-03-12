@@ -47,10 +47,10 @@ Class Offermodel extends CI_Model
 			if($res->num_rows()>0){
 				foreach ($res->result() as $rows)
 				{
-					$cus_id = $rows->cus_id;
-					$first_name = $rows->first_name;
-					$gcm_key = $rows->mob_key;
-					$mobile_type = $rows->mobile_type;
+					echo $cus_id = $rows->cus_id;
+					echo $first_name = $rows->first_name;
+					echo $gcm_key = $rows->mob_key;
+					echo $mobile_type = $rows->mobile_type;
 				    $this->notificationmodel->sendOfferNotification($offer_name,$gcm_key,$mobile_type,$product_id,$offer_picture);
 				}
 			}
