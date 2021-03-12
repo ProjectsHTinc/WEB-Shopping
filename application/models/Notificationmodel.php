@@ -63,9 +63,9 @@ Class Notificationmodel extends CI_Model
 			$result = fwrite($fp, $msg, strlen($msg));
 			
 			if (!$result){
-				echo 'Message not delivered' . PHP_EOL;
+				//echo 'Message not delivered' . PHP_EOL;
 			}else{
-				echo 'Message successfully delivered' . PHP_EOL;  
+				//echo 'Message successfully delivered' . PHP_EOL;  
 			}
 			fclose($fp);
       }
@@ -126,9 +126,9 @@ function sendNotification($title,$subject,$mob_key,$mobile_type)
 			$result = fwrite($fp, $msg, strlen($msg));
 			
 			if (!$result){
-				echo 'Message not delivered' . PHP_EOL;
+				//echo 'Message not delivered' . PHP_EOL;
 			}else{
-				echo 'Message successfully delivered' . PHP_EOL;  
+				//echo 'Message successfully delivered' . PHP_EOL;  
 			}
 			fclose($fp);
       }
