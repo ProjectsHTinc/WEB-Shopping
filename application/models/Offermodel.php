@@ -60,7 +60,7 @@ Class Offermodel extends CI_Model
        $res=$this->db->query($insert_query_history);
 	   
 	   
-	   exit;
+
        if($res){
                 $data = array("status" => "success");
                 return $data;
