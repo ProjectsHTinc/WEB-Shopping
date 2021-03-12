@@ -6,7 +6,7 @@ Class Smsmodel extends CI_Model
       parent::__construct();
 	}
 
-	function send_sms($phone,$notes)
+	function sendSMS($phone,$notes)
   	{
           //Your authentication key
           $authKey = "191431AStibz285a4f14b4";
