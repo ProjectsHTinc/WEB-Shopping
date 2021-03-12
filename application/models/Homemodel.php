@@ -1154,7 +1154,7 @@ Class Homemodel extends CI_Model
 			$order_sess_id =  array("order_id"=>$order_id);
 			$this->session->set_userdata($order_sess_id);
 			
-			$inssql = "INSERT INTO purchase_order(order_id ,browser_sess_id ,cus_id ,purchase_date,cus_address_id,total_amount,paid_amount,status,cus_notes,created_at,created_by) VALUES('$order_id','$browser_sess_id','$cust_session_id',now(),'$address_id','$total_amt','$total_amt','Pending','$ncheckout_mess',now(),'$cust_session_id')";
+			$inssql = "INSERT INTO purchase_order(order_id ,browser_sess_id ,cus_id ,purchase_date,cus_address_id,total_amount,paid_amount,status,payment_status,cus_notes,created_at,created_by) VALUES('$order_id','$browser_sess_id','$cust_session_id',now(),'$address_id','$total_amt','$total_amt','Pending','Pending','$ncheckout_mess',now(),'$cust_session_id')";
 			$insert = $this->db->query($inssql);
 
 
@@ -1244,7 +1244,7 @@ Class Homemodel extends CI_Model
 		$order_sess_id =  array("order_id"=>$order_id);
 		$this->session->set_userdata($order_sess_id);
 		
-		$inssql = "INSERT INTO purchase_order(order_id ,browser_sess_id ,cus_id ,purchase_date,cus_address_id,total_amount,paid_amount,status,cus_notes,created_at,created_by) VALUES('$order_id','$browser_sess_id','$cust_session_id',now(),'$address_id','$total_amt','$total_amt','Pending','$scheckout_mess',now(),'$cust_session_id')";
+		$inssql = "INSERT INTO purchase_order(order_id ,browser_sess_id ,cus_id ,purchase_date,cus_address_id,total_amount,paid_amount,status,payment_status,cus_notes,created_at,created_by) VALUES('$order_id','$browser_sess_id','$cust_session_id',now(),'$address_id','$total_amt','$total_amt','Pending','Pending','$scheckout_mess',now(),'$cust_session_id')";
 		$insert = $this->db->query($inssql);
 		
 		$check_product_cart="SELECT * FROM product_cart WHERE order_id ='' AND cus_id='$cust_session_id'";
@@ -1628,7 +1628,7 @@ Class Homemodel extends CI_Model
 		}
 
 		if ($wallet_amount !='0.00'){
-			$update_order = "UPDATE purchase_order SET paid_amount = paid_amount + $wallet_amount ,wallet_amount = '0.00',payment_status ='',status='Pending'  WHERE id = '$purchase_order_id' AND cus_id = '$cust_session_id'";
+			$update_order = "UPDATE purchase_order SET paid_amount = paid_amount + $wallet_amount ,wallet_amount = '0.00',payment_status ='Pending',status='Pending'  WHERE id = '$purchase_order_id' AND cus_id = '$cust_session_id'";
 			$res=$this->db->query($update_order);
 			
 			 $update_wallet = "UPDATE customer_wallet SET total_amt_used = total_amt_used - $wallet_amount,amt_in_wallet = amt_in_wallet + $wallet_amount WHERE customer_id ='$cust_session_id'";

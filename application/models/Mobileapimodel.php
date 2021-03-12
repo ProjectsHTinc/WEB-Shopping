@@ -1945,7 +1945,7 @@ class Mobileapimodel extends CI_Model {
 		}
 
 		if ($wallet_amount !='0.00'){
-			$update_order = "UPDATE purchase_order SET paid_amount = paid_amount + $wallet_amount ,wallet_amount = '0.00',payment_status ='',status='Pending'  WHERE id = '$purchase_order_id' AND cus_id = '$user_id'";
+			$update_order = "UPDATE purchase_order SET paid_amount = paid_amount + $wallet_amount ,wallet_amount = '0.00',payment_status ='Pending',status='Pending'  WHERE id = '$purchase_order_id' AND cus_id = '$user_id'";
 			$res=$this->db->query($update_order);
 			
 			 $update_wallet = "UPDATE customer_wallet SET total_amt_used = total_amt_used - $wallet_amount,amt_in_wallet = amt_in_wallet + $wallet_amount WHERE customer_id ='$user_id'";
