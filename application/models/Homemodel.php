@@ -1165,6 +1165,17 @@ Class Homemodel extends CI_Model
 				$update = $this->db->query($updatesql);
 			}
 			
+			$subject='OSASPP - Order Confirmation';
+			$message_content = "Order Confirmation - Your Order with OSASPP [".$order_id."] has been successfully placed!";
+			
+			if ($nemail !=''){
+				$this->mailmodel->sendMail($nemail,$subject,$message_content);
+			}
+
+			if ($nphone !=''){
+				$this->smsmodel->sendSMS($nphone,$message_content);
+			}
+			
 			$check_notifi_status = "SELECT * FROM customer_details WHERE customer_id = '$cust_session_id' AND notification_status = '1'";
 			$res=$this->db->query($check_notifi_status);
 			if($res->num_rows()>0){
@@ -1176,9 +1187,7 @@ Class Homemodel extends CI_Model
 						$mob_key = $rows->mob_key;
 						$mobile_type = $rows->mobile_type;
 					}
-				}else {
-					$mob_key = "";
-					$mobile_type = "";
+					$this->notificationmodel->sendNotification($subject,$message_content,$mob_key,$mobile_type);
 				}
 			}
 
@@ -1200,21 +1209,7 @@ Class Homemodel extends CI_Model
 			  }
 			} 
 			*/
-			
-			$subject='OSASPP - Order Confirmation';
-			$message_content = "Order Confirmation - Your Order with OSASPP [".$order_id."] has been successfully placed!";
-			
-			if ($nemail !=''){
-				$this->mailmodel->sendMail($nemail,$subject,$message_content);
-			}
 
-			if ($nphone !=''){
-				$this->smsmodel->sendSMS($nphone,$message_content);
-			}
-			
-			if ($mob_key !=''){
-				$this->notificationmodel->sendNotification($subject,$message_content,$mob_key,$mobile_type);
-			}
 			
 			$res=array('order_id'=>$order_id,'address'=>$address);
 			return $res;
@@ -1261,7 +1256,18 @@ Class Homemodel extends CI_Model
 			$update = $this->db->query($updatesql);
 		}
 
-		$check_notifi_status = "SELECT * FROM customer_details WHERE customer_id = '$cust_session_id' AND notification_status = '1'";
+		$subject='OSASPP - Order Confirmation';
+		$message_content = "Order Confirmation - Your Order with OSASPP [".$order_id."] has been successfully placed!";
+		
+		if ($oemail !=''){
+			$this->mailmodel->sendMail($oemail,$subject,$message_content);
+		}
+
+		if ($ophone !=''){
+			$this->smsmodel->sendSMS($ophone,$message_content);
+		}
+		
+		$check_notifi_status = "SELECT * FROM customer_details WHERE customer_id = '$cust_session_id' AND notification_status = 'Y'";
 		$res=$this->db->query($check_notifi_status);
 		if($res->num_rows()>0){
 			$check_gcm = "SELECT * FROM cus_notification_master WHERE cus_id = '$cust_session_id'";
@@ -1272,9 +1278,7 @@ Class Homemodel extends CI_Model
 					$mob_key = $rows->mob_key;
 					$mobile_type = $rows->mobile_type;
 				}
-			}else {
-					$mob_key = "";
-					$mobile_type = "";
+				$this->notificationmodel->sendNotification($subject,$message_content,$mob_key,$mobile_type);
 			}
 		}
 		
@@ -1296,19 +1300,12 @@ Class Homemodel extends CI_Model
 		  }
 		} 
 */	
-		$subject='OSASPP - Order Confirmation';
-		$message_content = "Order Confirmation - Your Order with OSASPP [".$order_id."] has been successfully placed!";
 		
-		if ($oemail !=''){
-			$this->mailmodel->sendMail($oemail,$subject,$message_content);
-		}
+		
 
-		if ($ophone !=''){
-			$this->smsmodel->sendSMS($ophone,$message_content);
-		}
 		
 		if ($mob_key !=''){
-			$this->notificationmodel->sendNotification($subject,$message_content,$mob_key,$mobile_type);
+			
 		}
 		
 		$res=array('order_id'=>$order_id,'address'=>$address);
