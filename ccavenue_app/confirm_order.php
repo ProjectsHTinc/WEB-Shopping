@@ -89,6 +89,10 @@
     	{
 			$update_order = "UPDATE purchase_order SET status = 'Success',payment_status = 'CCAvenue' WHERE order_id = '" .$orderid. "'";
 			mysqli_query($link, $update_order);
+			
+			$update_cart = "UPDATE product_cart SET status = 'Success' WHERE order_id = '$order_id'";
+			mysqli_query($link, $update_cart);
+			
 			$response["status"] = "Success";
     	}else{
 			$response["status"] = $order_status;

@@ -106,7 +106,7 @@ for($i = 0; $i < $dataSize; $i++)
 	}
 	else if($order_status==="Failure")
 	{
-		echo "<br>Thank you for shopping with us.However,the transaction has been declined.";
+		echo "<br>Thank you for shopping with us. However,the transaction has been declined.";
 	}
 	else
 	{

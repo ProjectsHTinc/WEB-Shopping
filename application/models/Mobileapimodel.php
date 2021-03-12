@@ -1502,7 +1502,7 @@ class Mobileapimodel extends CI_Model {
         $total=$total_amount->total_amount;
 
         $tot_quantity=$total_amount->total_quantity;
-        $insert="INSERT INTO purchase_order (order_id,cus_id,purchase_date,cus_address_id,total_amount,paid_amount,status,cus_notes,created_at,created_by) VALUES('$order_id','$user_id',NOW(),'$address_id','$total','$total','Success','$cus_notes',NOW(),'$user_id')";
+        $insert="INSERT INTO purchase_order (order_id,cus_id,purchase_date,cus_address_id,total_amount,paid_amount,status,payment_status,cus_notes,created_at,created_by) VALUES('$order_id','$user_id',NOW(),'$address_id','$total','$total','Pending','Pending','$cus_notes',NOW(),'$user_id')";
         $res=$this->db->query($insert);
 		//$insert_order_id = $this->db->insert_id();
 
@@ -1993,9 +1993,6 @@ class Mobileapimodel extends CI_Model {
 
           return $data;
       } 
-
-
-
 
 	  
 //################ Use CCAvenue ########################//
