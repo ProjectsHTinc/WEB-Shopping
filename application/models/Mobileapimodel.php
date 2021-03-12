@@ -1863,7 +1863,7 @@ class Mobileapimodel extends CI_Model {
 
       function use_wallet($user_id,$purchase_order_id){
 		  
-		$check_wallet = "SELECT * FROM customer_wallet WHERE id = '$user_id'";
+		$check_wallet = "SELECT * FROM customer_wallet WHERE customer_id = '$user_id'";
         $res = $this->db->query($check_wallet);
 
         if($res->num_rows()>0){

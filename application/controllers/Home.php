@@ -81,6 +81,7 @@ class Home extends CI_Controller {
 		$datas['count_cart_session'] = $this->homemodel->cart_list();
 		$datas['count_wishlist'] = $this->homemodel->list_wishlist();
 		$datas['tag_result'] = $this->homemodel->list_tags();
+		$datas['home_offers'] = $this->homemodel->homeoffer();
 		$this->load->view('front_header',$datas);
 		$this->load->view('register');
 		$this->load->view('front_footer',$datas);
@@ -101,6 +102,7 @@ class Home extends CI_Controller {
 		$datas['count_cart_session'] = $this->homemodel->cart_list();
 		$datas['count_wishlist'] = $this->homemodel->list_wishlist();
 		$datas['tag_result'] = $this->homemodel->list_tags();
+		$datas['home_offers'] = $this->homemodel->homeoffer();
 		$this->load->view('front_header',$datas);
 		$this->load->view('login');
 		$this->load->view('front_footer',$datas);
@@ -161,6 +163,7 @@ class Home extends CI_Controller {
 		$datas['count_cart_session'] = $this->homemodel->cart_list();
 		$datas['count_wishlist'] = $this->homemodel->list_wishlist();
 		$datas['tag_result'] = $this->homemodel->list_tags();
+		$datas['home_offers'] = $this->homemodel->homeoffer();
 		$this->load->view('front_header',$datas);
 		$this->load->view('forgot-password');
 		$this->load->view('front_footer',$datas);
@@ -178,6 +181,7 @@ class Home extends CI_Controller {
 		$datas['count_cart_session'] = $this->homemodel->cart_list();
 		$datas['count_wishlist'] = $this->homemodel->list_wishlist();
 		$datas['tag_result'] = $this->homemodel->list_tags();
+		$datas['home_offers'] = $this->homemodel->homeoffer();
 		$cust_session_id = $this->session->userdata('cust_session_id');
 		
 		if ($cust_session_id !='') {
@@ -196,6 +200,7 @@ class Home extends CI_Controller {
 		$datas['count_cart_session'] = $this->homemodel->cart_list();
 		$datas['count_wishlist'] = $this->homemodel->list_wishlist();
 		$datas['tag_result'] = $this->homemodel->list_tags();
+		$datas['home_offers'] = $this->homemodel->homeoffer();
 		$datas['orders'] = $this->homemodel->cust_orders($cust_session_id);
 		//print_r($datas['orders']);
 		if ($cust_session_id !='') {
@@ -215,6 +220,7 @@ class Home extends CI_Controller {
 		$datas['count_cart_session'] = $this->homemodel->cart_list();
 		$datas['count_wishlist'] = $this->homemodel->list_wishlist();
 		$datas['tag_result'] = $this->homemodel->list_tags();
+		$datas['home_offers'] = $this->homemodel->homeoffer();
 		$datas['address_details'] = $this->homemodel->cust_order_address($order_id);
 		$datas['order_details'] = $this->homemodel->cust_order_details($order_id);
 		if ($cust_session_id !='') {
@@ -234,6 +240,7 @@ class Home extends CI_Controller {
 		$datas['count_cart_session'] = $this->homemodel->cart_list();
 		$datas['count_wishlist'] = $this->homemodel->list_wishlist();
 		$datas['tag_result'] = $this->homemodel->list_tags();
+		$datas['home_offers'] = $this->homemodel->homeoffer();
 		$datas['address_details'] = $this->homemodel->cust_order_address($order_id);
 		$datas['retun_questions'] = $this->homemodel->retun_questions();
 		if ($cust_session_id !='') {
@@ -262,6 +269,7 @@ class Home extends CI_Controller {
 		$datas['count_cart_session'] = $this->homemodel->cart_list();
 		$datas['count_wishlist'] = $this->homemodel->list_wishlist();
 		$datas['tag_result'] = $this->homemodel->list_tags();
+		$datas['home_offers'] = $this->homemodel->homeoffer();
 		$datas['wallet'] = $this->homemodel->cust_wallet($cust_session_id);
 		$datas['wallet_history'] = $this->homemodel->cust_wallet_history($cust_session_id);
 		//print_r($datas['wallet']);
@@ -282,6 +290,7 @@ class Home extends CI_Controller {
 		$datas['count_cart_session'] = $this->homemodel->cart_list();
 		$datas['count_wishlist'] = $this->homemodel->list_wishlist();
 		$datas['tag_result'] = $this->homemodel->list_tags();
+		$datas['home_offers'] = $this->homemodel->homeoffer();
 		//print_r($datas['wallet']);
 		//exit;
 		if ($cust_session_id !='') {
@@ -300,6 +309,7 @@ class Home extends CI_Controller {
 		$datas['count_cart_session'] = $this->homemodel->cart_list();
 		$datas['count_wishlist'] = $this->homemodel->list_wishlist();
 		$datas['tag_result'] = $this->homemodel->list_tags();
+		$datas['home_offers'] = $this->homemodel->homeoffer();
 		$datas['wallet_amount'] = $this->input->post('wallet_amount');
 		$today = date("Ymd");
         $rand = strtoupper(substr(uniqid(sha1(time())),0,4));
@@ -322,6 +332,7 @@ class Home extends CI_Controller {
 		$datas['count_cart_session'] = $this->homemodel->cart_list();
 		$datas['count_wishlist'] = $this->homemodel->list_wishlist();
 		$datas['tag_result'] = $this->homemodel->list_tags();
+		$datas['home_offers'] = $this->homemodel->homeoffer();
 		$datas['countrylist'] = $this->homemodel->countrylist();
 		$datas['cust_details'] = $this->homemodel->customer_details($cust_session_id);
 		$datas['cust_address'] = $this->homemodel->get_cust_address($cust_session_id);
@@ -389,6 +400,7 @@ class Home extends CI_Controller {
 		$datas['count_cart_session'] = $this->homemodel->cart_list();
 		$datas['count_wishlist'] = $this->homemodel->list_wishlist();
 		$datas['tag_result'] = $this->homemodel->list_tags();
+		$datas['home_offers'] = $this->homemodel->homeoffer();
 		$cust_session_id = $this->session->userdata('cust_session_id');
 		
 		if ($cust_session_id !='') {
@@ -408,6 +420,7 @@ class Home extends CI_Controller {
 		$datas['count_cart_session'] = $this->homemodel->cart_list();
 		$datas['count_wishlist'] = $this->homemodel->list_wishlist();
 		$datas['tag_result'] = $this->homemodel->list_tags();
+		$datas['home_offers'] = $this->homemodel->homeoffer();
 		$cust_session_id = $this->session->userdata('cust_session_id');
 		
 		if ($cust_session_id !='') {
@@ -440,10 +453,12 @@ class Home extends CI_Controller {
 		$datas['count_cart_session'] = $this->homemodel->cart_list();
 		$datas['count_wishlist'] = $this->homemodel->list_wishlist();
 		$datas['tag_result'] = $this->homemodel->list_tags();
+		$datas['home_offers'] = $this->homemodel->homeoffer();
 		$datas['maincat_count'] = $this->homemodel->get_maincat_count();
 		$datas['category_details'] = $this->homemodel->get_categorydetails($cat_id);
 		$datas['cat_products'] = $this->homemodel->get_cat_products($cat_id);
-		//print_r($datas);
+		//print_r($datas['home_banner']);
+
 		$this->load->view('front_header',$datas);
 		$this->load->view('categories',$datas);
 		$this->load->view('front_footer',$datas);
@@ -461,6 +476,7 @@ class Home extends CI_Controller {
 		$datas['count_cart_session'] = $this->homemodel->cart_list();
 		$datas['count_wishlist'] = $this->homemodel->list_wishlist();
 		$datas['tag_result'] = $this->homemodel->list_tags();
+		$datas['home_offers'] = $this->homemodel->homeoffer();
 		$datas['search_result'] = $this->homemodel->search_result($search_tags);
 		
 		$this->load->view('front_header',$datas);
@@ -475,6 +491,7 @@ class Home extends CI_Controller {
 		$datas['count_cart_session'] = $this->homemodel->cart_list();
 		$datas['count_wishlist'] = $this->homemodel->list_wishlist();
 		$datas['tag_result'] = $this->homemodel->list_tags();
+		$datas['home_offers'] = $this->homemodel->homeoffer();
 		$datas['maincat_count'] = $this->homemodel->get_maincat_count();
 		$datas['offer_products'] = $this->homemodel->get_offer_products();
 		//print_r($datas);
@@ -489,6 +506,7 @@ class Home extends CI_Controller {
 		$datas['count_cart_session'] = $this->homemodel->cart_list();
 		$datas['count_wishlist'] = $this->homemodel->list_wishlist();
 		$datas['tag_result'] = $this->homemodel->list_tags();
+		$datas['home_offers'] = $this->homemodel->homeoffer();
 		$datas['maincat_count'] = $this->homemodel->get_maincat_count();
 		$datas['category_details'] = $this->homemodel->get_categorydetails($cat_id);
 		$datas['cat_products'] = $this->homemodel->get_subcat_products($cat_id);
@@ -504,6 +522,7 @@ class Home extends CI_Controller {
 		$datas['count_cart_session'] = $this->homemodel->cart_list();
 		$datas['count_wishlist'] = $this->homemodel->list_wishlist();
 		$datas['tag_result'] = $this->homemodel->list_tags();
+		$datas['home_offers'] = $this->homemodel->homeoffer();
 		$datas['check_review'] = $this->homemodel->check_review($prod_id);
 		$datas['review_details'] = $this->homemodel->get_reviewdetails($prod_id);
 		$datas['product_details'] = $this->homemodel->get_productdetails($prod_id);
@@ -570,6 +589,7 @@ class Home extends CI_Controller {
 		$datas['count_cart_session'] = $this->homemodel->cart_list();
 		$datas['count_wishlist'] = $this->homemodel->list_wishlist();
 		$datas['tag_result'] = $this->homemodel->list_tags();
+		$datas['home_offers'] = $this->homemodel->homeoffer();
 
 		$this->load->view('front_header',$datas);
 		$this->load->view('cart',$datas);
@@ -617,6 +637,7 @@ class Home extends CI_Controller {
 		$datas['count_cart_session'] = $this->homemodel->cart_list();
 		$datas['count_wishlist'] = $this->homemodel->list_wishlist();
 		$datas['tag_result'] = $this->homemodel->list_tags();
+		$datas['home_offers'] = $this->homemodel->homeoffer();
 		$datas['cart_list'] = $this->homemodel->cart_list();
 		$datas['countrylist'] = $this->homemodel->countrylist();
 		$datas['default_address'] = $this->homemodel->get_cust_address_default($cust_session_id);
@@ -636,6 +657,7 @@ class Home extends CI_Controller {
 		$datas['cart_list'] = $this->homemodel->cart_list();
 		$datas['count_wishlist'] = $this->homemodel->list_wishlist();
 		$datas['tag_result'] = $this->homemodel->list_tags();
+		$datas['home_offers'] = $this->homemodel->homeoffer();
 		//$datas['cart_process'] = $this->homemodel->cart_process();
 		$datas['count_cart_session'] = $this->homemodel->cart_list();
 		$cust_session_id = $this->session->userdata('cust_session_id');
@@ -705,7 +727,7 @@ class Home extends CI_Controller {
 		$datas['cart_list'] = $this->homemodel->cart_list();
 		$datas['count_wishlist'] = $this->homemodel->list_wishlist();
 		$datas['tag_result'] = $this->homemodel->list_tags();
-		
+		$datas['home_offers'] = $this->homemodel->homeoffer();
 		$order_session_id = $this->session->userdata('order_id');
 		$cust_session_id = $this->session->userdata('cust_session_id');
 		
@@ -755,6 +777,7 @@ class Home extends CI_Controller {
 		$datas['count_cart_session'] = $this->homemodel->cart_list();
 		$datas['count_wishlist'] = $this->homemodel->list_wishlist();
 		$datas['tag_result'] = $this->homemodel->list_tags();
+		$datas['home_offers'] = $this->homemodel->homeoffer();
 		$this->load->view('front_header',$datas);
 		$this->load->view('wish-list');
 		$this->load->view('front_footer',$datas);
@@ -789,6 +812,7 @@ class Home extends CI_Controller {
 		$datas['count_cart_session'] = $this->homemodel->cart_list();
 		$datas['count_wishlist'] = $this->homemodel->list_wishlist();
 		$datas['tag_result'] = $this->homemodel->list_tags();
+		$datas['home_offers'] = $this->homemodel->homeoffer();
 		$this->load->view('front_header',$datas);
 		$this->load->view('about-us');
 		$this->load->view('front_footer',$datas);
@@ -801,6 +825,7 @@ class Home extends CI_Controller {
 		$datas['count_cart_session'] = $this->homemodel->cart_list();
 		$datas['count_wishlist'] = $this->homemodel->list_wishlist();
 		$datas['tag_result'] = $this->homemodel->list_tags();
+		$datas['home_offers'] = $this->homemodel->homeoffer();
 		$this->load->view('front_header',$datas);
 		$this->load->view('contact-us');
 		$this->load->view('front_footer',$datas);
@@ -861,7 +886,7 @@ class Home extends CI_Controller {
 		$datas['cart_list'] = $this->homemodel->cart_list();
 		$datas['count_wishlist'] = $this->homemodel->list_wishlist();
 		$datas['tag_result'] = $this->homemodel->list_tags();
-		
+		$datas['home_offers'] = $this->homemodel->homeoffer();
 		$order_session_id = $this->session->userdata('order_id');
 		$cust_session_id = $this->session->userdata('cust_session_id');
 		

@@ -8,6 +8,17 @@
 	//echo get_cookie('search_values');
 	
 	$privacy_url = base_url()."privacy/";
+	
+	
+ if (count($home_offers)>0){ 
+	foreach($home_offers as $homoffer){ 
+		$offer_name = $homoffer->offer_name;
+		$product_name = $homoffer->product_name;
+	}
+ }else {
+	 $offer_name = "";
+	 $product_name  = "";
+ }
 ?>
 <!doctype html>
 <html class="no-js" lang="en-US">
@@ -77,7 +88,7 @@
             </div>
         </div>
         <!-- Preloader End -->
-	<div class="header-row"><marquee >Muslin Towel (Pack Of 2) Summer Discount Offer 25%</marquee></div>
+	<div class="header-row"><marquee ><?php echo $product_name." - ".$offer_name ?></marquee></div>
 	<!-- Wrapper Start -->
     <div class="wrapper home-2">   
         <!-- Header Area Start -->
