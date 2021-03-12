@@ -1383,6 +1383,39 @@ class Mobileapi extends CI_Controller {
 
 //-----------------------------------------------//
 
+		public function payby_cod()
+		{
+			$_POST = json_decode(file_get_contents("php://input"), TRUE);
+
+			if(!$this->checkMethod())
+			{
+				return FALSE;
+			}
+
+			if($_POST == FALSE)
+			{
+				$res = array();
+				$res["opn"] = "Cash on Delivery";
+				$res["scode"] = 204;
+				$res["message"] = "Input error";
+
+				echo json_encode($res);
+				return;
+			}
+
+			$user_id=$this->input->post("user_id");
+			$order_id=$this->input->post("order_id");
+			$data['result']=$this->mobileapimodel->payby_cod($user_id,$order_id);
+			$response = $data['result'];
+			//print_r($response);
+			echo json_encode($response);
+		}
+//-----------------------------------------------//
+
+
+
+//-----------------------------------------------//
+
 		public function view_orders()
 		{
 			$_POST = json_decode(file_get_contents("php://input"), TRUE);

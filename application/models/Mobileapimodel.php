@@ -1900,7 +1900,7 @@ class Mobileapimodel extends CI_Model {
 			$update_order ="UPDATE purchase_order SET wallet_amount='$amt_in_wallet',paid_amount='$spaid_amount',updated_at=NOW(),updated_by='$user_id' WHERE id='$purchase_order_id'";
 				$res=$this->db->query($update_order);
 
-			$insert_wallet="INSERT INTO customer_wallet_history (customer_id,order_id,transaction_amt,notes,status,created_at,created_by) VALUES('$user_id','$purchase_order_id','$amt_in_wallet','Debited from wallet','Debited',NOW(),'$user_id')";
+			$insert_wallet="INSERT INTO customer_wallet_history (customer_id,order_id,transaction_amt,notes,status,created_at,created_by) VALUES('$user_id','$order_id','$amt_in_wallet','Debited from wallet','Debited',NOW(),'$user_id')";
 				$res=$this->db->query($insert_wallet);
 
 			$update_wallet ="UPDATE customer_wallet SET total_amt_used = total_amt_used + $amt_in_wallet,amt_in_wallet = amt_in_wallet- $amt_in_wallet WHERE customer_id ='$user_id'";
@@ -1978,6 +1978,25 @@ class Mobileapimodel extends CI_Model {
           return $data;
       }
 
+
+//################ Use Cash On Delivey ########################//
+
+       function payby_cod($user_id,$order_id){
+
+			$update_order = "UPDATE purchase_order SET status = 'Success',payment_status = 'COD' WHERE order_id = '$order_id'";
+			$res=$this->db->query($update_order);
+			
+			$update_cart = "UPDATE product_cart SET status = 'Success' WHERE order_id = '$order_id'";
+			$res=$this->db->query($update_cart);
+			
+			$data = array("status" => "success","msg"=>"Order Details","order_details"=>$result);
+
+          return $data;
+      } 
+
+
+
+
 	  
 //################ Use CCAvenue ########################//
 
@@ -2009,6 +2028,7 @@ class Mobileapimodel extends CI_Model {
 
 
 //################# View customer orders #######################//
+
       function view_orders($user_id,$status){
 		
 		if ($status == 'Delivered'){
