@@ -1877,6 +1877,7 @@ class Mobileapimodel extends CI_Model {
         if($res->num_rows()>0){
             foreach($res->result() as $rows) {
                 $paid_amount = $rows->paid_amount;
+				$order_id = $rows->order_id;
             }
 		}
 		
@@ -1887,7 +1888,7 @@ class Mobileapimodel extends CI_Model {
 			$update_order ="UPDATE purchase_order SET wallet_amount='$paid_amount',paid_amount='$spaid_amount',payment_status='Wallet', updated_at=NOW(),updated_by='$user_id' WHERE id='$purchase_order_id'";
 				$res=$this->db->query($update_order);
 
-			$insert_wallet="INSERT INTO customer_wallet_history (customer_id,order_id,transaction_amt,notes,status,created_at,created_by) VALUES('$user_id','$purchase_order_id','$paid_amount','Debited from wallet','Debited',NOW(),'$user_id')";
+			$insert_wallet="INSERT INTO customer_wallet_history (customer_id,order_id,transaction_amt,notes,status,created_at,created_by) VALUES('$user_id','$order_id','$paid_amount','Debited from wallet','Debited',NOW(),'$user_id')";
 				$res=$this->db->query($insert_wallet);
 			
 			$update_wallet ="UPDATE customer_wallet SET total_amt_used = total_amt_used + $paid_amount,amt_in_wallet = amt_in_wallet- $paid_amount WHERE customer_id ='$user_id'";
