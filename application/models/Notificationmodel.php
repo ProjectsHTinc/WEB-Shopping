@@ -106,7 +106,7 @@ function sendNotification($title,$subject,$mob_key,$mobile_type)
 			 
 			 $body['aps'] = array(
 				'alert' => array(
-					'body' => $message,
+					'body' => $subject,
 					'action-loc-key' => $title
 					)
 				);
