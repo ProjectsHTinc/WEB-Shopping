@@ -20,8 +20,7 @@ Class Notificationmodel extends CI_Model
 					'notification' => array (
 						"body" => $offer_name,
 						"title" => $title,
-						"icon" => $offer_picture,
-						"product_id" => $product_id
+						"icon" => $offer_picture
 						)
 					);
 			$fields = json_encode ( $fields );

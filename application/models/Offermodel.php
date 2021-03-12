@@ -34,10 +34,11 @@ Class Offermodel extends CI_Model
 		if($res->num_rows()>0){
 				foreach ($res->result() as $rows)
 				{
-					$product_id = $rows->id;
-					$offer_image = $rows->offer_image;
-					$offer_name = $rows->offer_name;
-					$offer_picture = base_url().'assets/offers/'.$offer_image;
+					echo $product_id = $rows->id;
+					echo $offer_image = $rows->offer_image;
+					echo $offer_name = $rows->offer_name;
+					echo $offer_picture = base_url().'assets/offers/'.$offer_image;
+					echo "<br><br>";
 				}
 		}
 		
@@ -51,6 +52,7 @@ Class Offermodel extends CI_Model
 					echo $first_name = $rows->first_name;
 					echo $gcm_key = $rows->mob_key;
 					echo $mobile_type = $rows->mobile_type;
+					echo "<br><br>";
 				    $this->notificationmodel->sendOfferNotification($offer_name,$gcm_key,$mobile_type,$product_id,$offer_picture);
 				}
 			}
