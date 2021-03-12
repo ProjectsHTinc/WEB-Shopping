@@ -29,7 +29,7 @@ Class Offermodel extends CI_Model
        $res=$this->db->query($insert_query);
        $insert_id = $this->db->insert_id();
 
-	    $select="SELECT * FROM product_offer WHERE product_id='$prod_id'";
+	    $select="SELECT * FROM product_offer WHERE id='$insert_id'";
 		$res=$this->db->query($select);
 		if($res->num_rows()>0){
 				foreach ($res->result() as $rows)
@@ -37,7 +37,7 @@ Class Offermodel extends CI_Model
 					 $product_id = $rows->id;
 					 $offer_image = $rows->offer_image;
 					 $offer_name = $rows->offer_name;
-					 echo $offer_picture = base_url().'assets/offers/'.$offer_image;
+					 $offer_picture = base_url().'assets/offers/'.$offer_image;
 				}
 		}
 		
@@ -56,11 +56,9 @@ Class Offermodel extends CI_Model
 			}
 		}
 		
-		$insert_query_history="INSERT INTO product_offer_history (product_id,offer_prod_id,offer_name,offer_price,prod_actual_price,offer_percentage,status,created_at,created_by) VALUES('$prod_id','$insert_id','$offer_name','$offer_price','$prod_actucal_price','$offer_percentage','$offer_status',NOW(),'$user_id')";
+		$insert_query_history="INSERT INTO product_offer_history (product_id,offer_prod_id,offer_name,offer_price,prod_actual_price,offer_percentage,status, created_at,created_by) VALUES('$prod_id','$insert_id','$offer_name','$offer_price','$prod_actucal_price','$offer_percentage','$offer_status',NOW(),'$user_id')";
        $res=$this->db->query($insert_query_history);
 	   
-	   
-
        if($res){
                 $data = array("status" => "success");
                 return $data;
