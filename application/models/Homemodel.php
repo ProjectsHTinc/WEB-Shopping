@@ -1198,20 +1198,24 @@ Class Homemodel extends CI_Model
 			} 
 			*/
 			
-			$subject = "Order Confirmation - Your Order with OSASPP [".$order_id."] has been successfully placed!";
-			$htmlContent = "Hi ".$nname.", Order successfully placed.<br><br>Your order will be delivered with in One Week.<br>We are pleased to confirm your order no ".$order_id.".<br><br>Thank you for shopping with OSASPP!";
-			$this->mailmodel->sendMail($nemail,$subject,$htmlContent);
+			$subject='OSASPP - Order Confirmation';
+			$message_content = "Order Confirmation - Your Order with OSASPP [".$order_id."] has been successfully placed!";
 			
-			$mobile_message = "Order Confirmation - Your Order with OSASPP [".$order_id."] has been successfully placed!";
-			$this->smsmodel->sendSMS($nphone,$mobile_message);
+			if ($nemail !=''){
+				$this->mailmodel->sendMail($nemail,$subject,$message_content);
+			}
+
+			if ($nphone !=''){
+				$this->smsmodel->sendSMS($nphone,$message_content);
+			}
 			
-			$title='OSASPP';
-			$this->notificationmodel->sendNotification($title,$subject,$mob_key,$mobile_type);
+			if ($mob_key !=''){
+				$this->notificationmodel->sendNotification($subject,$message_content,$mob_key,$mobile_type);
+			}
 			
 			$res=array('order_id'=>$order_id,'address'=>$address);
 			return $res;
    }
-
 
 
 	function checkout_addressid($cust_session_id,$ocountry_id,$oname,$oaddress1,$oaddress2,$otown,$ostate,$ozip,$oemail,$ophone,$ophone1,$olandmark,$scheckout_mess,$address_id,$total_amt){
@@ -1286,17 +1290,21 @@ Class Homemodel extends CI_Model
 		  }
 		} 
 */	
-			
-		$subject = "Order Confirmation - Your Order with OSASPP [".$order_id."] has been successfully placed!";
-		$htmlContent = "Hi ".$oname.", Order successfully placed.<br><br>Your order will be delivered with in One Week.<br>We are pleased to confirm your order no ".$order_id.".<br><br>Thank you for shopping with OSASPP!";
-		$this->mailmodel->sendMail($oemail,$subject,$htmlContent);
-
-		$mobile_message = "Order Confirmation - Your Order with OSASPP [".$order_id."] has been successfully placed!";
-		$this->smsmodel->sendSMS($ophone,$mobile_message);
+		$subject='OSASPP - Order Confirmation';
+		$message_content = "Order Confirmation - Your Order with OSASPP [".$order_id."] has been successfully placed!";
 		
-		$title='OSASPP';
-		$this->notificationmodel->sendNotification($title,$subject,$mob_key,$mobile_type);
+		if ($oemail !=''){
+			$this->mailmodel->sendMail($oemail,$subject,$message_content);
+		}
 
+		if ($ophone !=''){
+			$this->smsmodel->sendSMS($ophone,$message_content);
+		}
+		
+		if ($mob_key !=''){
+			$this->notificationmodel->sendNotification($subject,$message_content,$mob_key,$mobile_type);
+		}
+		
 		$res=array('order_id'=>$order_id,'address'=>$address);
 		
 		return $res;
