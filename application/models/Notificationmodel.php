@@ -43,7 +43,7 @@ Class Notificationmodel extends CI_Model
 			 
 			 $body['aps'] = array(
 				'alert' => array(
-					'body' => $message,
+					'body' => $offer_name,
 					'action-loc-key' => $title
 					)
 				);
@@ -63,9 +63,9 @@ Class Notificationmodel extends CI_Model
 			$result = fwrite($fp, $msg, strlen($msg));
 			
 			if (!$result){
-				//echo 'Message not delivered' . PHP_EOL;
+				echo 'Message not delivered' . PHP_EOL;
 			}else{
-				//echo 'Message successfully delivered' . PHP_EOL;  
+				echo 'Message successfully delivered' . PHP_EOL;  
 			}
 			fclose($fp);
       }
