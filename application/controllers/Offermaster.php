@@ -58,7 +58,10 @@ class Offermaster extends CI_Controller {
 						move_uploaded_file($_FILES['ad_img']['tmp_name'], $trade_file);
 					}
 				$data=$this->offermodel->create_offer($prod_id,$offer_name,$offer_percentage,$prod_actucal_price,$offer_price,$ad_img,$offer_status,$notiication_status,$user_id);
-	exit;
+
+
+
+exit;
 				if($data['status']=="success"){
 						$this->session->set_flashdata('msg', 'Offer Created Successfully');
 						redirect('admin/offers#view');
