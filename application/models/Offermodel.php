@@ -29,7 +29,7 @@ Class Offermodel extends CI_Model
        $res=$this->db->query($insert_query);
        $insert_id = $this->db->insert_id();
 
-	    echo $select="SELECT * FROM product_offer WHERE product_id='$insert_id'";
+	     $select="SELECT * FROM product_offer WHERE product_id='$insert_id'";
 		$res=$this->db->query($select);
 		if($res->num_rows()>0){
 				foreach ($res->result() as $rows)
@@ -42,7 +42,7 @@ Class Offermodel extends CI_Model
 		}
 		
 		if ($notiication_status == 'Y'){
-			echo $select="SELECT A.cus_id, B.first_name, A.mob_key, A.mobile_type, B.notification_status FROM cus_notification_master A, customer_details B WHERE A.cus_id = B.customer_id AND B.notification_status ='Y'";
+			 $select="SELECT A.cus_id, B.first_name, A.mob_key, A.mobile_type, B.notification_status FROM cus_notification_master A, customer_details B WHERE A.cus_id = B.customer_id AND B.notification_status ='Y'";
 			$res=$this->db->query($select);
 			if($res->num_rows()>0){
 				foreach ($res->result() as $rows)
