@@ -1300,14 +1300,7 @@ Class Homemodel extends CI_Model
 		  }
 		} 
 */	
-		
-		
-
-		
-		if ($mob_key !=''){
-			
-		}
-		
+	
 		$res=array('order_id'=>$order_id,'address'=>$address);
 		
 		return $res;
