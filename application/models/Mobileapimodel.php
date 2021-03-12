@@ -31,7 +31,7 @@ class Mobileapimodel extends CI_Model {
 			$insert_user = $this->db->query($sQuery);
 			$user_id = $this->db->insert_id();
 			
-			$sQuery = "INSERT INTO customer_details (customer_id,first_name,newsletter_status,created_at) VALUES ('".$user_id. "','New Member','1',now())";
+			$sQuery = "INSERT INTO customer_details (customer_id,first_name,newsletter_status,notification_status,created_at) VALUES ('".$user_id. "','New Member','Y','Y',now())";
 			$insert_user = $this->db->query($sQuery);
 
 			$mobile_message = 'Dear user, Use the OTP '.$OTP.' to login.- Team OSPAPP';
@@ -339,7 +339,7 @@ class Mobileapimodel extends CI_Model {
 			$cus_result = $this->db->query($insert);
 			$insert_id = $this->db->insert_id();
        
-			$insert_details="INSERT INTO customer_details(customer_id,first_name,last_name,newsletter_status,created_at,created_by)VALUES('$insert_id','$first_name','$last_name','Y',NOW(),'$insert_id')";
+			$insert_details="INSERT INTO customer_details(customer_id,first_name,last_name,newsletter_status,notification_status,created_at,created_by)VALUES('$insert_id','$first_name','$last_name','Y','Y',NOW(),'$insert_id')";
 			$cus_result_details = $this->db->query($insert_details);
        
 			$add_sql = "SELECT * FROM cus_address WHERE cus_id = '$insert_id' AND address_mode = '1' AND status = 'Active'";
@@ -1643,8 +1643,8 @@ class Mobileapimodel extends CI_Model {
 				$select_order ="SELECT * FROM purchase_order WHERE id = '$purchase_order_id'";
 				$result=$this->db->query($select_order);
 				$res_cart=$result->result();
-				foreach($res_cart as $total_amount){
-					 $total=$total_amount->total_amount;
+				foreach($res_cart as $res_total_amount){
+					 $total=$res_total_amount->total_amount;
 					 $promo_value = ($total / 100) * $promo_percentage;
 					 $paid_amount = ($total - $promo_value);
 				}

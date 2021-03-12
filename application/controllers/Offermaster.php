@@ -40,7 +40,13 @@ class Offermaster extends CI_Controller {
 			$prod_actucal_price= $this->db->escape_str($this->input->post('prod_actucal_price'));
 			$offer_price= $this->db->escape_str($this->input->post('offer_price'));
 			$offer_status= $this->db->escape_str($this->input->post('offer_status'));
+			$notiication = $this->db->escape_str($this->input->post('notiication'));
 			
+			if ($notiication == ''){
+				$notiication_status = 'N';
+			}else {
+				$notiication_status = 'Y';
+			}
 			$ad_cover_img = $_FILES['ad_img']['name'];
 					if(empty($ad_cover_img)){
 						$ad_img='';
@@ -51,10 +57,8 @@ class Offermaster extends CI_Controller {
 						$trade_file = $uploaddir.$ad_img;
 						move_uploaded_file($_FILES['ad_img']['tmp_name'], $trade_file);
 					}
-				$data=$this->offermodel->create_offer($prod_id,$offer_name,$offer_percentage,$prod_actucal_price,$offer_price,$ad_img,$offer_status,$user_id);
-				
-				
-				
+				$data=$this->offermodel->create_offer($prod_id,$offer_name,$offer_percentage,$prod_actucal_price,$offer_price,$ad_img,$offer_status,$notiication_status,$user_id);
+	exit;
 				if($data['status']=="success"){
 						$this->session->set_flashdata('msg', 'Offer Created Successfully');
 						redirect('admin/offers#view');

@@ -10,7 +10,7 @@ Class Offermodel extends CI_Model
 
 
 
-   function create_offer($prod_id,$offer_name,$offer_percentage,$prod_actucal_price,$offer_price,$ad_img,$offer_status,$user_id){
+   function create_offer($prod_id,$offer_name,$offer_percentage,$prod_actucal_price,$offer_price,$ad_img,$offer_status,$notiication_status,$user_id){
     if(empty($prod_id)){
 
     }else{
@@ -29,11 +29,35 @@ Class Offermodel extends CI_Model
        $res=$this->db->query($insert_query);
        $insert_id = $this->db->insert_id();
 
-       $insert_query_history="INSERT INTO product_offer_history (product_id,offer_prod_id,offer_name,offer_price,offer_percentage,status,created_at,created_by) VALUES('$prod_id','$insert_id','$offer_name','$offer_price','$offer_percentage','$offer_status',NOW(),'$user_id')";
-       $res=$this->db->query($insert_query_history);
-	   
-	   //$this->notificationmodel->send_notification($message,$gcm_key,$mobile_type,$user_type);
+	    $select="SELECT * FROM product_offer WHERE product_id='$insert_id'";
+		$res=$this->db->query($select);
+		if($res->num_rows()>0){
+				foreach ($res->result() as $rows)
+				{
+					$product_id = $rows->id;
+					$offer_image = $rows->offer_image;
+					$offer_name = $rows->offer_name;
+					$offer_picture = base_url().'assets/offers/'.$offer_image;
+				}
+		}
 		
+		if ($notiication_status == 'Y'){
+			$select="SELECT A.cus_id, B.first_name, A.mob_key, A.mobile_type, B.notification_status FROM cus_notification_master A, customer_details B WHERE A.cus_id = B.customer_id AND B.notification_status ='Y'";
+			$res=$this->db->query($select);
+			if($res->num_rows()>0){
+				foreach ($res->result() as $rows)
+				{
+					$cus_id = $rows->cus_id;
+					$first_name = $rows->first_name;
+					$gcm_key = $rows->mob_key;
+					$mobile_type = $rows->mobile_type;
+				    $this->notificationmodel->sendOfferNotification($offer_name,$gcm_key,$mobile_type,$product_id,$offer_picture);
+				}
+			}
+		}
+		
+		$insert_query_history="INSERT INTO product_offer_history (product_id,offer_prod_id,offer_name,offer_price,prod_actual_price,offer_percentage,status,created_at,created_by) VALUES('$prod_id','$insert_id','$offer_name','$offer_price','$prod_actucal_price','$offer_percentage','$offer_status',NOW(),'$user_id')";
+       $res=$this->db->query($insert_query_history);
        if($res){
                 $data = array("status" => "success");
                 return $data;

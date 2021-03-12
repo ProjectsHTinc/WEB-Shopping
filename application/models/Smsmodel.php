@@ -1,16 +1,12 @@
 <?php
-
 Class Smsmodel extends CI_Model
 {
-
- public function __construct()
-  {
+	public function __construct()
+	{
       parent::__construct();
+	}
 
-  }
-
-
-   function send_sms($phone,$notes)
+	function send_sms($phone,$notes)
   	{
           //Your authentication key
           $authKey = "191431AStibz285a4f14b4";
@@ -66,9 +62,5 @@ Class Smsmodel extends CI_Model
 
           curl_close($ch);
   	}
-
-
-
-
 }
 ?>

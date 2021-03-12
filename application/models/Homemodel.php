@@ -4,8 +4,12 @@ Class Homemodel extends CI_Model
   public function __construct()
   {
       parent::__construct();
+	  $this->load->model('notificationmodel');
+	  $this->load->model('mailmodel');
+	  $this->load->model('smsmodel');
   }
-
+  
+/* 
 //#################### Email ####################//
 
 	public function sendMail($email,$subject,$email_message)
@@ -146,7 +150,7 @@ Class Homemodel extends CI_Model
 		}
 		fclose($fp);
 	  }
-}
+} */
 
 //#################### SMS End ####################//
 
@@ -314,18 +318,18 @@ Class Homemodel extends CI_Model
 			$res=$this->db->query($create);
 			$last_id=$this->db->insert_id();
 						
-			$user_details="INSERT INTO customer_details(customer_id,first_name,newsletter_status) VALUES('$last_id','$name','$newsletter')";
+			$user_details="INSERT INTO customer_details(customer_id,first_name,newsletter_status,notification_status) VALUES('$last_id','$name','$newsletter','Y')";
 			$result=$this->db->query($user_details);
 			
 			$update_sql = "UPDATE customers SET created_at =NOW(),created_by ='$last_id' WHERE id='$last_id'";
 			$update_result = $this->db->query($update_sql);
 			
-			$subject = "LittleAMore - Customer Registration";
-			$htmlContent = 'Dear '. $name . '<br><br>' .  'Username : '. $email .'<br>Password : '. $pwdconfirm .'<br><br><br>Regards<br>LittleAMore';
-			$this->sendMail($email,$subject,$htmlContent);
+			$subject = "OSASPP - Customer Registration";
+			$htmlContent = 'Dear '. $name . '<br><br>' .  'Username : '. $email .'<br>Password : '. $pwdconfirm .'<br><br><br>Regards<br>OSASPP';
+			$this->mailmodel->sendMail($email,$subject,$htmlContent);
 			
 			$mobile_message = "Username : ".$email.", Password : ".$pwdconfirm."";
-			$this->sendSMS($mobile,$mobile_message);
+			$this->smsmodel->sendSMS($mobile,$mobile_message);
 						
 			echo "register";
    }
@@ -525,13 +529,10 @@ Class Homemodel extends CI_Model
 			$password_sql = "UPDATE customers SET password = '$enc_password' WHERE email ='$email'";
 			$reset_pass = $this->db->query($password_sql);
 			
-			$subject = "LittleAMore - Reset Password";
-			$htmlContent = 'Dear '. $email . '<br><br>' .  'New Password : '. $random_password .'<br><br><br>Regards<br>LittleAMore';
-			$this->sendMail($email,$subject,$htmlContent);
-			
-			$mobile_message = "Username : ".$email.", Password : ".$random_password."";
-			$this->sendSMS($mobile,$mobile_message);
-			
+			$subject = "OSASPP - Reset Password";
+			$htmlContent = 'Dear '. $email . '<br><br>' .  'New Password : '. $random_password .'<br><br><br>Regards<br>OSASPP';
+			$this->mailmodel->sendMail($email,$subject,$htmlContent);
+		
 			echo "reset";
 		}else{
 			echo "error";
@@ -1195,18 +1196,17 @@ Class Homemodel extends CI_Model
 				$resu_stock=$this->db->query($update_stoc);
 			  }
 			} 
-			
+			*/
 			
 			$subject = "Order Confirmation - Your Order with LittleAmore [".$order_id."] has been successfully placed!";
-			$htmlContent = "Hi ".$nname.", Order successfully placed.<br><br>Your order will be delivered with in One Week.<br>We are pleased to confirm your order no ".$order_id.".<br><br>Thank you for shopping with LittleAMore!";
-			$this->sendMail($nemail,$subject,$htmlContent);
+			$htmlContent = "Hi ".$nname.", Order successfully placed.<br><br>Your order will be delivered with in One Week.<br>We are pleased to confirm your order no ".$order_id.".<br><br>Thank you for shopping with OSASPP!";
+			$this->mailmodel->sendMail($nemail,$subject,$htmlContent);
 			
 			$mobile_message = "Order Confirmation - Your Order with LittleAmore [".$order_id."] has been successfully placed!";
-			$this->sendSMS($nphone,$mobile_message);
+			$this->smsmodel->sendSMS($nphone,$mobile_message);
 			
-			$title='LittleAMore';
-			$this->sendNotification($title,$subject,$mob_key,$mobile_type);
-			*/
+			$title='OSASPP';
+			$this->notificationmodel->sendNotification($title,$subject,$mob_key,$mobile_type);
 			
 			$res=array('order_id'=>$order_id,'address'=>$address);
 			return $res;
@@ -1285,18 +1285,18 @@ Class Homemodel extends CI_Model
 			$resu_stock=$this->db->query($update_stoc);
 		  }
 		} 
-			
+*/	
 			
 		$subject = "Order Confirmation - Your Order with LittleAmore [".$order_id."] has been successfully placed!";
-		$htmlContent = "Hi ".$oname.", Order successfully placed.<br><br>Your order will be delivered with in One Week.<br>We are pleased to confirm your order no ".$order_id.".<br><br>Thank you for shopping with LittleAMore!";
-		$this->sendMail($oemail,$subject,$htmlContent);
-		
-		$title='LittleAMore';
-		$this->sendNotification($title,$subject,$mob_key,$mobile_type);
-		
+		$htmlContent = "Hi ".$oname.", Order successfully placed.<br><br>Your order will be delivered with in One Week.<br>We are pleased to confirm your order no ".$order_id.".<br><br>Thank you for shopping with OSASPP!";
+		$this->mailmodel->sendMail($oemail,$subject,$htmlContent);
+
 		$mobile_message = "Order Confirmation - Your Order with LittleAmore [".$order_id."] has been successfully placed!";
-		$this->sendSMS($ophone,$mobile_message);
-	*/
+		$this->smsmodel->sendSMS($ophone,$mobile_message);
+		
+		$title='OSASPP';
+		$this->notificationmodel->sendNotification($title,$subject,$mob_key,$mobile_type);
+
 		$res=array('order_id'=>$order_id,'address'=>$address);
 		
 		return $res;
