@@ -1592,7 +1592,7 @@ class Mobileapimodel extends CI_Model {
 	 }
 	 
         $check_order = "SELECT
-							po.id as purchse_order_id,
+							po.id as purchase_order_id,
 							po.*,
 							ca.*,
 							cm.country_name
@@ -1656,7 +1656,7 @@ class Mobileapimodel extends CI_Model {
 				$res_promo=$this->db->query($update_promo);
 				
 				 $check_order = "SELECT
-							po.id as purchse_order_id,
+							po.id as purchase_order_id,
 							po.*,
 							ca.*,
 							cm.country_name
@@ -1690,15 +1690,15 @@ class Mobileapimodel extends CI_Model {
 			$select_order ="SELECT * FROM purchase_order WHERE id = '$purchase_order_id'";
 			$result=$this->db->query($select_order);
 			$res_cart=$result->result();
-			foreach($res_cart as $total_amount){
-				 $total=$total_amount->total_amount;
+			foreach($res_cart as $res_total_amount){
+				 $total=$res_total_amount->total_amount;
 			}
 
 			$update_promo ="UPDATE purchase_order SET promo_amount='0.00',paid_amount='$total' WHERE id='$purchase_order_id'";
 			$res_promo=$this->db->query($update_promo);
 				
 			 $check_order = "SELECT
-						po.id as purchse_order_id,
+						po.id as purchase_order_id,
 						po.*,
 						ca.*,
 						cm.country_name
@@ -1734,9 +1734,9 @@ class Mobileapimodel extends CI_Model {
 		return $data;
 	}
 	
-      function order_address_update($user_id,$purchse_order_id,$address_id){
+      function order_address_update($user_id,$purchase_order_id,$address_id){
 			
-			$update_address = "UPDATE purchase_order SET cus_address_id='$address_id' WHERE id = '$purchse_order_id'";
+			$update_address = "UPDATE purchase_order SET cus_address_id='$address_id' WHERE id = '$purchase_order_id'";
 			$update_address = $this->db->query($update_address);
 
 			if($update_address){
@@ -1907,7 +1907,7 @@ class Mobileapimodel extends CI_Model {
 		}
 
 		$check_order = "SELECT
-					po.id as purchse_order_id,
+					po.id as purchase_order_id,
 					po.*,
 					ca.*,
 					cm.country_name
@@ -1957,7 +1957,7 @@ class Mobileapimodel extends CI_Model {
 		}
 
 		$check_order = "SELECT
-					po.id as purchse_order_id,
+					po.id as purchase_order_id,
 					po.*,
 					ca.*,
 					cm.country_name
@@ -1986,7 +1986,7 @@ class Mobileapimodel extends CI_Model {
 		$res=$this->db->query($update_order);
 
 		$check_order = "SELECT
-					po.id as purchse_order_id,
+					po.id as purchase_order_id,
 					po.*,
 					ca.*,
 					cm.country_name
