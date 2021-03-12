@@ -29,7 +29,7 @@ Class Offermodel extends CI_Model
        $res=$this->db->query($insert_query);
        $insert_id = $this->db->insert_id();
 
-	     $select="SELECT * FROM product_offer WHERE product_id='$insert_id'";
+	    echo $select="SELECT * FROM product_offer WHERE product_id='$insert_id'";
 		$res=$this->db->query($select);
 		if($res->num_rows()>0){
 				foreach ($res->result() as $rows)
@@ -59,6 +59,8 @@ Class Offermodel extends CI_Model
 		$insert_query_history="INSERT INTO product_offer_history (product_id,offer_prod_id,offer_name,offer_price,prod_actual_price,offer_percentage,status,created_at,created_by) VALUES('$prod_id','$insert_id','$offer_name','$offer_price','$prod_actucal_price','$offer_percentage','$offer_status',NOW(),'$user_id')";
        $res=$this->db->query($insert_query_history);
 	   
+	   
+	   exit;
        if($res){
                 $data = array("status" => "success");
                 return $data;
