@@ -1198,11 +1198,11 @@ Class Homemodel extends CI_Model
 			} 
 			*/
 			
-			$subject = "Order Confirmation - Your Order with LittleAmore [".$order_id."] has been successfully placed!";
+			$subject = "Order Confirmation - Your Order with OSASPP [".$order_id."] has been successfully placed!";
 			$htmlContent = "Hi ".$nname.", Order successfully placed.<br><br>Your order will be delivered with in One Week.<br>We are pleased to confirm your order no ".$order_id.".<br><br>Thank you for shopping with OSASPP!";
 			$this->mailmodel->sendMail($nemail,$subject,$htmlContent);
 			
-			$mobile_message = "Order Confirmation - Your Order with LittleAmore [".$order_id."] has been successfully placed!";
+			$mobile_message = "Order Confirmation - Your Order with OSASPP [".$order_id."] has been successfully placed!";
 			$this->smsmodel->sendSMS($nphone,$mobile_message);
 			
 			$title='OSASPP';
@@ -1287,11 +1287,11 @@ Class Homemodel extends CI_Model
 		} 
 */	
 			
-		$subject = "Order Confirmation - Your Order with LittleAmore [".$order_id."] has been successfully placed!";
+		$subject = "Order Confirmation - Your Order with OSASPP [".$order_id."] has been successfully placed!";
 		$htmlContent = "Hi ".$oname.", Order successfully placed.<br><br>Your order will be delivered with in One Week.<br>We are pleased to confirm your order no ".$order_id.".<br><br>Thank you for shopping with OSASPP!";
 		$this->mailmodel->sendMail($oemail,$subject,$htmlContent);
 
-		$mobile_message = "Order Confirmation - Your Order with LittleAmore [".$order_id."] has been successfully placed!";
+		$mobile_message = "Order Confirmation - Your Order with OSASPP [".$order_id."] has been successfully placed!";
 		$this->smsmodel->sendSMS($ophone,$mobile_message);
 		
 		$title='OSASPP';

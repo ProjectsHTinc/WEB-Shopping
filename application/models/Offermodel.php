@@ -51,7 +51,7 @@ Class Offermodel extends CI_Model
 					$first_name = $rows->first_name;
 					$gcm_key = $rows->mob_key;
 					$mobile_type = $rows->mobile_type;
-				    $this->notificationmodel->sendOfferNotification($offer_name,$gcm_key,$mobile_type,$product_id,$offer_picture);
+				   // $this->notificationmodel->sendOfferNotification($offer_name,$gcm_key,$mobile_type,$product_id,$offer_picture);
 				}
 			}
 		}
