@@ -14,8 +14,8 @@ Class Offermodel extends CI_Model
     if(empty($prod_id)){
 
     }else{
-      echo $select="SELECT * FROM product_offer WHERE product_id='$prod_id'";
-      $res=$this->db->query($select);
+       $select="SELECT * FROM product_offer WHERE product_id='$prod_id'";
+       $res=$this->db->query($select);
      if($res->num_rows()>0){
        $data = array("status" => "already");
        return $data;
@@ -29,7 +29,7 @@ Class Offermodel extends CI_Model
        $res=$this->db->query($insert_query);
        $insert_id = $this->db->insert_id();
 
-	    echo $select="SELECT * FROM product_offer WHERE product_id='$prod_id'";
+	    $select="SELECT * FROM product_offer WHERE product_id='$prod_id'";
 		$res=$this->db->query($select);
 		if($res->num_rows()>0){
 				foreach ($res->result() as $rows)
@@ -37,7 +37,7 @@ Class Offermodel extends CI_Model
 					 $product_id = $rows->id;
 					 $offer_image = $rows->offer_image;
 					 $offer_name = $rows->offer_name;
-					 $offer_picture = base_url().'assets/offers/'.$offer_image;
+					 echo $offer_picture = base_url().'assets/offers/'.$offer_image;
 				}
 		}
 		
@@ -51,7 +51,7 @@ Class Offermodel extends CI_Model
 					 $first_name = $rows->first_name;
 					 $gcm_key = $rows->mob_key;
 					 $mobile_type = $rows->mobile_type;
-				    $this->notificationmodel->sendOfferNotification($offer_name,$gcm_key,$mobile_type,$product_id,$offer_picture);
+				     $this->notificationmodel->sendOfferNotification($offer_name,$gcm_key,$mobile_type,$product_id,$offer_picture);
 				}
 			}
 		}
