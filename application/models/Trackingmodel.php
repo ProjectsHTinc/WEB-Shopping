@@ -6,6 +6,7 @@ Class Trackingmodel extends CI_Model
       parent::__construct();
       	$this->load->model('smsmodel');
         $this->load->model('mailmodel');
+		$this->load->model('notificationmodel');
   }
 
    function get_all_recent_orders(){
@@ -110,14 +111,42 @@ function get_success_orders_graph(){
      $select="SELECT ca.* FROM purchase_order AS po LEFT JOIN customers AS c ON po.cus_id=c.id LEFT JOIN cus_address AS ca ON ca.id=po.cus_address_id WHERE po.order_id='$order_id'";
      $res_select=$this->db->query($select);
      $result=$res_select->result();
-     foreach($result as $rows_val){}
-     $phone= $rows_val->mobile_number;
-     $email= $rows_val->email_address;
-     $textmessage=''.$msg_to_customer.' Track Your order '.$order_id.' ';
-     $notes =utf8_encode($textmessage);
-     $this->mailmodel->send_mail($email,$notes);
-     $this->smsmodel->send_sms($phone,$notes);
-     $insert="INSERT order_history (order_id,sent_msg,old_status,status,updated_at,updated_by) VALUES('$order_id','$msg_to_customer','$current_order_status','$order_status',NOW(),'$user_id')";
+     foreach($result as $rows_val){
+		 $phone= $rows_val->mobile_number;
+		 $email= $rows_val->email_address;
+		 $cus_id= $rows_val->cus_id;
+		 
+	 }
+
+	 $subject='OSASPP - Order Tracking';
+	 $order_message = ''.$msg_to_customer.' Track Your order '.$order_id.'';
+	 $track_message = utf8_encode($order_message);
+	 
+			
+	if ($email !=''){
+		$this->mailmodel->sendMail($email,$subject,$track_message);
+	}
+
+	if ($phone !=''){
+		$this->smsmodel->sendSMS($phone,$track_message);
+	}
+		
+	$check_notifi_status = "SELECT * FROM customer_details WHERE customer_id = '$cus_id' AND notification_status = 'Y'";
+	$res=$this->db->query($check_notifi_status);
+	if($res->num_rows()>0){
+		$check_gcm = "SELECT * FROM cus_notification_master WHERE cus_id = '$cus_id'";
+		$res_gcm=$this->db->query($check_gcm);
+
+		if($res_gcm->num_rows()>0){
+			foreach($res_gcm->result() as $rows) {
+				$mob_key = $rows->mob_key;
+				$mobile_type = $rows->mobile_type;
+			}
+			$this->notificationmodel->sendNotification($subject,$track_message,$mob_key,$mobile_type);
+		}
+	}
+	
+	$insert="INSERT order_history (order_id,sent_msg,old_status,status,updated_at,updated_by) VALUES('$order_id','$msg_to_customer','$current_order_status','$order_status',NOW(),'$user_id')";
      $res_ins=$this->db->query($insert);
      if($res_ins){
 		echo "success";

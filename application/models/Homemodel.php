@@ -176,7 +176,7 @@ Class Homemodel extends CI_Model
 		$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 		$unique_ref = substr( str_shuffle( $chars ), 0, 8 );
 		
-      	$unique_order_id = 'LAM-'.$unique_ref.'-'.$order_id;
+      	$unique_order_id = 'SHOP-'.$unique_ref.'-'.$order_id;
     	//echo 'Our unique reference number is: '.$unique_order_id;  
 		//exit;
 		return $unique_order_id;
@@ -1176,7 +1176,7 @@ Class Homemodel extends CI_Model
 				$this->smsmodel->sendSMS($nphone,$message_content);
 			}
 			
-			$check_notifi_status = "SELECT * FROM customer_details WHERE customer_id = '$cust_session_id' AND notification_status = '1'";
+			$check_notifi_status = "SELECT * FROM customer_details WHERE customer_id = '$cust_session_id' AND notification_status = 'Y'";
 			$res=$this->db->query($check_notifi_status);
 			if($res->num_rows()>0){
 				$check_gcm = "SELECT * FROM cus_notification_master WHERE cus_id = '$cust_session_id'";
