@@ -115,7 +115,6 @@ function get_success_orders_graph(){
 		 $phone= $rows_val->mobile_number;
 		 $email= $rows_val->email_address;
 		 $cus_id= $rows_val->cus_id;
-		 
 	 }
 
 	 $subject='OSASPP - Order Tracking';

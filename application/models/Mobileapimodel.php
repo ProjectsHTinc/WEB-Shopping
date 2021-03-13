@@ -7,6 +7,7 @@ class Mobileapimodel extends CI_Model {
         parent::__construct();
         $this->load->model('smsmodel');
         $this->load->model('mailmodel');
+		$this->load->model('notificationmodel');
     }
 
 //#################### Mobile Login ####################//
@@ -24,6 +25,7 @@ class Mobileapimodel extends CI_Model {
 
 			 $mobile_message = 'Dear user, Use the OTP '.$OTP.' to login.- Team OSPAPP';
 			 //$this->smsmodel->send_sms($mobile_number,$mobile_message);
+			 $this->smsmodel->sendSMS($mobile_number,$mobile_message);
 		
 		} else {
 
@@ -36,6 +38,7 @@ class Mobileapimodel extends CI_Model {
 
 			$mobile_message = 'Dear user, Use the OTP '.$OTP.' to login.- Team OSPAPP';
 			//$this->smsmodel->send_sms($mobile_number,$mobile_message);
+			 $this->smsmodel->sendSMS($mobile_number,$mobile_message);
 		}
 		$response = array("status" => "success", "msg" => "Mobile Login", "mobile_number" => $mobile_number, "OTP" => $OTP);
         return $response;
@@ -428,14 +431,17 @@ class Mobileapimodel extends CI_Model {
 			$digits = 4;
 			$otp = str_pad(rand(0, pow(10, $digits)-1), $digits, '0', STR_PAD_LEFT);
 		
-          //$textmessage='Password Reset OTP '.$otp.'';
-          //$notes =utf8_encode($textmessage);
-		  //$this->smsmodel->send_sms($phone,$notes);
-		  
-		  //$subject = "Forgot Password - OTP";
-		  //$htmlContent = 'Dear '. $name . '<br><br>' .  'Username : '. $email .'<br>OTP : '. $otp .'<br><br><br>Regards<br>OSPAPP';
-		  //$this->sendMail($email,$subject,$htmlContent);
-			
+		if ($phone!=''){
+			$textmessage='Password Reset OTP '.$otp.'';
+			$notes =utf8_encode($textmessage);
+			//$this->smsmodel->send_sms($phone,$notes);
+			$this->smsmodel->sendSMS($phone,$textmessage);
+		}
+		if ($email!=''){
+			  $subject = "Forgot Password - OTP";
+			  $htmlContent = 'Dear '. $name . '<br><br>' .  'Username : '. $email .'<br>OTP : '. $otp .'<br><br><br>Regards<br>OSPAPP';
+			  $this->mailmodel->sendMail($email,$subject,$htmlContent);
+		}
           
           $update_otp="UPDATE customers SET mobile_otp='$otp' WHERE id='$id'";
           $res_otp=$this->db->query($update_otp);
@@ -1488,41 +1494,82 @@ class Mobileapimodel extends CI_Model {
             foreach($res->result() as $rows) {
                 $old_order_id = $rows->id;
             }
-            $order_id = $old_order_id+1;
+				$order_id = $old_order_id+1;
         } else {
-            $order_id = 1;
+			$order_id = 1;
         }
+		
         $today = date("Ymd");
         $rand = strtoupper(substr(uniqid(sha1(time())),0,4));
         $order_id = 'SHOP'.$today . $rand . $order_id.'-'.$user_id;
+		
         $select_cart="SELECT sum(total_amount) as total_amount,sum(quantity) as total_quantity FROM product_cart WHERE cus_id='$user_id' AND status='Pending'";
         $result=$this->db->query($select_cart);
         $res_cart=$result->result();
-        foreach($res_cart as $total_amount){}
-        $total=$total_amount->total_amount;
-
-        $tot_quantity=$total_amount->total_quantity;
+        foreach($res_cart as $total_amount){
+			$total=$total_amount->total_amount;
+			$tot_quantity=$total_amount->total_quantity;
+		}
+		
         $insert="INSERT INTO purchase_order (order_id,cus_id,purchase_date,cus_address_id,total_amount,paid_amount,status,payment_status,cus_notes,created_at,created_by) VALUES('$order_id','$user_id',NOW(),'$address_id','$total','$total','Pending','Pending','$cus_notes',NOW(),'$user_id')";
         $res=$this->db->query($insert);
-		//$insert_order_id = $this->db->insert_id();
 
+
+		$select="SELECT ca.* FROM purchase_order AS po LEFT JOIN customers AS c ON po.cus_id=c.id LEFT JOIN cus_address AS ca ON ca.id=po.cus_address_id WHERE po.order_id='$order_id'";
+		$res_select=$this->db->query($select);
+		$result=$res_select->result();
+		 foreach($result as $rows_val){
+			 $phone= $rows_val->mobile_number;
+			 $email= $rows_val->email_address;
+			 $cus_id= $rows_val->cus_id;
+		 }
+
+		$subject='OSASPP - Order Confirmation';
+		$message_content = "Order Confirmation - Your Order with OSASPP [".$order_id."] has been successfully placed!";
+		
+		if ($email !=''){
+			$this->mailmodel->sendMail($email,$subject,$message_content);
+		}
+
+		if ($phone !=''){
+			$this->smsmodel->sendSMS($phone,$message_content);
+		}
+		
+		$check_notifi_status = "SELECT * FROM customer_details WHERE customer_id = '$cus_id' AND notification_status = 'Y'";
+		$res=$this->db->query($check_notifi_status);
+		if($res->num_rows()>0){
+			$check_gcm = "SELECT * FROM cus_notification_master WHERE cus_id = '$cus_id'";
+			$res_gcm=$this->db->query($check_gcm);
+
+			if($res_gcm->num_rows()>0){
+				foreach($res_gcm->result() as $rows) {
+					$mob_key = $rows->mob_key;
+					$mobile_type = $rows->mobile_type;
+				}
+				$this->notificationmodel->sendNotification($subject,$message_content,$mob_key,$mobile_type);
+			}
+		}
+/*
         //---Stocks left Update--//
-/*         $select_stock="SELECT * FROM product_cart WHERE cus_id='$user_id' AND status='Pending'";
+		$select_stock="SELECT * FROM product_cart WHERE cus_id='$user_id' AND status = 'Pending'";
         $result_stock=$this->db->query($select_stock);
         $res_stock=$result_stock->result();
+		
         foreach($res_stock as $rows_stock){
           $prd_qu=$rows_stock->quantity;
           $prd_id=$rows_stock->product_id;
           $prd_com_id=$rows_stock->product_combined_id;
-          $update_stoc="UPDATE products SET stocks_left=stocks_left-'$prd_qu' WHERE id='$prd_id'";
+		  
+          $update_stoc="UPDATE products SET stocks_left = stocks_left-'$prd_qu' WHERE id = '$prd_id'";
           $resu_stock=$this->db->query($update_stoc);
-          if($prd_com_id=='1'){
+		  
+          if($prd_com_id == '1'){
             $update_comb_stoc="UPDATE product_combined SET stocks_left=stocks_left-'$prd_qu' WHERE id='$prd_com_id' AND product_id='$prd_id'";
             $resu_stock=$this->db->query($update_comb_stoc);
           }
-        } */
+        } 
           //---Stocks left Update--//
-
+*/
          //---Update Cart to Success--//
         $update_cart="UPDATE product_cart SET order_id='$order_id',cus_id='$user_id',status='Success' WHERE cus_id='$user_id' AND status='Pending'";
         $res_cart=$this->db->query($update_cart);
