@@ -2036,7 +2036,7 @@ class Mobileapimodel extends CI_Model {
 			$update_cart = "UPDATE product_cart SET status = 'Success' WHERE order_id = '$order_id'";
 			$res=$this->db->query($update_cart);
 			
-			$data = array("status" => "success","msg"=>"Order Details","order_details"=>$result);
+			$data = array("status" => "success","msg"=>"COD Completed");
 
           return $data;
       } 
