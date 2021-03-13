@@ -2078,7 +2078,7 @@ class Mobileapimodel extends CI_Model {
 		if ($status == 'Delivered'){
 			$select="SELECT po.*,ca.*,po.status AS order_status FROM purchase_order as po left join cus_address as ca on ca.id=po.cus_address_id where po.status = 'Delivered' AND po.cus_id='$user_id'";
 		}else {
-			$select="SELECT po.*,ca.*,po.status AS order_status FROM purchase_order as po left join cus_address as ca on ca.id=po.cus_address_id where po.status != 'Delivered'  AND po.status != 'Pending' AND po.cus_id='$user_id'";
+			$select="SELECT po.*,ca.*,po.status AS order_status FROM purchase_order as po left join cus_address as ca on ca.id=po.cus_address_id where po.status != 'Delivered' AND po.status != 'Pending' AND po.cus_id='$user_id'";
 		}
         $res=$this->db->query($select);
         if($res->num_rows()>0){
@@ -2095,30 +2095,29 @@ class Mobileapimodel extends CI_Model {
 							foreach($result_pic  as $rows_pic){
 								 $product_cover_img = base_url().'assets/products/'.$rows_pic->product_cover_img;
 							}
-				}
+						}
 						
-                $order_details[]=array(
-                  "id"=>$rows->id,
-                  "order_id"=>$rows->order_id,
-                  "cus_id"=>$rows->cus_id,
-                  "purchase_date"=>$rows->purchase_date,
-                  "total_amount"=>$rows->total_amount,
-                  "status"=>$rows->status,
-                  "cus_notes"=>$rows->cus_notes,
-                  "state"=>$rows->state,
-                  "city"=>$rows->city,
-                  "pincode"=>$rows->pincode,
-                  "house_no"=>$rows->house_no,
-                  "street"=>$rows->street,
-                  "landmark"=>$rows->landmark,
-                  "full_name"=>$rows->full_name,
-                  "mobile_number"=>$rows->mobile_number,
-                  "email_address"=>$rows->email_address,
-                  "alternative_mobile_number"=>$rows->alternative_mobile_number,
-				  "order_status"=>$rows->order_status,
-				  "order_cover_img"=>$product_cover_img
-                );
-					}
+						$order_details[]=array(
+						  "id"=>$rows->id,
+						  "order_id"=>$rows->order_id,
+						  "cus_id"=>$rows->cus_id,
+						  "purchase_date"=>$rows->purchase_date,
+						  "total_amount"=>$rows->total_amount,
+						  "status"=>$rows->status,
+						  "cus_notes"=>$rows->cus_notes,
+						  "state"=>$rows->state,
+						  "city"=>$rows->city,
+						  "pincode"=>$rows->pincode,
+						  "house_no"=>$rows->house_no,
+						  "street"=>$rows->street,
+						  "landmark"=>$rows->landmark,
+						  "full_name"=>$rows->full_name,
+						  "mobile_number"=>$rows->mobile_number,
+						  "email_address"=>$rows->email_address,
+						  "alternative_mobile_number"=>$rows->alternative_mobile_number,
+						  "order_status"=>$rows->order_status,
+						  "order_cover_img"=>$product_cover_img
+						);
 				}
               $data = array("status" => "success","msg"=>"orders found","order_count"=>$order_count,"order_details"=>$order_details);
           }else{
