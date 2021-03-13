@@ -20,6 +20,7 @@ Class Notificationmodel extends CI_Model
 					'notification' => array (
 						"body" => $offer_name,
 						"title" => $title,
+						"image" => $offer_picture,
 						"icon" => $offer_picture
 						)
 					);
