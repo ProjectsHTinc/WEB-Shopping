@@ -1932,7 +1932,7 @@ class Mobileapimodel extends CI_Model {
 			$balance_amt_in_wallet = $amt_in_wallet - $paid_amount;
 			$spaid_amount = '0.00';
 			
-			$update_order ="UPDATE purchase_order SET wallet_amount='$paid_amount',paid_amount='$spaid_amount',payment_status='Wallet', updated_at=NOW(),updated_by='$user_id' WHERE id='$purchase_order_id'";
+			$update_order ="UPDATE purchase_order SET wallet_amount='$paid_amount',paid_amount='$spaid_amount',status='Success', payment_status='Wallet', updated_at=NOW(),updated_by='$user_id' WHERE id='$purchase_order_id'";
 				$res=$this->db->query($update_order);
 
 			$insert_wallet="INSERT INTO customer_wallet_history (customer_id,order_id,transaction_amt,notes,status,created_at,created_by) VALUES('$user_id','$order_id','$paid_amount','Debited from wallet','Debited',NOW(),'$user_id')";
