@@ -2027,4 +2027,35 @@ class Mobileapi extends CI_Controller {
 		}
 //-----------------------------------------------//
 
+//-----------------------------------------------//
+
+		public function offer_list()
+		{
+
+		$_POST = json_decode(file_get_contents("php://input"), TRUE);
+
+			if(!$this->checkMethod())
+			{
+				return FALSE;
+			}
+
+			if($_POST == FALSE)
+			{
+				$res = array();
+				$res["opn"] = "Filter";
+				$res["scode"] = 204;
+				$res["message"] = "Input error";
+
+				echo json_encode($res);
+				return;
+			}
+			$user_id=$this->input->post("user_id");
+			$data['result']=$this->mobileapimodel->offer_list($user_id);
+			
+			$response = $data['result'];
+			//print_r($response);
+			echo json_encode($response);
+		}
+//-----------------------------------------------//
+
 }

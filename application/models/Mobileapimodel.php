@@ -2076,7 +2076,7 @@ class Mobileapimodel extends CI_Model {
       function view_orders($user_id,$status){
 		
 		if ($status == 'Delivered'){
-			$select="SELECT po.*,ca.*,po.status AS order_status FROM purchase_order as po left join cus_address as ca on ca.id=po.cus_address_id where po.status = 'Delivered' AND po.cus_id='$user_id'";
+			$select="SELECT po.*,ca.*,po.status AS order_status FROM purchase_order as po left join cus_address as ca on ca.id=po.cus_address_id where po.status = 'Delivered' AND po.cus_id = '$user_id'";
 		}else {
 			$select="SELECT po.*,ca.*,po.status AS order_status FROM purchase_order as po left join cus_address as ca on ca.id=po.cus_address_id where po.status != 'Delivered' AND po.status != 'Pending' AND po.cus_id='$user_id'";
 		}
@@ -2088,7 +2088,7 @@ class Mobileapimodel extends CI_Model {
             foreach($result as $rows){
 				$sorder_id = $rows->order_id;
 
-				$select_pic="SELECT p.product_cover_img FROM product_cart AS pc LEFT JOIN products AS p ON p.id = pc.product_id LEFT JOIN purchase_order AS pur ON pur.order_id = pc.order_id WHERE pc.order_id = '$sorder_id' ORDER BY pc.id LIMIT 1";
+					$select_pic="SELECT p.product_cover_img FROM product_cart AS pc LEFT JOIN products AS p ON p.id = pc.product_id LEFT JOIN purchase_order AS pur ON pur.order_id = pc.order_id WHERE pc.order_id = '$sorder_id' ORDER BY pc.id LIMIT 1";
 					$res_pic=$this->db->query($select_pic);
 						if($res_pic->num_rows()>0){
 							$result_pic=$res_pic->result();
@@ -2600,6 +2600,77 @@ LEFT JOIN products AS p ON p.id=pc.product_id LEFT JOIN product_combined AS comb
 			$data = array("status" => "error","msg"=>"No Products found");
 		 }
 		  return $data;
+	  }
+	  
+	  
+	     
+//################ Offer List ########################//
+    function offer_list($user_id){
+			$select="SELECT * FROM products WHERE offer_status ='1' AND status = 'Active'";
+            $res=$this->db->query($select);
+             if($res->num_rows()>0){
+                $result=$res->result();
+                foreach($result  as $rows){
+					$product_id = $rows->id;
+					
+					$prod_size_chart = $rows->prod_size_chart;
+					if ($prod_size_chart!=''){
+						$product_size_url = base_url().'assets/products/charts/'.$prod_size_chart;
+					}else {
+						$product_size_url = "";
+					}
+					
+					$select_rev = "SELECT COUNT(product_id) AS review_count,IFNULL(ROUND(AVG(rating)),'0') AS average FROM product_review AS pr WHERE product_id='$product_id'";
+					$res_rev=$this->db->query($select_rev);
+						if($res_rev->num_rows()>0){
+							$result_rev=$res_rev->result();
+							foreach($result_rev as $rows_rev){
+								$review_count = $rows_rev->review_count;
+								$review_average = $rows_rev->average;
+							}
+						}
+					
+					if ($user_id != ''){
+						$select_wish="SELECT * FROM cus_wishlist WHERE customer_id='$user_id' AND product_id='$product_id'";
+						 $res_wish=$this->db->query($select_wish);
+							 if($res_wish->num_rows()>0){
+								 $wishlisted = "1";
+							 }else{
+								 $wishlisted = "0";
+							 }
+					}else {
+						$wishlisted = "0";
+					}
+					
+                    $product_list[]=array(
+                      "id"=>$rows->id,
+                      "product_name"=>$rows->product_name,
+                      "sku_code"=>$rows->sku_code,
+                      "product_cover_img"=>base_url().'assets/products/'.$rows->product_cover_img,
+                      "prod_size_chart"=>$product_size_url,
+                      "product_description"=>$rows->product_description,
+                      "offer_status"=>$rows->offer_status,
+                      "specification_status"=>$rows->specification_status,
+                      "combined_status"=>$rows->combined_status,
+                      "prod_actual_price"=>$rows->prod_actual_price,
+                      "prod_mrp_price"=>$rows->prod_mrp_price,
+                      "offer_percentage"=>$rows->offer_percentage,
+                      "delivery_fee_status"=>$rows->delivery_fee_status,
+                      "prod_return_policy"=>$rows->prod_return_policy,
+                      "prod_cod"=>$rows->prod_cod,
+                      "product_meta_title"=>$rows->product_meta_title,
+                      "product_meta_desc"=>$rows->product_meta_desc,
+                      "product_meta_keywords"=>$rows->product_meta_keywords,
+                      "stocks_left"=>$rows->stocks_left,
+					  "review_average"=>$review_average,
+					  "wishlisted"=>$wishlisted
+                    );
+                }
+				$offer_list = array("status" => "success","msg"=>"Offer list","offer_list"=>$product_list);
+             }else{
+				$offer_list = array("status" => "error","msg"=>"No Products found");
+             }
+		  return $offer_list;
 	  }
 }
 ?>
