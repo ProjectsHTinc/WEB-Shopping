@@ -2084,10 +2084,19 @@ class Mobileapimodel extends CI_Model {
         if($res->num_rows()>0){
 			$order_count = $res->num_rows();
             $result=$res->result();
-			$i = 1;
+			
             foreach($result as $rows){
 				$sorder_id = $rows->order_id;
-				
+
+				$select_pic="SELECT p.product_cover_img FROM product_cart AS pc LEFT JOIN products AS p ON p.id = pc.product_id LEFT JOIN purchase_order AS pur ON pur.order_id = pc.order_id WHERE pc.order_id = '$sorder_id' ORDER BY pc.id LIMIT 1";
+					$res_pic=$this->db->query($select_pic);
+						if($res_pic->num_rows()>0){
+							$result_pic=$res_pic->result();
+							foreach($result_pic  as $rows_pic){
+								 $product_cover_img = base_url().'assets/products/'.$rows_pic->product_cover_img;
+							}
+				}
+						
                 $order_details[]=array(
                   "id"=>$rows->id,
                   "order_id"=>$rows->order_id,
@@ -2106,22 +2115,12 @@ class Mobileapimodel extends CI_Model {
                   "mobile_number"=>$rows->mobile_number,
                   "email_address"=>$rows->email_address,
                   "alternative_mobile_number"=>$rows->alternative_mobile_number,
-				  "order_status"=>$rows->order_status
+				  "order_status"=>$rows->order_status,
+				  "order_cover_img"=>$product_cover_img
                 );
-			
-				if ($i == 1){
-					$select_pic="SELECT p.product_cover_img FROM product_cart AS pc LEFT JOIN products AS p ON p.id = pc.product_id LEFT JOIN purchase_order AS pur ON pur.order_id = pc.order_id WHERE pc.order_id = '$sorder_id' ORDER BY pc.id LIMIT 1 ";
-					$res_pic=$this->db->query($select_pic);
-						if($res_pic->num_rows()>0){
-							$result_pic=$res_pic->result();
-							foreach($result_pic  as $rows_pic){
-								 $product_cover_img = base_url().'assets/products/'.$rows_pic->product_cover_img;
-							}
-						}
-						$i = $i+1;
 					}
 				}
-              $data = array("status" => "success","msg"=>"orders found","order_count"=>$order_count,"order_pic"=>$product_cover_img,"order_details"=>$order_details);
+              $data = array("status" => "success","msg"=>"orders found","order_count"=>$order_count,"order_details"=>$order_details);
           }else{
               $data = array("status" => "error","msg"=>"No orders found");
           }
