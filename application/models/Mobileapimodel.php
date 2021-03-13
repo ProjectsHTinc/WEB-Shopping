@@ -2078,7 +2078,7 @@ class Mobileapimodel extends CI_Model {
 		if ($status == 'Delivered'){
 			$select="SELECT po.*,ca.*,po.status AS order_status FROM purchase_order as po left join cus_address as ca on ca.id=po.cus_address_id where po.status = 'Delivered' AND po.cus_id='$user_id'";
 		}else {
-			$select="SELECT po.*,ca.*,po.status AS order_status FROM purchase_order as po left join cus_address as ca on ca.id=po.cus_address_id where po.status != 'Delivered' AND po.cus_id='$user_id'";
+			$select="SELECT po.*,ca.*,po.status AS order_status FROM purchase_order as po left join cus_address as ca on ca.id=po.cus_address_id where po.status != 'Delivered'  AND po.status != 'Pending' AND po.cus_id='$user_id'";
 		}
         $res=$this->db->query($select);
         if($res->num_rows()>0){

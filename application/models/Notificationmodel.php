@@ -84,7 +84,7 @@ function sendNotification($title,$subject,$mob_key,$mobile_type)
 					'notification' => array (
 						"body" => $subject,
 						"title" => $title,
-						"icon" => "myicon"
+						"icon" => "myicon",
 						)
 					);
 			$fields = json_encode ( $fields );
