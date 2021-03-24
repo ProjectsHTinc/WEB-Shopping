@@ -1467,7 +1467,7 @@ class Mobileapi extends CI_Controller {
 			}
 
 			$order_id=$this->input->post("order_id");
-			$data['result']=$this->mobileapimodel->view_order_details($order_id);
+			$data['result']=$this->mobileapimodel->view_order_cart_details($order_id);
 			$response = $data['result'];
 			//print_r($response);
 			echo json_encode($response);

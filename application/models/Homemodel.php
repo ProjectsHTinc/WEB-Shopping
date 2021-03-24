@@ -1395,7 +1395,7 @@ Class Homemodel extends CI_Model
    }
    
     function newproducts(){
-		$sql = "SELECT * FROM products WHERE status='Active' ORDER BY created_at LIMIT 10";
+		$sql = "SELECT * FROM products WHERE status='Active' ORDER BY created_at DESC LIMIT 10";
 		$resu=$this->db->query($sql);
 		$res=$resu->result();
 		return $res;
@@ -1409,7 +1409,7 @@ Class Homemodel extends CI_Model
    }
    
       function related_products($cat_id,$product_id){
-		$sql = "SELECT * FROM products WHERE cat_id ='$cat_id' AND id!='$product_id' AND status='Active' ORDER BY created_at LIMIT 10";
+		$sql = "SELECT * FROM products WHERE cat_id ='$cat_id' AND id!='$product_id' AND status='Active' ORDER BY created_at DESC LIMIT 10";
 		$resu=$this->db->query($sql);
 		$res=$resu->result();
 		return $res;
