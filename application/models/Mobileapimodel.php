@@ -1940,6 +1940,9 @@ class Mobileapimodel extends CI_Model {
 			
 			$update_wallet ="UPDATE customer_wallet SET total_amt_used = total_amt_used + $paid_amount,amt_in_wallet = amt_in_wallet- $paid_amount WHERE customer_id ='$user_id'";
 				$res=$this->db->query($update_wallet);
+				
+			$insert_history ="INSERT INTO order_history (order_id,sent_msg,old_status,status,updated_at,updated_by) VALUES ('$order_id','Order Success','Success','Success',now(),'$user_id')";
+				$res=$this->db->query($insert_history);
 
 		}else {
 			$spaid_amount = $paid_amount - $amt_in_wallet;
@@ -2035,6 +2038,9 @@ class Mobileapimodel extends CI_Model {
 			
 			$update_cart = "UPDATE product_cart SET status = 'Success' WHERE order_id = '$order_id'";
 			$res=$this->db->query($update_cart);
+			
+			$insert_history ="INSERT INTO order_history (order_id,sent_msg,old_status,status,updated_at,updated_by) VALUES ('$order_id','Order Success','Success','Success',now(),'$user_id')";
+			$res=$this->db->query($insert_history);
 			
 			$data = array("status" => "success","msg"=>"COD Completed");
 
@@ -2173,7 +2179,7 @@ LEFT JOIN products AS p ON p.id=pc.product_id LEFT JOIN product_combined AS comb
 //################# Track customer orders #######################//
       function track_order($order_id){
 		
-			$select="SELECT * FROM order_history WHERE order_id ='$order_id' ORDER BY id ";
+			$select="SELECT * FROM order_history WHERE order_id ='$order_id' ORDER BY id DESC LIMIT 1";
 			$res=$this->db->query($select);
 			if($res->num_rows()>0){
 			  $result = $res->result();
@@ -2672,5 +2678,20 @@ LEFT JOIN products AS p ON p.id=pc.product_id LEFT JOIN product_combined AS comb
              }
 		  return $offer_list;
 	  }
+	  
+	  
+//################ List order status master ########################//
+	  function list_orderstatus($user_id){
+		  
+		$select="SELECT * FROM order_status_master WHERE status = 'Active' ORDER BY id";
+		$res=$this->db->query($select);
+		$result=$res->result();
+		if($res->num_rows()>0){
+			$data = array("status" => "success","msg"=>"Order Status List","order_status_list"=>$result);
+		} else {
+			$data = array("status" => "error","msg"=>"No List");
+		}
+        return $data;
+      }
 }
 ?>

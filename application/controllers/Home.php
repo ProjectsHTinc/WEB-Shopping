@@ -918,8 +918,9 @@ class Home extends CI_Controller {
 	
 	public function cod_apply()
 	{
+		$user_id = $this->session->userdata('cust_session_id');
 		$order_id=$this->input->post('order_id');
-		$datas['res']= $this->homemodel->cod_apply($order_id);
+		$datas['res']= $this->homemodel->cod_apply($order_id,$user_id);
 		
 	}
 }

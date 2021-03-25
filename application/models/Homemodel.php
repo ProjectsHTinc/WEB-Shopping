@@ -1593,6 +1593,9 @@ Class Homemodel extends CI_Model
 			 $update_wallet ="UPDATE customer_wallet SET total_amt_used = total_amt_used + $paid_amount,amt_in_wallet = amt_in_wallet- $paid_amount WHERE customer_id ='$user_id'";
 			$res=$this->db->query($update_wallet);
 			
+			$insert_history ="INSERT INTO order_history (order_id,sent_msg,old_status,status,updated_at,updated_by) VALUES ('$order_id','Order Success','Success','Success',now(),'$user_id')";
+			$res=$this->db->query($insert_history);
+			
 			redirect(base_url().'cust_orders/');
 		}else {
 			$spaid_amount = $paid_amount - $amt_in_wallet;
@@ -1645,13 +1648,15 @@ Class Homemodel extends CI_Model
 		redirect(base_url().'home/wallet_review/');
    }
    
-   function cod_apply($order_id){
+   function cod_apply($order_id,$user_id){
 			$update_order = "UPDATE purchase_order SET status = 'Success',payment_status = 'COD' WHERE order_id = '$order_id'";
 			$res=$this->db->query($update_order);
 			
 			$update_cart = "UPDATE product_cart SET status = 'Success' WHERE order_id = '$order_id'";
 			$res=$this->db->query($update_cart);
 			
+			$insert_history ="INSERT INTO order_history (order_id,sent_msg,old_status,status,updated_at,updated_by) VALUES ('$order_id','Order Success','Success','Success',now(),'$user_id')";
+				$res=$this->db->query($insert_history);
 			redirect(base_url().'cust_orders/');
    }
 

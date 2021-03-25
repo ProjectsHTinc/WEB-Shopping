@@ -95,6 +95,9 @@ for($i = 0; $i < $dataSize; $i++)
 		$query = "UPDATE product_cart SET status = 'Success' WHERE order_id = '" .$orderid. "'";
 	    $result = $mysqli->query($query);
 	    
+		$query = "INSERT INTO order_history (order_id,sent_msg,old_status,status,updated_at,updated_by) VALUES ('$orderid','Order Success','Success','Success',now(),'$user_id')";
+		 $result = $mysqli->query($query);
+		
 		//echo "<br>Thank you for shopping with us. Your transaction is successful. We will be shipping your order to you soon.";
 	    header("Location: https://www.happysanztech.com/shopping/cust_orders/");
         //exit();

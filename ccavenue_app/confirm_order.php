@@ -93,6 +93,10 @@
 			$update_cart = "UPDATE product_cart SET status = 'Success' WHERE order_id = '$order_id'";
 			mysqli_query($link, $update_cart);
 			
+			
+			$sQuery = "INSERT INTO order_history (order_id,sent_msg,old_status,status,updated_at,updated_by) VALUES ('$orderid','Order Success','Success','Success',now(),'$user_id')";
+			mysqli_query($link, $sQuery);
+			
 			$response["status"] = "Success";
     	}else{
 			$response["status"] = $order_status;
