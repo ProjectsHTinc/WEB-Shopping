@@ -2135,13 +2135,60 @@ class Mobileapimodel extends CI_Model {
 
 //###############  Customer order details #########################//
       function view_order_cart_details($order_id){
-        $select="SELECT pc.id as cart_id,ca.*,pur.cus_address_id,c.*,p.id as product_id,p.product_name,p.product_cover_img,am.attribute_value,am.attribute_name,ams.attribute_value AS size,pc.*,comb.id FROM product_cart AS pc
-LEFT JOIN products AS p ON p.id=pc.product_id LEFT JOIN product_combined AS comb ON comb.id=pc.product_combined_id LEFT JOIN attribute_masters AS am ON am.id=comb.mas_color_id LEFT JOIN attribute_masters AS ams ON ams.id=comb.mas_size_id LEFT JOIN purchase_order AS pur ON pur.order_id=pc.order_id LEFT JOIN customers AS c ON pur.cus_id=c.id LEFT JOIN cus_address AS ca ON ca.id=pur.cus_address_id WHERE pc.order_id='$order_id'";
+        $select="SELECT
+					pur.purchase_date,
+					pur.promo_amount,
+					pur.wallet_amount,
+					pur.total_amount AS purchase_order_amount,
+					pur.paid_amount,
+					pur.status AS purchase_order_status,
+					pur.payment_status,
+					pc.id AS cart_id,
+					ca.*,
+					pur.cus_address_id,
+					c.*,
+					co.country_name,
+					p.id AS product_id,
+					p.product_name,
+					p.product_cover_img,
+					am.attribute_value,
+					am.attribute_name,
+					ams.attribute_value AS size,
+					pc.*,
+					comb.id
+				FROM
+					product_cart AS pc
+				LEFT JOIN products AS p
+				ON
+					p.id = pc.product_id
+				LEFT JOIN product_combined AS comb
+				ON
+					comb.id = pc.product_combined_id
+				LEFT JOIN attribute_masters AS am
+				ON
+					am.id = comb.mas_color_id
+				LEFT JOIN attribute_masters AS ams
+				ON
+					ams.id = comb.mas_size_id
+				LEFT JOIN purchase_order AS pur
+				ON
+					pur.order_id = pc.order_id
+				LEFT JOIN customers AS c
+				ON
+					pur.cus_id = c.id
+				LEFT JOIN cus_address AS ca
+				ON
+					ca.id = pur.cus_address_id
+				LEFT JOIN country_master AS co
+				ON
+					ca.country_id = co.id
+				WHERE
+					pc.order_id = '$order_id'";
         $res=$this->db->query($select);
         if($res->num_rows()>0){
             $result=$res->result();
             foreach($result  as $rows){
-                $my_order_details[]=array(
+                $cart_details[]=array(
                   "id"=>$rows->cart_id,
                   "product_name"=>$rows->product_name,
                   "product_id"=>$rows->product_id,
@@ -2152,7 +2199,27 @@ LEFT JOIN products AS p ON p.id=pc.product_id LEFT JOIN product_combined AS comb
                   "quantity"=>$rows->quantity,
                 );
             }
-              $data = array("status" => "success","msg"=>"orders found","my_order_details"=>$my_order_details);
+			$order_details[]=array(
+				"order_id"=>$rows->order_id,
+				"purchase_date"=>$rows->purchase_date,
+				"full_name"=>$rows->full_name,
+				"mobile_number"=>$rows->mobile_number,
+				"email_address"=>$rows->email_address,
+				"purchase_order_status"=>$rows->purchase_order_status,
+				"promo_amount"=>$rows->promo_amount,
+				"wallet_amount"=>$rows->wallet_amount,
+				"total_amount"=>$rows->purchase_order_amount,
+				"paid_amount"=>$rows->paid_amount,
+				"payment_status"=>$rows->payment_status,
+				"country_name"=>$rows->country_name,
+				"state"=>$rows->state,
+				"city"=>$rows->city,
+				"pincode"=>$rows->pincode,
+				"house_no"=>$rows->house_no,
+				"street"=>$rows->street,
+				"landmark"=>$rows->landmark,
+                );
+              $data = array("status" => "success","msg"=>"orders found","order_details"=>$order_details,"cart_details"=>$cart_details);
           }else{
               $data = array("status" => "error","msg"=>"No orders found");
           }
