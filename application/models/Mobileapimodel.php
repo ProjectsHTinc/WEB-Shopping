@@ -1293,7 +1293,7 @@ class Mobileapimodel extends CI_Model {
 		   $check_quantity=$row_comb->stocks_left;
 			}
           if($offer_status=='1'){
-            $offer_percentage=$row_comb->offer_percentage;
+            $offer_percentage=$rows_result->offer_percentage;
             $discount_value = ($old_price_comb / 100) * $offer_percentage;
             $offer_pirce = $old_price_comb - $discount_value;
           }else{
