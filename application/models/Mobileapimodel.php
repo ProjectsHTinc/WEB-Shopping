@@ -1443,28 +1443,50 @@ class Mobileapimodel extends CI_Model {
 		  $prod_id=$rows_cart->product_id;
 		  $current_quantity=$rows_cart->quantity;
 		  $product_combined_id=$rows_cart->product_combined_id;
-		  
 	  }
 	  
 	  if ($product_combined_id == 0){
 		  $check="SELECT * FROM products WHERE id='$prod_id'";
 		  $res=$this->db->query($check);
 		  $result=$res->result();
-		  foreach($result as $rows_result){ 
-			  $check_quantity=$rows_result->stocks_left;
-			  $prod_actual_price=$rows_result->prod_actual_price;
-		  }
+		  foreach($result as $rows_result){ }
+			$check_quantity=$rows_result->stocks_left;
+			$old_price=$rows_result->prod_actual_price;
+			$offer_status=$rows_result->offer_status;
+		  
+          if($offer_status=='1'){
+            $offer_percentage=$rows_result->offer_percentage;
+            $discount_value = ($old_price / 100) * $offer_percentage;
+            $offer_pirce = $old_price - $discount_value;
+          }else{
+            $offer_pirce = $rows_result->prod_actual_price;
+          }
 		  //$update_quantity=$current_quantity+$quantity;
-		  $total_amount = ($quantity * $prod_actual_price);
+		  $total_amount = ($quantity * $offer_pirce);
 	  }else {
 		  
+		  $check="SELECT * FROM products WHERE id='$prod_id'";
+		  $res=$this->db->query($check);
+		  $result=$res->result();
+		  foreach($result as $rows_result_1){ }
+			$offer_status=$rows_result_1->offer_status;
+			
 		  $check="SELECT * FROM product_combined WHERE id='$product_combined_id'";
 		  $res=$this->db->query($check);
 		  $result=$res->result();
 		  foreach($result as $rows_result){ 
 			  $check_quantity=$rows_result->stocks_left;
-			  $prod_actual_price=$rows_result->prod_actual_price;
+			  $old_price=$rows_result->prod_actual_price;
 		  }
+		  
+		  if($offer_status=='1'){
+            $offer_percentage=$rows_result_1->offer_percentage;
+            $discount_value = ($old_price / 100) * $offer_percentage;
+            $offer_pirce = $old_price - $discount_value;
+          }else{
+            $offer_pirce = $rows_result->prod_actual_price;
+          }
+		  
 		  //$update_quantity = $current_quantity+$quantity;
 		  $total_amount = ($quantity * $prod_actual_price);
 	  }
