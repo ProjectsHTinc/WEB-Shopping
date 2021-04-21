@@ -2460,7 +2460,7 @@ class Mobileapimodel extends CI_Model {
 		if($res->num_rows()>0){
 			$data = array("status" => "success","msg"=>"Wallet Details","wallet_amount"=>$amt_in_wallet,"wallet_history"=>$result);
 		} else {
-			$result = '0.00';
+			$result = []; 
 			$data = array("status" => "success","msg"=>"Wallet Details","wallet_amount"=>$amt_in_wallet,"wallet_history"=>$result);
 		}
         return $data;
