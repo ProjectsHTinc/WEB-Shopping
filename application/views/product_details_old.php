@@ -82,48 +82,33 @@ if (count($product_details)>0){
         <div class="main-product-thumbnail pb-50">
             <div class="container-fluid">
                 <div class="row">
-				
-				<div class="col-sm-7">
-					<div class="row">
-						<div class="fwImage">
-							<div id="gallery-2" class="royalSlider rsUni">
-							
-								  <a class="rsImg" data-rsBigImg="<?php echo base_url(); ?>assets/products/<?php echo $product_cover_img;?>" href="<?php echo base_url(); ?>assets/products/<?php echo $product_cover_img;?>"><img class="rsTmb" src="<?php echo base_url(); ?>assets/products/<?php echo $product_cover_img;?>" /></a>
-								  
-								  
+                    <div class="col-sm-4">
+                        <img id="big-img" src="<?php echo base_url(); ?>assets/products/<?php echo $product_cover_img;?>" data-zoom-image="<?php echo base_url(); ?>assets/products/<?php echo $product_cover_img;?>" alt="product-image" />
+
+                        <div id="small-img" class="mt-20">
+   
+                            <div class="thumb-menu owl-carousel">
+                                <a href="#" data-image="<?php echo base_url(); ?>assets/products/<?php echo $product_cover_img;?>" data-zoom-image="<?php echo base_url(); ?>assets/products/<?php echo $product_cover_img;?>">
+                                    <img src="<?php echo base_url(); ?>assets/products/<?php echo $product_cover_img;?>" alt="product-image" />
+                                </a>
 <?php
-				if (count($product_gallery)>0){
-					foreach($product_gallery as $gallery){ 
-					$gallery_img = $gallery->gallery_img;
+if (count($product_gallery)>0){
+	foreach($product_gallery as $gallery){ 
+	$gallery_img = $gallery->gallery_img;
 ?>
-								  
-								  <a class="rsImg" data-rsBigImg="<?php echo base_url(); ?>assets/products/images/<?php echo $gallery_img;?>" href="<?php echo base_url(); ?>assets/products/images/<?php echo $gallery_img;?>"><img class="rsTmb" src="<?php echo base_url(); ?>assets/products/images/<?php echo $gallery_img;?>" /></a>
+                                <a href="#" data-image="<?php echo base_url(); ?>assets/products/images/<?php echo $gallery_img;?>" data-zoom-image="<?php echo base_url(); ?>assets/products/images/<?php echo $gallery_img;?>">
+                                    <img src="<?php echo base_url(); ?>assets/products/images/<?php echo $gallery_img;?>" alt="product-image" />
+                                </a>
 <?php
-					}
-				}
+	}
+}
 ?>
-							</div>  
-						</div>
-					
-					
-					
-						<!--<ul class="pgwSlider">
-							<li><img src="<?php echo base_url(); ?>assets/products/<?php echo $product_cover_img;?>" alt="" data-large-src="<?php echo base_url(); ?>assets/products/<?php echo $product_cover_img;?>" data-description=""></li>
-<?php
-				if (count($product_gallery)>0){
-					foreach($product_gallery as $gallery){ 
-					$gallery_img = $gallery->gallery_img;
-?>
-							<li><img src="<?php echo base_url(); ?>assets/products/images/<?php echo $gallery_img;?>" alt="" data-large-src="<?php echo base_url(); ?>assets/products/images/<?php echo $gallery_img;?>" data-description=""></li>
-<?php
-					}
-				}
-?>
-					</ul>-->
-					</div>
-				</div>
-				
-                    <div class="col-sm-5 pl-50">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Thumbnail Description Start -->
+                    <div class="col-sm-4 pl-50">
                      <form id="product-form" name="product-form" class="contact-form" action="<?php echo base_url(); ?>home/insertcart/" method="post">
                         <div class="thubnail-desc fix">
                             <h2 class="product-header mb-20"><?php echo $product_name; ?></h2>
@@ -286,7 +271,7 @@ if (count($product_details)>0){
                             <div class="product-button-actions">
                             <?php 
 								if ($stocks_left>0){ ?>
-                               	<button id='addcart' type="submit" class="add-to-cart" onclick="getStock()">Add to Cart</button>
+                               	<button id='addcart' type="submit" class="add-to-cart" onclick="getStock()">add to cart</button>
                                 <button id='emptycart' type="button" class="add-to-cart" style="background:#e20202;display:none;">Out of Stock</button>
                              <?php } else { ?>
                              	<button id='emptycart' type="button" class="add-to-cart" style="background:#e20202;">Out of Stock</button>
@@ -343,11 +328,10 @@ if (count($product_details)>0){
                         </div>
                         </form>
                     </div>
-					
                     <!-- Thumbnail Description End -->
-					<!--<div class="col-sm-4">
+					<div class="col-sm-4">
 							<h5 class="mt-50" style="text-transform: capitalize;">Description</h5> <p class="mt-10"><?php echo $product_description; ?></p> <?php if (count($product_spec)>0){ ?>
-							
+							<!-- Table Content Start -->
 							<h5 class="mt-50" style="text-transform: capitalize;">Specification</h5>
                             <div class="table-content table-responsive mb-50 mt-10">
                                 <table>
@@ -364,7 +348,7 @@ if (count($product_details)>0){
 								</table>
 								</div>
 							<?php } ?>
-					</div>-->
+					</div>
                 </div>
                 <!-- Row End -->
             </div>
@@ -376,7 +360,7 @@ if (count($product_details)>0){
 		
 		
 		<!-- Product Thumbnail Description Start -->
-        <div class="thumnail-desc pb-50">
+        <!--<div class="thumnail-desc pb-50">
             <div class="container">
                 <div class="row">
                     <div class="col-sm-12">
@@ -404,7 +388,7 @@ if (count($product_details)>0){
 										?>
                                         <tr>
                                             <td><?php echo $spec_name; ?></td>
-                                            <td style="text-align:left;"><?php echo $spec_value; ?></td>
+                                            <td><?php echo $spec_value; ?></td>
                                         </tr>
 									<?php } ?>
 								</table>
@@ -419,7 +403,7 @@ if (count($product_details)>0){
                 
             </div>
            
-        </div>
+        </div>-->
         <!-- Product Thumbnail Description End -->
    
 
@@ -434,7 +418,7 @@ if (count($product_details)>0){
                     <!-- Section Title Start -->
                     <div class="col-xs-12">
                         <div class="section-title text-center mb-40">
-                            <h3 class="section-info colour_blue">Related Products</h3>
+                            <h3 class="section-info">RELATED PRODUCTS</h3>
                         </div>
                     </div>
                     <!-- Section Title End -->
@@ -491,9 +475,9 @@ if (count($product_details)>0){
                                         <?php } ?>
                                         <div class="action-links2">
                                          <?php if ($combined_status == '1'){ ?>
-                                            <a data-toggle="tooltip" title="View Products" href="<?php echo base_url(); ?>home/product_details/<?php echo $sproduct_id; ?>/<?php echo $enc_product_name ; ?>/" style="background:#ffb23c;">View Product</a>
+                                            <a data-toggle="tooltip" title="View Products" href="<?php echo base_url(); ?>home/product_details/<?php echo $sproduct_id; ?>/<?php echo $enc_product_name ; ?>/" style="background:#ffb23c;">view products</a>
                                         <?php } else { ?>
-                                            <a data-toggle="tooltip" title="Add to Cart" href="<?php echo base_url(); ?>home/addcart/<?php echo $sproduct_id; ?>/">Add to Cart</a>
+                                            <a data-toggle="tooltip" title="Add to Cart" href="<?php echo base_url(); ?>home/addcart/<?php echo $sproduct_id; ?>/">add to cart</a>
                                          <?php }?>
                                         </div>
                                     </div>
@@ -520,7 +504,7 @@ if (count($product_details)>0){
                     <!-- Section Title Start -->
                     <div class="col-xs-12">
                         <div class="section-title text-center mb-40">
-                            <h3 class="section-info colour_blue">Customer Reviews</h3>
+                            <h3 class="section-info">Customer Reviews</h3>
                         </div>
                     </div>
                     <!-- Section Title End -->
@@ -600,7 +584,7 @@ if (count($product_details)>0){
                                         <div class="col-sm-12">
                                             <label class="control-label req">Rating</label> &nbsp;&nbsp;&nbsp; Bad&nbsp;
                                             <?php for ($i=1; $i <6; $i++) { ?>
-                                                   <input type="radio" name="rating" value="<?php echo $i;?>" <?php if ($i==$rating) { echo "checked"; } ?>> &nbsp;
+                                                   <input type="radio" name="rating" value="1" <?php if ($i==$rating) { echo "checked"; } ?>> &nbsp;
                                              <?php } ?>Good
                                         </div>
                                     </div>
@@ -615,7 +599,7 @@ if (count($product_details)>0){
                             <?php } else { ?>
                             <form name="reviewform" id="reviewform" method="post" action="" autocomplete="off">
                                 <div class="form-group">
-                                    <label class="req" for="comments">Your Review</label>
+                                    <label class="req" for="comments">your Review</label>
                                     <textarea class="form-control" rows="5" id="comments" name="comments" required="required"></textarea>
                                     <div class="help-block">
                                         <span class="text-danger">Note:</span> HTML is not translated!

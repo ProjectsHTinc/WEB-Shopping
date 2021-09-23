@@ -21,16 +21,15 @@
             <div class="container-fluid">
                 <div class="row">
                 <h3 class="mb-5">Contact Us</h3>
-                        <p class="text-capitalize mb-40">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                        
                     <div class="col-md-6">
-                   
                                     
-                                    <h5 class="contact-info mtb-10">contact info:</h5>
                                     <ul class="footer-list first-content">
-                                        <li><i class="pe-7s-map-marker"></i>Address will be here</li>
-                                        <li><i class="pe-7s-mail"></i>your-email@example.com</li>
-                                        <li><i class="pe-7s-call"></i>+00 123 45678</li>
-                                    </ul>
+                                        <li><i class="pe-7s-map-marker"></i> No 28, 3rd cross west Acedata Building</li>
+										<li style="margin-left:30px;"> Bharathi Colony, Peelamedu</li>
+										<li style="margin-left:30px;"> Coimbatore - 641004</li>
+                                        <li><i class="pe-7s-mail"></i> love@littleamore.in</li>
+                                        <li><i class="pe-7s-call"></i> +91 87540 32022</li>
               
                     </div>
                     <div class="col-md-6">

@@ -11,17 +11,16 @@
                                     <a href="#"><img class="img" src="<?php echo base_url(); ?>assets/front/img/logo/logo.png" alt="logo-img"></a>
                                 </div>
                                 <div class="footer-content">
-                                    <p>We are a team of designers and developers that create high quality HTML, Magento, Prestashop, Opencart.</p>
-                                    
+                                    <p>Little Amore is a conscious bespoke baby store. We handpick the best, softest cotton fabrics and organic muslin in modern and whimsical prints, and hope to bring more warmth and care to wrap your little bundle of joy! </p>
                                 </div>
                             </div>
                             <!-- Single Footer Start -->
                             <!-- Single Footer Start -->
                             <div class="single-footer col-md-3 col-sm-6 pl-50">
-                                <h4 class="footer-title">information</h4>
+                                <h4 class="footer-title">Quick Links</h4>
                                 <div class="footer-content">
                                     <ul class="footer-list">
-                                    	<li><a href="<?php echo base_url(); ?>aboutus/">about Us</a></li>
+                                    	<li><a href="<?php echo base_url(); ?>aboutus/">About Us</a></li>
                                         <li><a href="<?php echo base_url(); ?>contactus/">Contact Us</a></li>
                                         <li><a href="<?php echo base_url(); ?>offers/">Offer Zone</a></li>
 										<li><a href="#">FAQ</a></li>
@@ -32,11 +31,11 @@
                             <!-- Single Footer Start -->
                             <!-- Single Footer Start -->
                             <div class="single-footer col-md-3 col-sm-6">
-                                <h4 class="footer-title"></h4>
-                                <div class="footer-content">
+                               
+                                <div class="footer-content" style="margin-top:40px;">
                                     <ul class="footer-list">
                                     	<li><a href="#">delivery information</a></li>
-                                        <li><a href="<?php echo base_url(); ?>privacy/">privacy policy</a></li>
+                                        <li><a href="<?php echo base_url(); ?>privacy/">Privacy Policy</a></li>
                                         <li><a href="#">terms & conditions</a></li>
                                         
                                         <li><a href="#">returns</a></li>
@@ -49,9 +48,11 @@
                                 <h4 class="footer-title">Contact Info</h4>
 								<div class="footer-content">
                                  <ul class="footer-list first-content">
-                                        <li><i class="pe-7s-map-marker"></i>Address will be here</li>
-                                        <li><i class="pe-7s-mail"></i>your-email@example.com</li>
-                                        <li><i class="pe-7s-call"></i>+00 123 45678</li>
+                                        <li><i class="pe-7s-map-marker"></i>No 28, 3rd cross west Acedata Building</li>
+										<li style="margin-left:30px;">Bharathi Colony, Peelamedu</li>
+										<li style="margin-left:30px;">Coimbatore - 641004</li>
+                                        <li><i class="pe-7s-mail"></i>love@littleamore.in</li>
+                                        <li><i class="pe-7s-call"></i>+91 87540 32022</li>
                                     </ul>
 								</div>
                             </div>
@@ -76,14 +77,13 @@
                                 <!-- Footer Social List Start -->
                                 <div class="socila-footer">
                                     <ul class="social-footer-list list-inline text-right">
-                                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-rss" aria-hidden="true"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-facebook-square" style="color:#4267B2"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-instagram" aria-hidden="true" style="color:#833ab4"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-google-plus-square" aria-hidden="true" style="color:#db4a39" ></i></a></li>
+                                        <li><a href="#"><i class="fa fa-linkedin-square" aria-hidden="true" style="color:#0e76a8" ></i></a></li>
                                     </ul>
                                 </div>
-                                <!-- Footer Social List End -->
+                                <!-- Footer Social List End --><i class="fab fa-instagram-square"></i>
                             </div>
                         </div>
                         <!-- Row End -->
@@ -120,7 +120,16 @@
 
 
 <script>
-
+	$(document).ready(function() {
+	    $('.pgwSlider').pgwSlider({
+			
+			autoSlide:false,
+			displayControls :true,
+			adaptiveHeight:false,
+			verticalCentering:true
+		});
+	});
+	
 	$( function() {
 		var availableTags = [<?php
 		 $tot_count = count($tag_result);
@@ -150,6 +159,28 @@
   });
 
  </script>
+ <script id="addJS">jQuery(document).ready(function() {
+  $('#gallery-2').royalSlider({
+    fullscreen: {
+      enabled: true,
+      nativeFS: true
+    },
+    controlNavigation: 'thumbnails',
+    thumbs: {
+      orientation: 'vertical',
+      paddingBottom: 4,
+      appendSpan: true
+    },
+    transitionType:'fade',
+    autoScaleSlider: true, 
+    autoScaleSliderWidth: 960,     
+    autoScaleSliderHeight: 600,
+    loop: false,
+    arrowsNav: true,
+    keyboardNavEnabled: true
+  });
+});
+</script>
 
      </body>
 </html>

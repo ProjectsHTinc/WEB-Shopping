@@ -56,6 +56,12 @@
 	<!-- cookie css -->
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/front/css/purecookie.css">
 	
+	<!-- pgwslider css -->
+	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/front/css/pgwslider.css">
+	
+	<!-- pgwslider css -->
+	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/front/css/royalslider.css">
+	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/front/css/rs-universal.css">
 	
     <!-- modernizr js -->
     <script src="<?php echo base_url(); ?>assets/front/js/modernizr-2.8.3.min.js"></script>
@@ -68,6 +74,10 @@
     <script src="<?php echo base_url(); ?>assets/front/js/jquery.validate.js"></script>
     <script src="<?php echo base_url(); ?>assets/front/js/additional-methods.js"></script>
 	
+	<script src="<?php echo base_url(); ?>assets/front/js/pgwslider.js"></script>
+	
+	<script src="<?php echo base_url(); ?>assets/front/js/jquery.royalslider.min.js"></script>
+	 
 	<!-- cookie js -->
 	<script>var privacy_url = '<?= $privacy_url ?>'</script>
     <script src="<?php echo base_url(); ?>assets/front/js/purecookie.js"></script>

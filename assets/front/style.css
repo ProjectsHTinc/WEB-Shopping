@@ -39,9 +39,11 @@ Description: Responsive Furniture & Interior Ecommerce HTML Template;
 /*----------------------------------------*/
 /* 1. Theme Default CSS
 /*----------------------------------------*/
-@import url('https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i|Nunito+Sans:400,600,700,800');
+@import url('https://fonts.googleapis.com/css2?family=Signika');
+/*@import url('https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i|Nunito+Sans:400,600,700,800');*/
 body {
-    font-family: 'Nunito Sans', sans-serif;
+	font-family: 'Signika', sans-serif;
+    /*font-family: 'Nunito Sans', sans-serif;*/
     font-weight: 400;
     color: #505050;
     font-size: 14px;
@@ -62,7 +64,7 @@ body {
     max-width: 100%;
 	padding-top:10px;
 	padding-bottom : 3px;
-	background:#ce0100;
+	background:#f06a6b;
 	text-align : center;
 	color:#ffffff;
 }
@@ -77,7 +79,7 @@ body {
 .section-info {
     font-size: 28px;
     font-weight: 800;
-    text-transform: uppercase;
+    /*text-transform: uppercase;*/
     position: relative;
     display: inline-block;
 }
@@ -135,8 +137,8 @@ body {
     position: absolute;
     width: 46px;
     height: 20px;
-    background: #797979;
-    color: #fff;
+    background: #94dadc;
+    color: #000000;
     text-transform: uppercase;
     font-weight: 700;
     font-size: 10px;
@@ -381,6 +383,7 @@ input#newsletter-permission {
 /*----------------------------------------*/
 /* 4. Header CSS
 /*----------------------------------------*/
+
 .sticky .logo img {
     /*max-width: 150px;*/
 }
@@ -541,7 +544,7 @@ input#newsletter-permission {
 
 .selection-list > li > span,
 .selection-list > li > a span {
-    background: #797979 none repeat scroll 0 0;
+    background: #cc0000 none repeat scroll 0 0;
     border-radius: 100%;
     color: #fff;
     font-size: 10px;
@@ -1133,7 +1136,7 @@ ul.pull-left.home-4-search i {
 }
 
 .price {
-    color: #505050;
+    color: #ef7571;
     font-size: 16px;
     -webkit-transform: scale(1);
     -moz-transform: scale(1);
@@ -1171,11 +1174,11 @@ ul.pull-left.home-4-search i {
 }
 
 .pro-content .action-links2 a {
-    color: #ffffff;
-	background:#797979;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
+    color: #000000;
+	background:#94dadc;
+    font-size: 13px;
+    /*font-weight: 600;
+    text-transform: uppercase;*/
     cursor: pointer;
 	text-align: center;
     padding: 10px;
@@ -1501,7 +1504,15 @@ ul.pull-left.home-4-search i {
 }
 
 .rating.f-left.mr-10 i {
-    color: #999999;
+   /* color: #999999;*/
+}
+
+
+.fa-star{
+	color: #fecd33;
+}
+.fa-star-o{
+	color: #999999;
 }
 
 .pro-price-list .price {
@@ -1526,19 +1537,20 @@ ul.pull-left.home-4-search i {
 #button-review {
     margin: 0 20px 30px 0;
     height: 46px;
-    border-radius: 0px;
+    border-radius: 5px;
     padding: 0 30px;
-    border: 1px solid #797979;
-    color: #fff;
-    background: #797979;
+    border: 1px solid #94dadc;
+    color: #000000;
+    background: #94dadc;
     font-size: 14px;
-    text-transform: uppercase;
-    font-weight: 600;
+    /*text-transform: uppercase;
+    font-weight: 600;*/
 }
 
 .product-button-actions .add-to-cart:hover {
-	border: 1px solid #949696;
-    background: #949696;
+	 color: #ffffff;
+	border: 1px solid #f06a6b;
+    background: #f06a6b;
 }
 
 .product-button-actions .same-btn {
@@ -2097,13 +2109,13 @@ ul.pull-left.home-4-search i {
 
 .footer-title {
     font-size: 16px;
-    font-weight: 800;
+    font-weight: 400;
     text-transform: uppercase;
-    font-family: Nunito Sans;
+	color:#000000;
 }
 
 .footer-content {
-    margin-top: 35px;
+    margin-top: 20px;
 }
 
 .single-footer p {
@@ -2116,7 +2128,7 @@ ul.pull-left.home-4-search i {
 }
 
 .footer-list li a {
-    color: #505050;
+    color: #797979;
     text-transform: capitalize;
     padding: 3px 0;
     display: block;
@@ -2127,7 +2139,7 @@ ul.pull-left.home-4-search i {
 }
 
 .footer-content li i {
-    font-size: 14px;
+    font-size: 20px;
     margin-right: 10px;
     vertical-align: middle;
 }
@@ -2145,8 +2157,8 @@ ul.pull-left.home-4-search i {
 
 .social-footer-list li a {
     color: #a2a2a2;
-    font-size: 17px;
-    padding-left: 14px;
+    font-size: 25px;
+    /*padding-left: 14px;*/
 }
 
 .social-footer-list li a:hover {
@@ -2173,9 +2185,9 @@ ul.pull-left.home-4-search i {
 .newsletter-btn,
 .customer-btn,
 .return-customer-btn {
-    background: #797979 none repeat scroll 0 0;
-    border: 1px solid #797979;
-    border-radius: 0;
+    background: #f06a6b none repeat scroll 0 0;
+    border: 1px solid #f06a6b;
+    border-radius: 5px;
     color: #fff;
     display: inline-block;
     font-size: 14px;
@@ -2697,14 +2709,14 @@ ul.pull-left.home-4-search i {
 
 .table-content table td.product-subtotal {
     font-size: 14px;
-    font-weight: bold;
+   
     width: 120px;
 }
 
 .table-content table td.product-name a,
 .product-stock-status span {
     font-size: 14px;
-    font-weight: 700;
+    
     margin-left: 10px;
     color: #6f6f6f;
     text-transform: capitalize;
@@ -2724,7 +2736,7 @@ ul.pull-left.home-4-search i {
 }
 
 .table-content table td.product-remove i {
-    color: #919191;
+    color: #e90202;
     display: inline-block;
     font-size: 20px;
     height: 40px;
@@ -2735,7 +2747,7 @@ ul.pull-left.home-4-search i {
 
 .table-content table .product-price .amount {
     font-size: 15px;
-    font-weight: 700;
+    
 }
 
 .table-content table td.product-remove i:hover {
@@ -2772,21 +2784,19 @@ ul.pull-left.home-4-search i {
 .coupon input[type="submit"],
 .buttons-cart a,
 .coupon-info p.form-row input[type="submit"] {
-    background: #797979 none repeat scroll 0 0;
+    background: #94dadc none repeat scroll 0 0;
     border: medium none;
-    border-radius: 0;
+    border-radius: 5px;
     box-shadow: none;
-    color: #fff;
+    color: #000000;
     display: inline-block;
     float: left;
     font-size: 12px;
-    font-weight: 700;
     height: 40px;
     line-height: 40px;
     margin-right: 15px;
     padding: 0 15px;
     text-shadow: none;
-    text-transform: uppercase;
     transition: all 0.3s ease 0s;
     white-space: nowrap;
     width: inherit;
@@ -2800,12 +2810,12 @@ ul.pull-left.home-4-search i {
 .buttons-cart input:hover,
 .coupon input[type="submit"]:hover,
 .buttons-cart a:hover {
-    background: #797979 none repeat scroll 0 0;
+    background: #f06a6b none repeat scroll 0 0;
     color: #fff;
 }
 
 .buttons-cart a {
-    color: #fff;
+    color: #000000;
     float: left;
     height: 40px;
     line-height: 40px;
@@ -2824,7 +2834,7 @@ ul.pull-left.home-4-search i {
     display: inline-block;
     font-size: 30px;
     margin: 0 0 35px;
-    text-transform: uppercase;
+   
     font-weight: 500;
 }
 
@@ -2904,20 +2914,24 @@ a.shipping-calculator-button:hover {
 }
 
 .wc-proceed-to-checkout a {
-    background: #797979;
-    color: #fff;
+    background: #94dadc;
+    color: #000000;
     display: inline-block;
-    font-size: 14px;
-    font-weight: 700;
+    font-size: 16px;
     height: 50px;
     line-height: 50px;
     margin-top: 20px;
     padding: 0 30px;
     text-transform: none;
+	border-radius: 5px;
+	border: 1px solid #94dadc;
 }
 
+	
 .wc-proceed-to-checkout a:hover {
-    background: #949696;
+	color: #ffffff;
+    background: #f06a6b;
+	border: 1px solid #f06a6b;
 }
 
 .amount del {
@@ -3322,7 +3336,7 @@ p.checkout-coupon input[type="submit"] {
 }
 
 .order-button-payment input {
-    background: #797979;
+    background: #f06a6b;
     border: medium none;
     color: #fff;
     font-size: 17px;
@@ -3336,7 +3350,7 @@ p.checkout-coupon input[type="submit"] {
 }
 
 .order-button-payment input:hover {
-    background: #444
+    background: #e06162
 }
 
 /*----------------------------------------*/
@@ -3348,6 +3362,8 @@ p.checkout-coupon input[type="submit"] {
 
 .register-title h3 {
     font-size: 31px;
+	color: #333;
+	text-transform:capitalize ;
 }
 
 legend {
@@ -3358,10 +3374,10 @@ legend {
 .newsletter-btn,
 .customer-btn,
 .return-customer-btn {
-    /*background: transparent;*/
+    /*background: transparent;
 	background: #797979;
     color: #ffffff;
-    text-align: center;
+    text-align: center;*/
 }
 
 .return-customer-btn {
@@ -3376,7 +3392,7 @@ legend {
 .newsletter-btn:hover,
 .customer-btn:hover,
 .return-customer-btn:hover {
-    background: #949696;
+    background: #e55a5b;
     color: #fff;
 }
 
@@ -4185,6 +4201,10 @@ legend {
 
 .error{
 	color:red;
+}
+
+.colour_blue{
+	color:#95dadc;
 }
 
 .blink_me {

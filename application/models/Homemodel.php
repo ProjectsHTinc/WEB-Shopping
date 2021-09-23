@@ -628,10 +628,17 @@ Class Homemodel extends CI_Model
    }
    
    function get_productdetails($prod_id){
-	   
-	   	$c_update = "UPDATE product_view_count SET view_count = view_count+1 WHERE product_id = '$prod_id'";
-		$c_update = $this->db->query($c_update);
-		
+
+		$check_prod_id ="SELECT * FROM product_view_count WHERE product_id = '$prod_id'";
+		$res=$this->db->query($check_prod_id);
+		if($res->num_rows()>0){
+			$c_update = "UPDATE product_view_count SET view_count = view_count+1 WHERE product_id = '$prod_id'";
+			$c_updated = $this->db->query($c_update);
+		}else{
+			$c_insert = "INSERT INTO product_view_count(`product_id`, `view_count`, `created_at`) VALUES ('$prod_id', '1', now())";
+			$c_inserted = $this->db->query($c_insert);
+		}
+
 		$sql="SELECT * FROM products WHERE id ='$prod_id' AND status = 'Active'";
 	  	$resu=$this->db->query($sql);
 	  	$res=$resu->result();

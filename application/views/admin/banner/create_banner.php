@@ -1,8 +1,8 @@
 	<div class="container-fluid">
       <div class="row">
-				<div class="row heading-bg bg-green">
+				<div class="row heading-bg bg-blue">
 					<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-					  <h5 class="txt-light">Banner</h5>
+					  <h5 class="txt-dark">Banner</h5>
 					</div>
 
 					<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
@@ -195,31 +195,31 @@ $.validator.addMethod('filesize', function (value, element, param) {
 
 $('#adminform').validate({ // initialize the plugin
     rules: {
-        prod_id: {required: true,
-          remote: {
-                url: "<?php echo base_url(); ?>banner/check_banner",
-                type: "post"
-             }
-           },
-        banner_title : {
-           required: true, maxlength: 100
-       },
-			 banner_desc : {
-					required: true,maxlength: 100
+		prod_id: {required: true,
+		  remote: {
+				url: "<?php echo base_url(); ?>banner/check_banner",
+				type: "post"
+			 }
+		   },
+		banner_title : {
+		   required: true, maxlength: 100
+		},
+		banner_desc : {
+			required: true,maxlength: 100
 			},
 
-			banner_img : {
+		banner_img : {
 				 required: true,accept: "jpg,jpeg,png",filesize: 1048576,
 		 },
-			 cat_status : {
+		cat_status : {
 					required: true
 				}
-    },
+		},
     messages: {
-        prod_id: { required:"select product",remote:"product  already added for banner" },
-				banner_title: { required:"Enter the title",maxlength:"Max length is 100 characters"},
-        banner_desc: { required:"Enter the Description",maxlength:"Max length is 100 characters"},
-				banner_img: { required:"Select banner image", accept:"Please upload .jpg or .png .",fileSize:"File must be JPG or PNG, less than 1MB"}
+		prod_id: { required:"select product",remote:"product  already added for banner" },
+		banner_title: { required:"Enter the title",maxlength:"Max length is 100 characters"},
+		banner_desc: { required:"Enter the Description",maxlength:"Max length is 100 characters"},
+		banner_img: { required:"Select banner image", accept:"Please upload .jpg or .png .",fileSize:"File must be JPG or PNG, less than 1MB"}
     }
 
 });

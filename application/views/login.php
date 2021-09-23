@@ -26,7 +26,7 @@
                     <div class="col-sm-6">
                         <div class="well">
                             <div class="new-customer">
-                                <h3>NEW CUSTOMER</h3>
+                                <h3>New Customer</h3>
                                 <p class="mtb-10"><strong>Register</strong></p>
                                 <p>By creating an account you will be able to shop faster, be up to date on an order's status, and keep track of the orders you have previously made</p>
                                 <a class="customer-btn" href="<?php echo base_url(); ?>register/">continue</a>
@@ -38,7 +38,7 @@
                     <div class="col-sm-6">
                         <div class="well">
                             <div class="return-customer">
-                                <h3 class="mb-10">RETURNING CUSTOMER</h3>
+                                <h3 class="mb-10">Returning Customer</h3>
                                 <p class="mb-10"><strong>I am a returning customer</strong></p>
                                
 							    <form name="login" id="login" method="post" action="">

@@ -34,8 +34,11 @@ Please do not change anything here! write in a custom.css file if required!
 /*************************
     General
 *************************/
+@import url('https://fonts.googleapis.com/css2?family=Signika');
+
 body {
-    font-family: 'Open Sans', sans-serif;
+	font-family: 'Signika', sans-serif;
+    /*font-family: 'Open Sans', sans-serif;*/
     font-weight: 400;
     font-style: normal;
     font-size: 14px;
@@ -95,10 +98,10 @@ h5,
 h6 {   
     font-weight: 500;
     margin-top: 0px;
-    text-transform: uppercase;
+    /*text-transform: uppercase;*/
     font-style: normal;
     margin: 0;
-    color: #1a1a1a;
+    color: ##1a1a1a;
 }
 h1 a,
 h2 a,
@@ -106,7 +109,8 @@ h3 a,
 h4 a,
 h5 a,
 h6 a { 
-    color: inherit 
+	color: #797979;
+   /* color: inherit */
 }
 h1 {
     font-size: 35px;

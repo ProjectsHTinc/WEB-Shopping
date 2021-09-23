@@ -1,8 +1,8 @@
 	<div class="container-fluid">
           <div class="row">
-    				<div class="row heading-bg bg-green">
+    				<div class="row heading-bg bg-blue">
     					<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-    					  <h5 class="txt-light">Sales</h5>
+    					  <h5 class="txt-dark">Sales</h5>
     					</div>
 
     					<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
@@ -109,9 +109,9 @@
 			</div>
 
 
-<script type="text/javascript" src="<?php echo base_url(); ?>assets/bower_components/moment/min/moment-with-locales.min.js"></script>
-<script src="<?php echo base_url(); ?>assets/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
-<script type="text/javascript" src="<?php echo base_url(); ?>assets/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/vendors/bower_components/moment/min/moment-with-locales.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/vendors/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/vendors/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
 
 <script>
 $('#datetimepicker1').datetimepicker({

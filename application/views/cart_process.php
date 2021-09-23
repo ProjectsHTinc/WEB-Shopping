@@ -119,7 +119,7 @@
 									<table>
 										<tbody>
 										<tr>
-											<td><input placeholder="Apply Promo Code" type="text" name="promo_code" id="promo_code" value="" style="width:150px;background: #ffffff; color:#ccc;border: 1px solid #ccc;padding:5px;font-size: 15px;font-weight: 600;height: 40px;">&nbsp;<input type="button" value="Apply" onclick="promo_apply()" name="promo_btn" id="promo_btn" style="width:150px;background: #797979; color:#ffffff;border: 1px solid #ccc;padding:5px;font-size: 15px;font-weight: 600;height: 40px;text-transform: uppercase;" ></td>
+											<td><input placeholder="Apply Promo Code" type="text" name="promo_code" id="promo_code" value="" style="width:150px;background: #ffffff; color:#ccc;border: 1px solid #ccc;padding:5px;font-size: 15px;font-weight: 300;height: 40px;">&nbsp;<input type="button" value="Apply" onclick="promo_apply()" name="promo_btn" id="promo_btn" style="width:150px;background: #f06a6b; color:#ffffff;border: 1px solid #f06a6b;padding:5px;font-size: 15px;font-weight: 600;height: 40px;text-transform: uppercase;" ></td>
 										</tr>
 										</tbody>
 									</table>
@@ -127,7 +127,7 @@
 									<table>
 										<tbody>
 										<tr>
-											<td><input type="radio" name="payment_tupe" id="payment_tupe" value="One" checked>Cash on Delivery</td>
+											<td><input type="radio" name="payment_tupe" id="payment_tupe" value="One" checked>&nbsp;Cash on Delivery</td>
 											<?php
 												if (count($wallet_status)>0){
 													foreach($wallet_status as $wallet){ 
@@ -136,11 +136,11 @@
 							
 											?>
 											<?php if ($wallet_amt !='0.00'){ ?>
-											<td><input type="radio" name="payment_tupe" id="payment_tupe" value="Two">Wallet</td>
+											<td><input type="radio" name="payment_tupe" id="payment_tupe" value="Two">&nbsp;Wallet</td>
 											<?php } 
 											
 											} ?>
-											<td><input type="radio" name="payment_tupe" id="payment_tupe" value="Three">CCAvenue</td>
+											<td><input type="radio" name="payment_tupe" id="payment_tupe" value="Three">&nbsp;CCAvenue</td>
 										</tr>
 										</tbody>
 									</table>

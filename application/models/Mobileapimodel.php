@@ -434,8 +434,8 @@ class Mobileapimodel extends CI_Model {
 		if ($phone!=''){
 			$textmessage='Password Reset OTP '.$otp.'';
 			$notes =utf8_encode($textmessage);
-			//$this->smsmodel->send_sms($phone,$notes);
-			$this->smsmodel->sendSMS($phone,$textmessage);
+			
+			//$this->smsmodel->sendSMS($phone,$textmessage);
 		}
 		if ($email!=''){
 			  $subject = "Forgot Password - OTP";
@@ -868,7 +868,7 @@ class Mobileapimodel extends CI_Model {
                 "product_meta_desc"=>$rows->product_meta_desc,
                 "product_meta_keywords"=>$rows->product_meta_keywords,
                 "stocks_left"=>$rows->stocks_left,
-                "wishlisted"=>$rows->wishlisted,
+                "wishlisted"=>$rows->wishlisted
               );
 
 			$product_details = array("status" => "success","msg"=>"product details","product_details"=>$prd_details);
@@ -1114,6 +1114,7 @@ class Mobileapimodel extends CI_Model {
         $data = array("status" => "error","msg"=>"No records found");
        }else{
 		$wishlist_count = $res->num_rows();
+		$wishlist_value='1';
         $result=$res->result();
         foreach($result  as $rows){
             $product_list[]=array(
@@ -1135,6 +1136,7 @@ class Mobileapimodel extends CI_Model {
               "product_meta_desc"=>$rows->product_meta_desc,
               "product_meta_keywords"=>$rows->product_meta_keywords,
               "stocks_left"=>$rows->stocks_left,
+			  "wishlisted"=>$wishlist_value
             );
         }
       $data = array("status" => "success","msg"=>"wishlist found","wishlist_count"=>$wishlist_count,"product_list"=>$product_list);
@@ -1663,6 +1665,7 @@ class Mobileapimodel extends CI_Model {
 	 
         $check_order = "SELECT
 							po.id as purchase_order_id,
+							po.status as order_status,
 							po.*,
 							ca.*,
 							cm.country_name
@@ -2117,7 +2120,7 @@ class Mobileapimodel extends CI_Model {
             foreach($result as $rows){
 				$sorder_id = $rows->order_id;
 
-					$select_pic="SELECT p.product_cover_img FROM product_cart AS pc LEFT JOIN products AS p ON p.id = pc.product_id LEFT JOIN purchase_order AS pur ON pur.order_id = pc.order_id WHERE pc.order_id = '$sorder_id' ORDER BY pc.id LIMIT 1";
+					 $select_pic="SELECT p.product_cover_img FROM product_cart AS pc LEFT JOIN products AS p ON p.id = pc.product_id LEFT JOIN purchase_order AS pur ON pur.order_id = pc.order_id WHERE pc.order_id = '$sorder_id' ORDER BY pc.id LIMIT 1";
 					$res_pic=$this->db->query($select_pic);
 						if($res_pic->num_rows()>0){
 							$result_pic=$res_pic->result();
@@ -2144,8 +2147,8 @@ class Mobileapimodel extends CI_Model {
 						  "mobile_number"=>$rows->mobile_number,
 						  "email_address"=>$rows->email_address,
 						  "alternative_mobile_number"=>$rows->alternative_mobile_number,
-						  "order_status"=>$rows->order_status,
-						  "order_cover_img"=>$product_cover_img
+						  "order_status"=>$rows->order_status
+						  /*"order_cover_img"=>$product_cover_img*/
 						);
 				}
               $data = array("status" => "success","msg"=>"orders found","order_count"=>$order_count,"order_details"=>$order_details);

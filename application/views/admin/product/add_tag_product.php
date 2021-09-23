@@ -16,11 +16,10 @@
 
 	<div class="container-fluid">
       <div class="row">
-				<div class="row heading-bg bg-green">
+				<div class="row heading-bg bg-blue">
 					<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-					  <h5 class="txt-light">Product </h5>
+					  <h5 class="txt-dark">Product </h5>
 					</div>
-
 					<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
 					  <ol class="breadcrumb">
 						<li><a href="<?php echo base_url(); ?>admin/home">Dashboard</a></li>
@@ -30,8 +29,6 @@
 					</div>
 			</div>
 		</div>
-
-
 
                 <div class="row">
     							<div class="col-md-6">

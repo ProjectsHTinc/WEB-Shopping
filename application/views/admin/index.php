@@ -1,8 +1,8 @@
           <div class="container-fluid">
 		  
-				<div class="row heading-bg  bg-red">
+				<div class="row heading-bg bg-blue">
 					<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-						<h5 class="txt-light">Dashboard</h5>
+						<h5 class="txt-dark">Dashboard</h5>
 					</div>
 					<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
 						<ol class="breadcrumb">
@@ -27,7 +27,7 @@
 									<div class="sm-graph-box">
 										<div class="row">
 											<div class="col-xs-6">
-												<i class="fa fa-user" style="font-size:50px;padding-left:50px;"></i>
+												<i class="fa fa-user" style="font-size:50px;padding-left:50px;color:#EF6A6B;"></i>
 											</div>
 											<div class="col-xs-6">
 												<div class="counter-wrap text-right">
@@ -51,7 +51,7 @@
 										<div class="sm-graph-box">
 											<div class="row">
 												<div class="col-xs-6">
-													<i class="fa fa-shopping-basket" style="font-size:40px;padding-left:50px;"></i>
+													<i class="fa fa-shopping-basket" style="font-size:40px;padding-left:50px;color:#FDBC5E;"></i>
 												</div>
 												<div class="col-xs-6">
 													<div class="counter-wrap text-right">
@@ -75,7 +75,7 @@
 										<div class="sm-graph-box">
 											<div class="row">
 												<div class="col-xs-6"> 
-													<i class="fa fa-outdent" style="font-size:40px;padding-left:50px;"></i>
+													<i class="fa fa-outdent" style="font-size:40px;padding-left:50px;color:#699BD2;"></i>
 												</div>
 												<div class="col-xs-6">
 													<div class="counter-wrap text-right">
@@ -93,7 +93,7 @@
 						<div class="panel panel-default card-view">
 							<div class="panel-heading">
 								<div class="pull-left">
-									<h6 class="panel-title txt-dark"><i class="icon-share mr-10"></i>Monthly Sales Report</h6>
+									<h6 class="panel-title txt-dark">Monthly Sales Report</h6>
 								</div>
 								<div class="clearfix"></div>
 							</div>
@@ -166,8 +166,10 @@
                                                   <tr>
                                                       <td><?php echo $newDate = date("d-m-Y H:i:s", strtotime($res_prod->purchase_date));  ?></td>
                                                       <td><?php echo $res_prod->order_id; ?></td>
-                                                      <td>
-                                                          <span class="label label-primary font-weight-100"><?php echo $res_prod->status; ?></span>
+                                                      <td><?php if($res_prod->status =='Success'){ ?>
+															<button class="label label-success font-weight-100">Order Placed</button>
+													  <?php } ?>
+                                                        
                                                       </td>
                                                       <td>
                                                         <?php echo $res_prod->name; ?>

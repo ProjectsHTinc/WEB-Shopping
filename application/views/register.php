@@ -25,7 +25,7 @@
 				<div class="col-sm-2"></div>
 					<div class="col-sm-8">
                     <div class="register-title">
-                        <h3 class="mb-10">REGISTER ACCOUNT</h3>
+                        <h3 class="mb-10">Register Account</h3>
                         <p class="mb-10">If you already have an account with us, please login at the <a href="<?php echo base_url(); ?>login/">login page</a>.</p>
                     </div>
 					</div>

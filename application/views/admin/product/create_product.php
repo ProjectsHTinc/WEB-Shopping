@@ -15,9 +15,9 @@
 
 	<div class="container-fluid">
       <div class="row">
-				<div class="row heading-bg bg-green">
+				<div class="row heading-bg bg-blue">
 					<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-					  <h5 class="txt-light">Product </h5>
+					  <h5 class="txt-dark">Product </h5>
 					</div>
 
 					<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
@@ -33,16 +33,16 @@
 
     <div class="row">
       <div class="col-lg-12">
-<div class="panel panel-default card-view">
-<div class="panel-heading">
-									<div class="pull-left">
-										<h6 class="panel-title txt-dark">Product  information  </h6>
-									</div>
-									<div class="clearfix"></div>
-								</div>
-    <div id='progress'><div id='progress-complete'></div></div>
+			<div class="panel panel-default card-view">
+				<div class="panel-heading">
+					<div class="pull-left">
+						<h6 class="panel-title txt-dark">Product  information  </h6>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+		<div id='progress'><div id='progress-complete'></div></div>
 
-    <form id="SignupForm" action="<?php echo base_url(); ?>productmaster/create" method="post" enctype="multipart/form-data" name="SignupForm">
+		<form id="SignupForm" action="<?php echo base_url(); ?>productmaster/create" method="post" enctype="multipart/form-data" name="SignupForm">
         <fieldset>
            <div class="row">
 						  <div class="col-md-6">
@@ -126,8 +126,6 @@
 								</div>
 							</div>
 						</div>
-
-						
 						<div class="row">
 								<div class="col-md-6">
 							<div class="form-group mb-30">
@@ -357,7 +355,7 @@
       .next, .submit {float:right}
       .error { color: #ff0000; }
       #progress { position: relative; height: 5px; background-color: #fff; margin-bottom: 20px; }
-      #progress-complete { border: 0; position: absolute; height: 10px; min-width: 50px; background-color: #3cb878 ; transition: width .2s ease-in-out; }
+      #progress-complete { border: 0; position: absolute; height: 10px; min-width: 50px; background-color: #94dadc ; transition: width .2s ease-in-out; }
 </style>
 <script>
 

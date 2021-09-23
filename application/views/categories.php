@@ -126,9 +126,9 @@ if (count($category_details)>0){
                                                       <?php 
 										 if ($stocks_left>0){
 											 if ($combined_status == '1'){ ?>
-												<a data-toggle="tooltip" title="View Products" href="<?php echo base_url(); ?>home/product_details/<?php echo $sproduct_id; ?>/<?php echo $enc_product_name ; ?>/" style="background:#FAA320;">view products</a>
+												<a data-toggle="tooltip" title="View Products" href="<?php echo base_url(); ?>home/product_details/<?php echo $sproduct_id; ?>/<?php echo $enc_product_name ; ?>/" style="background:#FAA320;">View Product</a>
 											<?php } else { ?>
-												<a data-toggle="tooltip" title="Add to Cart" href="<?php echo base_url(); ?>home/addcart/<?php echo $sproduct_id; ?>/">add to cart</a>
+												<a data-toggle="tooltip" title="Add to Cart" href="<?php echo base_url(); ?>home/addcart/<?php echo $sproduct_id; ?>/">Add to Cart</a>
 											 <?php }
 										 } else {
 										?>
@@ -167,7 +167,7 @@ if (count($category_details)>0){
                         <aside class="categorie-sidebar mb-100">
                             <!-- Categories Module Start -->
                             <div class="categorie-module mb-80">
-                                <h3>categories</h3>
+                                <h3>Categories</h3>
                                  <ul class="categorie-list">
 								<?php 
 									if (count($main_catmenu)>0){

@@ -9,13 +9,6 @@
                 <?php foreach($home_banner as $imglist){ 
 						$img_id = $imglist->id;
 						$picture = $imglist->banner_image;
-				?>
-                    <img src="<?php echo base_url(); ?>assets/banner/<?php echo $picture; ?>" data-thumb="<?php echo base_url(); ?>assets/banner/<?php $picture; ?>" alt="" title="#htmlcaption<?php echo $img_id;?>" />
-                <?php } ?>
-                </div>
-                <!-- Slider Background  Image Start-->
-                <?php foreach($home_banner as $imglist){ 
-						$img_id = $imglist->id;
 						$banner_title  = $imglist->banner_title ;
 						$disp_banner_title = wordwrap($banner_title, 22, "<br />");
 						$banner_desc  = $imglist->banner_desc ;
@@ -26,25 +19,19 @@
 						$enc_product_name = strtolower(preg_replace("/[^\w]/", "-", $imglist->product_name));
 						$enc_product_id = base64_encode($product_id);
 				?>
-                    <!-- Slider htmlcaption Start-->
-                <div id="htmlcaption<?php echo $img_id;?>" class="nivo-html-caption slider-caption">
-                    <!-- Slider Text Start -->
-                    <div class="slider-text">
-                        <h2 class="wow fadeInLeft" data-wow-delay="1s"><?php echo $disp_banner_title; ?></h2>
-                        <p class="wow fadeInRight" data-wow-delay="1s"><?php echo $disp_banner_desc; ?></p>
-                        <a class="wow fadeInLeft" data-wow-delay="0.8s" href="<?php echo base_url(); ?>home/product_details/<?php echo $sproduct_id; ?>/<?php echo $enc_product_name ; ?>/">shop now</a>
-                    </div>
-                    <!-- Slider Text End -->
+                    <a href="<?php echo base_url(); ?>home/product_details/<?php echo $sproduct_id; ?>/<?php echo $enc_product_name ; ?>/"><img src="<?php echo base_url(); ?>assets/banner/<?php echo $picture; ?>" data-thumb="<?php echo base_url(); ?>assets/banner/<?php $picture; ?>" alt="" title="#htmlcaption<?php echo $img_id;?>" /></a>
+                <?php } ?>
                 </div>
+               
                 <!-- Slider htmlcaption End -->
                 <?php } ?>
             </div>
             <!-- Main Slider Area End -->
         </div>
         <!-- Slider Area End -->
-<?php }	?>
 
-<div class="home-home-2-banner pb-50">
+
+		<div class="home-home-2-banner pb-50">
             <div class="container-fluid">
                 <div class="row">
                     <!-- Single Banner Start -->
@@ -102,7 +89,7 @@
                     <div class="col-xs-12">
                         <div class="section-title text-center mb-40">
                             <span class="section-desc mb-15">Top new in this week</span>
-                            <h3 class="section-info">new products</h3>
+                            <h3 class="section-info colour_blue">New Products</h3>
                         </div>
                     </div>
                     <!-- Section Title End -->
@@ -165,9 +152,9 @@
                                          <?php 
 										 if ($stocks_left>0){
 											 if ($combined_status == '1'){ ?>
-												<a data-toggle="tooltip" title="View Products" href="<?php echo base_url(); ?>home/product_details/<?php echo $sproduct_id; ?>/<?php echo $enc_product_name ; ?>/" style="background:#ffb23c;">view products</a>
+												<a data-toggle="tooltip" title="View Products" href="<?php echo base_url(); ?>home/product_details/<?php echo $sproduct_id; ?>/<?php echo $enc_product_name ; ?>/" style="background:#ffb23c;">View product</a>
 											<?php } else { ?>
-												<a data-toggle="tooltip" title="Add to Cart" href="<?php echo base_url(); ?>home/addcart/<?php echo $sproduct_id; ?>/">add to cart</a>
+												<a data-toggle="tooltip" title="Add to Cart" href="<?php echo base_url(); ?>home/addcart/<?php echo $sproduct_id; ?>/">Add to Cart</a>
 											 <?php }
 										 } else {
 										?>
@@ -212,12 +199,16 @@
                 <div class="row">
                     <!-- Big Banner Start -->
                     <div class="col-sm-12">
-                        <div class="big-banner text-center" style="background: url(<?php echo base_url(); ?>assets/ads/<?php echo $adv_img; ?>) no-repeat center center / cover;">
+					<div class="single-banner zoom">
+                             <a href="<?php echo base_url(); ?>home/subcategories/<?php echo $scat_id; ?>/<?php echo $enc_cat_name ; ?>/"><img src="<?php echo base_url(); ?>assets/ads/<?php echo $adv_img; ?>" alt="Offers"></a>
+                        </div>
+						
+                        <!--<div class="big-banner text-center" style="background: url(<?php echo base_url(); ?>assets/ads/<?php echo $adv_img; ?>) no-repeat center center / cover;">
                             <div class="big-banner-desc">
                                 <h2><?php echo $adv_title; ?></h2>
                                 <a href="<?php echo base_url(); ?>home/subcategories/<?php echo $scat_id; ?>/<?php echo $enc_cat_name ; ?>/">view more</a>
                             </div>
-                        </div>
+                        </div>-->
                     </div>
                     <!-- Big Banner End -->
                 </div>
@@ -240,7 +231,7 @@
                     <div class="col-xs-12">
                         <div class="section-title text-center mb-40">
                             <span class="section-desc mb-20">Most Viewed from customers</span>
-                            <h3 class="section-info">popular products</h3>
+                            <h3 class="section-info colour_blue">Popular Products</h3>
                         </div>
                     </div>
                     <!-- Section Title End -->
@@ -301,9 +292,9 @@
                                         <?php 
 										 if ($stocks_left>0){
 											 if ($combined_status == '1'){ ?>
-												<a data-toggle="tooltip" title="View Products" href="<?php echo base_url(); ?>home/product_details/<?php echo $sproduct_id; ?>/<?php echo $enc_product_name ; ?>/" style="background:#ffb23c;">view products</a>
+												<a data-toggle="tooltip" title="View Products" href="<?php echo base_url(); ?>home/product_details/<?php echo $sproduct_id; ?>/<?php echo $enc_product_name ; ?>/" style="background:#ffb23c;">View Product</a>
 											<?php } else { ?>
-												<a data-toggle="tooltip" title="Add to Cart" href="<?php echo base_url(); ?>home/addcart/<?php echo $sproduct_id; ?>/">add to cart</a>
+												<a data-toggle="tooltip" title="Add to Cart" href="<?php echo base_url(); ?>home/addcart/<?php echo $sproduct_id; ?>/">Add to Cart</a>
 											 <?php }
 										 } else {
 										?>

@@ -73,12 +73,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $active_group = 'default';
 $query_builder = TRUE;
 
+
+
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
-	'username' => 'happysan_shopping',
-	'password' => 'h}zGW^;r)@',
-	'database' => 'happysan_shopping',
+	'username' => 'root',
+	'password' => '',
+	'database' => 'shopping',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,

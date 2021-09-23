@@ -1,14 +1,8 @@
-<style>
-.form-control .error{
-	border:1px solid red;
-}
-</style>
-
 	<div class="container-fluid">
       <div class="row">
-				<div class="row heading-bg bg-green">
+				<div class="row heading-bg bg-blue">
 					<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-					  <h5 class="txt-light">Orders</h5>
+					  <h5 class="txt-dark">Orders</h5>
 					</div>
 
 					<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
@@ -62,17 +56,17 @@
 													<td><?php echo $rows->total_amount; ?></td>
 													<td><?php echo $rows->paid_amount; ?></td>
 													<td><?php if($rows->status=='Success'){ ?>
-														<button class="label label-success font-weight-100">Success</button>
+														<button class="label label-success font-weight-100">Order Placed</button>
 												<?php	}else if($rows->status=='Processing'){ ?>
 												<button class="label label-warning font-weight-100">Processing</button>
 												<?php	}else if($rows->status=='Shipped'){ ?>
 													<button class="label label-primary font-weight-100">Shipped</button>
 												<?php	}else if($rows->status=='Out for Delivery'){ ?>
 													<button class="label label-info font-weight-100">Out for Delivery</button>
-												<?php	}else if($rows->status=='Out for Delivery'){ ?>
-													<button class="label label-danger font-weight-100">Payment Error</button>
+												<?php	}else if($rows->status=='Delivered'){ ?>
+														<button class="label label-delivered font-weight-100">Delivered</button>
 												<?php	}else{ ?>
-													<button class="label label-default font-weight-100"><?php echo $rows->status; ?></button>
+													<button class="label label-pending font-weight-100"><?php echo $rows->status; ?></button>
 												<?php	} ?>
 											</td>
 													<td>

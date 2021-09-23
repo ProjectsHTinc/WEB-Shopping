@@ -72,7 +72,8 @@ Project:	KENNY
 /****************************/
 /** Imports **/
 /****************************/
-@import url(https://fonts.googleapis.com/css?family=Montserrat:400,700|Varela+Round);
+@import url('https://fonts.googleapis.com/css2?family=Signika');
+/*@import url(https://fonts.googleapis.com/css?family=Montserrat:400,700|Varela+Round);*/
 @import url(../../../vendors/bower_components/bootstrap/dist/css/bootstrap.min.css);
 @import url(font-awesome.min.css);
 @import url(themify-icons.css);
@@ -102,7 +103,8 @@ strong {
 
 body {
   color: #6f6d6d;
-  font-family: "Varela Round", sans-serif;
+  /*font-family: "Varela Round", sans-serif;*/
+  font-family: 'Signika', sans-serif;
   font-size: 14px;
   font-style: normal;
   line-height: 1.5;
@@ -140,7 +142,8 @@ a:focus {
 }
 
 h1, h2, h3, h4, h5, h6, .panel-title {
-  font-family: "Montserrat", sans-serif;
+  /*font-family: "Montserrat", sans-serif;*/
+  font-family: 'Signika', sans-serif;
   color: #2f2c2c;
 }
 
@@ -744,7 +747,8 @@ code {
 }
 
 .bg-blue {
-  background: #566FC9 !important;
+	color:#000000;
+  background: #94dadc !important;
 }
 
 .bg-pink {
@@ -760,11 +764,11 @@ code {
 }
 
 .txt-dark {
-  color: #2f2c2c !important;
+  color: #000000 !important;
 }
 
 .txt-light {
-  color: #fff !important;
+  color: #ffffff !important;
 }
 
 .txt-grey {
@@ -864,7 +868,7 @@ small {
 hr {
   margin-top: 10px;
   margin-bottom: 35px;
-  border-top: 1px solid #3cb879;
+  border-top: 1px solid #94dadc;
 }
 hr.light-grey-hr {
   border-top: 1px solid #eee;
@@ -964,7 +968,7 @@ ul.uo-list {
 .btn, .wizard > .actions .disabled a, .wizard > .actions .disabled a:hover, .wizard > .actions .disabled a:active, .wizard > .actions a, .wizard > .actions a:hover, .wizard > .actions a:active, .dt-buttons .dt-button, .tablesaw-sortable th.tablesaw-sortable-head button, .sweet-alert button, .owl-theme .owl-nav [class*="owl-"], button.fc-agendaDay-button,
 button.fc-month-button,
 button.fc-agendaWeek-button, .fc-prev-button, .fc-next-button, .fc-today-button {
-  color: #fff;
+  color: #000000;
   padding: 9px 25px;
   text-transform: capitalize;
   border-radius: 0;
@@ -1038,8 +1042,9 @@ button.btn-primary.fc-agendaWeek-button:focus, .btn-primary.fc-prev-button:focus
 .owl-theme .owl-nav button[class*="owl-"].fc-agendaWeek-button, .owl-theme .owl-nav [class*="owl-"].fc-prev-button, .owl-theme .owl-nav [class*="owl-"].fc-next-button, .owl-theme .owl-nav [class*="owl-"].fc-today-button, button.fc-agendaDay-button,
 button.fc-month-button,
 button.fc-agendaWeek-button, .fc-prev-button, .fc-next-button, .fc-today-button {
-  background: #3cb878;
-  border: solid 2px #3cb878;
+  background: #94dadc;
+  border: solid 2px #94dadc;
+  color:#000000;
 }
 .btn.btn-success:hover, .wizard > .actions a.btn-success:hover, .wizard > .actions a.fc-prev-button:hover, .wizard > .actions a.fc-next-button:hover, .wizard > .actions a.fc-today-button:hover, .dt-buttons .btn-success.dt-button:hover, .tablesaw-sortable th.tablesaw-sortable-head button.btn-success:hover, .tablesaw-sortable th.tablesaw-sortable-head button.fc-agendaDay-button:hover,
 .tablesaw-sortable th.tablesaw-sortable-head button.fc-month-button:hover,
@@ -1060,14 +1065,14 @@ button.fc-agendaWeek-button:active, .fc-prev-button:active, .fc-next-button:acti
 .owl-theme .owl-nav button[class*="owl-"].fc-agendaWeek-button:focus, .owl-theme .owl-nav [class*="owl-"].fc-prev-button:focus, .owl-theme .owl-nav [class*="owl-"].fc-next-button:focus, .owl-theme .owl-nav [class*="owl-"].fc-today-button:focus, button.fc-agendaDay-button:focus,
 button.fc-month-button:focus,
 button.fc-agendaWeek-button:focus, .fc-prev-button:focus, .fc-next-button:focus, .fc-today-button:focus {
-  background: rgba(60, 184, 120, 0.85);
+   background: #94dadc;
   border: solid 2px rgba(60, 184, 120, 0.1);
 }
 .btn.btn-danger, .wizard > .actions a.btn-danger, .dt-buttons .btn-danger.dt-button, .tablesaw-sortable th.tablesaw-sortable-head button.btn-danger, .sweet-alert button.btn-danger, .owl-theme .owl-nav .btn-danger[class*="owl-"], button.btn-danger.fc-agendaDay-button,
 button.btn-danger.fc-month-button,
 button.btn-danger.fc-agendaWeek-button, .btn-danger.fc-prev-button, .btn-danger.fc-next-button, .btn-danger.fc-today-button {
-  background: #f15b26;
-  border: solid 2px #f15b26;
+  background: #f06a6b;
+  border: solid 2px #f06a6b;
 }
 .btn.btn-danger:hover, .wizard > .actions a.btn-danger:hover, .dt-buttons .btn-danger.dt-button:hover, .tablesaw-sortable th.tablesaw-sortable-head button.btn-danger:hover, .sweet-alert button.btn-danger:hover, .owl-theme .owl-nav .btn-danger[class*="owl-"]:hover, button.btn-danger.fc-agendaDay-button:hover,
 button.btn-danger.fc-month-button:hover,
@@ -1285,7 +1290,7 @@ button.btn-outline-white.fc-agendaWeek-button:hover, .btn-outline.btn-outline-wh
 .owl-theme .owl-nav button[class*="owl-"].fc-agendaWeek-button, button.fc-agendaDay-button,
 button.fc-month-button,
 button.fc-agendaWeek-button, .btn-rounded.fc-prev-button, .btn-rounded.fc-next-button, .btn-rounded.fc-today-button {
-  border-radius: 60px;
+  border-radius: 5px;
 }
 .btn.btn-lg, .wizard > .actions a.btn-lg, .dt-buttons .btn-lg.dt-button, .tablesaw-sortable th.tablesaw-sortable-head button.btn-lg, .sweet-alert button.btn-lg, .owl-theme .owl-nav .btn-lg[class*="owl-"], button.btn-lg.fc-agendaDay-button,
 button.btn-lg.fc-month-button,
@@ -1393,8 +1398,8 @@ button.right-label.fc-next-button.fc-month-button .btn-label,
 button.right-label.fc-next-button.fc-agendaWeek-button .btn-label, .btn-rounded.right-label.fc-today-button .btn-label, button.right-label.fc-today-button.fc-agendaDay-button .btn-label,
 button.right-label.fc-today-button.fc-month-button .btn-label,
 button.right-label.fc-today-button.fc-agendaWeek-button .btn-label {
-  border-bottom-right-radius: 60px;
-  border-top-right-radius: 60px;
+  border-bottom-right-radius: 5px;
+  border-top-right-radius: 5px;
 }
 .btn.btn-outline.btn-lable-wrap .btn-label, .wizard > .actions a.btn-outline.btn-lable-wrap .btn-label, .dt-buttons .btn-outline.btn-lable-wrap.dt-button .btn-label, .dt-buttons button.btn-lable-wrap.dt-button.fc-agendaDay-button .btn-label,
 .dt-buttons button.btn-lable-wrap.dt-button.fc-month-button .btn-label,
@@ -2180,7 +2185,7 @@ button.fancy-button.btn-warning.btn-0.fc-agendaWeek-button:hover, .fancy-button.
 }
 .side-nav > li > a:hover {
   background: #ebebeb;
-  color: #3cb878;
+  color: #f06a6b;
 }
 .side-nav > li > a:focus, .side-nav > li > a:active {
   background: #ebebeb;
@@ -2191,14 +2196,14 @@ button.fancy-button.btn-warning.btn-0.fc-agendaWeek-button:hover, .fancy-button.
   display: block;
 }
 .side-nav > li > ul > li a:hover, .side-nav > li > ul > li a:focus, .side-nav > li > ul > li a:active {
-  color: #3cb878;
+  color: #f06a6b;
 }
 .side-nav > li > a.active {
   background: #ebebeb;
-  color: #2f2c2c;
+  color: #f06a6b;
 }
 .side-nav > li ul.collapse li a.active {
-  color: #2f2c2c;
+  color: #f06a6b;
 }
 
 a.toggle-left-nav-btn {
@@ -2464,7 +2469,7 @@ a.toggle-left-nav-btn i {
   text-transform: capitalize;
 }
 .breadcrumb a {
-  color: #fff;
+  color: #000000;
   opacity: .5;
   -webkit-transition: 0.3s ease;
   -moz-transition: 0.3s ease;
@@ -2474,11 +2479,11 @@ a.toggle-left-nav-btn i {
   opacity: 1;
 }
 .breadcrumb span {
-  color: #fff;
+  color: #000000;
 }
 
 .breadcrumb > li + li::before {
-  color: #fff;
+  color: #000000;
   opacity: .5;
   font-family: FontAwesome;
   content: "\f105";
@@ -3710,8 +3715,8 @@ table.dataTable > caption + thead > tr:first-child > td, table.dataTable > capti
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover, .dataTables_wrapper .dataTables_paginate .paginate_button:hover, .dataTables_wrapper .dataTables_paginate .paginate_button:active, .dataTables_wrapper .dataTables_paginate .paginate_button:focus {
-  background: #3cb878;
-  border-color: #3cb878;
+  background: #f06a6b;
+  border-color: #f06a6b;
   color: #fff !important;
   box-shadow: none;
 }
@@ -5008,7 +5013,7 @@ a.compose-mail {
 }
 
 .panel-primary > .panel-heading {
-  background-color: #566FC9;
+  background-color: #f06a6b;
 }
 
 .panel-inverse > .panel-heading {
@@ -5290,20 +5295,35 @@ a.compose-mail {
   font-weight: 400;
 }
 .label.label-info, .label-info.jvectormap-tip {
-  background: #ea65a2;
+  background: #afa3c4;
+  border: 1px solid;
 }
 .label.label-primary, .label-primary.jvectormap-tip {
-  background: #566FC9;
+  background: #563e7c;
+  border: 1px solid;
 }
 .label.label-success, .label-success.jvectormap-tip {
-  background: #3cb878;
+  background: #4e97d6;
+  border: 1px solid;
 }
 .label.label-danger, .label-danger.jvectormap-tip {
   background: #f12626;
+  border: 1px solid;
 }
 .label.label-warning, .label-warning.jvectormap-tip {
-  background: #fcb03b;
+  background: #d9512c;
+  border: 1px solid;
 }
+
+.label.label-delivered, .label-delivered.jvectormap-tip {
+  background: #6aa84f;
+  border: 1px solid;
+}
+.label.label-pending, .label-pending.jvectormap-tip {
+  background: #f1c232;
+  border: 1px solid;
+}
+
 
 /*Badge*/
 .badge {
